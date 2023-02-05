@@ -26,5 +26,5 @@ jobs:
           VALIDATE_ALL_CODEBASE: true
           DEFAULT_BRANCH: "main"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LINTER_RULES_PATH	: /shoppingify-2.0-frontend
+          LINTER_RULES_PATH: /shoppingify-2.0-frontend
 
