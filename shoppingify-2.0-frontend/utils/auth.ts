@@ -57,7 +57,9 @@ export async function createAccount (
       } else {
         const cognitoUser = result?.user
         setUsername(
-          cognitoUser?.getUsername() ? cognitoUser.getUsername() : 'undefined'
+          cognitoUser?.getUsername() != null
+            ? cognitoUser.getUsername()
+            : 'undefined'
         )
       }
     }

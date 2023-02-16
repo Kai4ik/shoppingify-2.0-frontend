@@ -28,14 +28,14 @@ export default function Register (): JSX.Element {
   const [birthdate, setBirthdate] = useState(new Date())
   const [username, setUsername] = useState('undefined')
 
-  const handleBdate = (date: Date): void => {
+  const handleBdate = async (date: Date): Promise<void> => {
     setBirthdate(date)
     const convertedValue = date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit'
     })
-    formik.setFieldValue('birthdate', convertedValue)
+    await formik.setFieldValue('birthdate', convertedValue)
   }
 
   const formik = useFormik({
@@ -185,7 +185,7 @@ export default function Register (): JSX.Element {
                   <FormLabel>Birth Date</FormLabel>
                   <SingleDatepicker
                     date={birthdate}
-                    onDateChange={(e) => handleBdate(e)}
+                    onDateChange={async (e) => await handleBdate(e)}
                     propsConfigs={{
                       dateNavBtnProps: {
                         variant: 'flushed'
