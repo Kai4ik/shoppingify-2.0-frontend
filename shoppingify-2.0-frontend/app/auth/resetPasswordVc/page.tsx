@@ -27,7 +27,7 @@ import { useRouter } from 'next/navigation'
 import { resetPasswordVc } from '@/utils/auth'
 import { ResetPasswordVcSchema } from '@/common/yupSchemas'
 
-export default function ConfirmEmail () {
+export default function ConfirmEmail (): JSX.Element {
   const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = useRef() as RefObject<FocusableElement>

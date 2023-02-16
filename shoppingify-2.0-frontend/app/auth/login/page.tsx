@@ -19,7 +19,7 @@ import { use } from 'react'
 import { authenticateUser } from '@/utils/auth'
 import { UserLoginSchema } from '@/common/yupSchemas'
 
-export default function Login () {
+export default function Login (): JSX.Element {
   const formik = useFormik({
     initialValues: {
       email: '',

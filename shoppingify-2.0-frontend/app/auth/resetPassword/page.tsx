@@ -28,7 +28,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { resetPassword } from '@/utils/auth'
 import { ResetPasswordSchema } from '@/common/yupSchemas'
 
-export default function ConfirmEmail () {
+export default function ConfirmEmail (): JSX.Element {
   const router = useRouter()
   const searchParams = useSearchParams()
   const username: string = searchParams.get('email') as string

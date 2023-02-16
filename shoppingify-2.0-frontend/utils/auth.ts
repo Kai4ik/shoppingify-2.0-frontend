@@ -27,7 +27,7 @@ export async function createAccount (
   formData: User,
   formik: FormikProps<User>,
   setUsername: Dispatch<SetStateAction<string>>
-) {
+): Promise<void> {
   const dataMapping: DataMapping[] = [
     { property: 'given_name', mapping: 'fname' },
     { property: 'family_name', mapping: 'lname' },
@@ -37,7 +37,7 @@ export async function createAccount (
 
   const attributeList: CognitoUserAttribute[] = []
 
-  dataMapping.map((item: DataMapping) => {
+  dataMapping.forEach((item: DataMapping) => {
     attributeList.push(
       new CognitoUserAttribute({
         Name: item.property,
@@ -68,7 +68,7 @@ export async function confirmAccount (
   username: string,
   code: string,
   setConfirmed: Dispatch<SetStateAction<boolean>>
-) {
+): Promise<void> {
   const userData = {
     Username: decodeURIComponent(username).replace(/\+/g, ' '),
     Pool: userPool
@@ -76,8 +76,8 @@ export async function confirmAccount (
 
   const cognitoUser = new CognitoUser(userData)
   cognitoUser.confirmRegistration(code, false, function (err) {
-    if (err) {
-      alert(err.message || JSON.stringify(err))
+    if (err != null) {
+      console.log(err.message)
     } else {
       setConfirmed(true)
     }
@@ -87,7 +87,7 @@ export async function confirmAccount (
 export async function resendConfirmationCode (
   username: string,
   setCodeSent: Dispatch<SetStateAction<boolean>>
-) {
+): Promise<void> {
   const userData = {
     Username: decodeURIComponent(username).replace(/\+/g, ' '),
     Pool: userPool
@@ -96,7 +96,7 @@ export async function resendConfirmationCode (
   const cognitoUser = new CognitoUser(userData)
   cognitoUser.resendConfirmationCode(function (err) {
     if (err != null) {
-      alert(err.message || JSON.stringify(err))
+      console.log(err.message)
     } else {
       setCodeSent(true)
     }
@@ -107,7 +107,7 @@ export async function authenticateUser (
   username: string,
   password: string,
   formik: FormikProps<UserLogin>
-) {
+): Promise<void> {
   const userData = {
     Username: username,
     Pool: userPool
@@ -138,7 +138,7 @@ export async function resetPasswordVc (
   username: string,
   formik: FormikProps<ResetPasswordVc>,
   setCodeSent: Dispatch<SetStateAction<boolean>>
-) {
+): Promise<void> {
   const userData = {
     Username: username,
     Pool: userPool
@@ -164,7 +164,7 @@ export async function resetPassword (
   username: string,
   formik: FormikProps<ResetPassword>,
   setResetPasswordStatus: Dispatch<SetStateAction<boolean>>
-) {
+): Promise<void> {
   const userData = {
     Username: username,
     Pool: userPool
@@ -190,7 +190,7 @@ export function getSession (): string {
   const cognitoUser = userPool.getCurrentUser()
   if (cognitoUser != null) {
     cognitoUser?.getSession(function (err: any, session: CognitoUserSession) {
-      if (err) {
+      if (err != null) {
         return 'error'
       } else {
         // console.log("session validity: " + session.isValid());

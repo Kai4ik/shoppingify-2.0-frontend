@@ -33,7 +33,7 @@ interface Props {
   }
 }
 
-export default function ConfirmEmail ({ params }: Props) {
+export default function ConfirmEmail ({ params }: Props): JSX.Element {
   const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = useRef() as RefObject<FocusableElement>

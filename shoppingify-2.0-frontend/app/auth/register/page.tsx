@@ -23,12 +23,12 @@ import { User } from '@/common/types'
 import { UserSchema } from '@/common/yupSchemas'
 import { createAccount } from '@/utils/auth'
 
-export default function Register () {
+export default function Register (): JSX.Element {
   const router = useRouter()
   const [birthdate, setBirthdate] = useState(new Date())
   const [username, setUsername] = useState('undefined')
 
-  const handleBdate = (date: Date) => {
+  const handleBdate = (date: Date): void => {
     setBirthdate(date)
     const convertedValue = date.toLocaleDateString('en-US', {
       year: 'numeric',
