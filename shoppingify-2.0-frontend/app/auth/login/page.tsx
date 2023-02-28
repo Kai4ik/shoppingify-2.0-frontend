@@ -13,13 +13,16 @@ import {
   Link
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
-import { use } from 'react'
+import { use, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 // internal modules
 import { authenticateUser } from '@/utils/auth'
 import { UserLoginSchema } from '@/common/yupSchemas'
 
 export default function Login (): JSX.Element {
+  const router = useRouter()
+  const [loggedIn, setLoggedIn] = useState(false)
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -27,9 +30,15 @@ export default function Login (): JSX.Element {
     },
     validationSchema: UserLoginSchema,
     onSubmit: (values) => {
-      use(authenticateUser(values.email, values.password, formik))
+      use(authenticateUser(values.email, values.password, formik, setLoggedIn))
     }
   })
+
+  useEffect(() => {
+    if (loggedIn) {
+      router.push('/protected/dashboard')
+    }
+  }, [router, loggedIn])
 
   return (
     <Flex
