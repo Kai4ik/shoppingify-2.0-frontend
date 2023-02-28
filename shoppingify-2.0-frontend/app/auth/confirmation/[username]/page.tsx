@@ -105,7 +105,8 @@ export default function ConfirmEmail ({ params }: Props): JSX.Element {
                   <PinInput
                     otp
                     size='lg'
-                    onChange={async (e) => await formik.setFieldValue('code', e)}
+                    onChange={async (e) =>
+                      await formik.setFieldValue('code', e)}
                   >
                     <PinInputField />
                     <PinInputField />

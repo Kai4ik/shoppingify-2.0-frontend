@@ -108,7 +108,8 @@ export async function resendConfirmationCode (
 export async function authenticateUser (
   username: string,
   password: string,
-  formik: FormikProps<UserLogin>
+  formik: FormikProps<UserLogin>,
+  setLoggedIn: Dispatch<SetStateAction<boolean>>
 ): Promise<void> {
   const userData = {
     Username: username,
@@ -122,8 +123,8 @@ export async function authenticateUser (
 
   const cognitoUser = new CognitoUser(userData)
   cognitoUser.authenticateUser(authenticationDetails, {
-    onSuccess: function (result) {
-      console.log(result)
+    onSuccess: function () {
+      setLoggedIn(true)
     },
 
     onFailure: function (err) {
