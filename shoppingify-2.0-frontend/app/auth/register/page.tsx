@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
 import { useState, useEffect, use } from 'react'
-import { SingleDatepicker } from 'chakra-dayzed-datepicker'
+
 import { useRouter } from 'next/navigation'
 
 // internal modules
@@ -25,18 +25,7 @@ import { createAccount } from '@/utils/auth'
 
 export default function Register (): JSX.Element {
   const router = useRouter()
-  const [birthdate, setBirthdate] = useState(new Date())
   const [username, setUsername] = useState('undefined')
-
-  const handleBdate = async (date: Date): Promise<void> => {
-    setBirthdate(date)
-    const convertedValue = date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    })
-    await formik.setFieldValue('birthdate', convertedValue)
-  }
 
   const formik = useFormik({
     initialValues: {
@@ -161,6 +150,7 @@ export default function Register (): JSX.Element {
                   />
                   <FormErrorMessage>{formik.errors.lname}</FormErrorMessage>
                 </FormControl>
+
                 <FormControl
                   isInvalid={
                     Boolean(formik.errors.gender) && formik.touched.gender
@@ -181,21 +171,23 @@ export default function Register (): JSX.Element {
                   </Select>
                   <FormErrorMessage>{formik.errors.gender}</FormErrorMessage>
                 </FormControl>
-                <FormControl>
+                <FormControl
+                  isInvalid={
+                    Boolean(formik.errors.lname) && formik.touched.lname
+                  }
+                >
                   <FormLabel>Birth Date</FormLabel>
-                  <SingleDatepicker
-                    date={birthdate}
-                    onDateChange={async (e) => await handleBdate(e)}
-                    propsConfigs={{
-                      dateNavBtnProps: {
-                        variant: 'flushed'
-                      },
-                      inputProps: {
-                        focusBorderColor: 'secondary',
-                        size: 'lg'
-                      }
-                    }}
+                  <Input
+                    name='birthdate'
+                    type='date'
+                    variant='outline'
+                    placeholder='birthdate'
+                    size='lg'
+                    focusBorderColor='secondary'
+                    onChange={formik.handleChange}
+                    value={formik.values.birthdate}
                   />
+                  <FormErrorMessage>{formik.errors.birthdate}</FormErrorMessage>
                 </FormControl>
               </VStack>
               <Button
