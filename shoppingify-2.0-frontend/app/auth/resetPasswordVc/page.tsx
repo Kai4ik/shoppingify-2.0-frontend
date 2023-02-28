@@ -119,24 +119,30 @@ export default function ConfirmEmail (): JSX.Element {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogBody color='main'>
-              <HStack justify='center' p='10% 0'>
-                {codeSent && (
+              {codeSent
+                ? (
                   <>
-                    <Text fontSize='xl'> Code was sent </Text>
-                    <CheckCircleIcon boxSize={6} color='green.500' />
+                    <HStack justify='center' p='10% 0'>
+                      <Text fontSize='xl'> Code was sent </Text>
+                      <CheckCircleIcon boxSize={6} color='green.500' />
+                    </HStack>
+                    <HStack justify='center' pb='10%'>
+                      <Button
+                        onClick={() =>
+                          router.push(
+                          `/auth/resetPassword?email=${formik.values.email}`
+                          )}
+                      >
+                        Continue
+                      </Button>
+                    </HStack>
                   </>
-                )}
-              </HStack>
-              <HStack justify='center' pb='10%'>
-                <Button
-                  onClick={() =>
-                    router.push(
-                      `/auth/resetPassword?email=${formik.values.email}`
-                    )}
-                >
-                  Continue
-                </Button>
-              </HStack>
+                  )
+                : (
+                  <HStack justify='center' p='10% 0'>
+                    <Text fontSize='xl'> {formik.errors.email} </Text>
+                  </HStack>
+                  )}
             </AlertDialogBody>
           </AlertDialogContent>
         </AlertDialogOverlay>
