@@ -7,7 +7,7 @@ export default function Head (): JSX.Element {
         name='description'
         content='Personal project to keep track of groceries inflation'
       />
-      <link rel='icon' href='/favicon.ico' />
+      <link rel='icon' href='/logo.ico' />
     </>
   )
 }
