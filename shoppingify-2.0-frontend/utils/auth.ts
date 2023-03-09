@@ -214,7 +214,8 @@ export async function loggedIn (): Promise<{
             signedIn: false
           })
         }
-        if (session.isValid()) {
+        const isValid: boolean = session.isValid()
+        if (isValid) {
           cognitoUser.getUserAttributes(function (err, result) {
             if (err != null) {
               resolve({
