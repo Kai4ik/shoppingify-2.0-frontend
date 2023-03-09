@@ -1,19 +1,33 @@
 'use client'
 
 // external modules
-import { VStack, Flex, Avatar } from '@chakra-ui/react'
+import {
+  VStack,
+  Flex,
+  Avatar,
+  WrapItem,
+  Spinner,
+  Text
+} from '@chakra-ui/react'
 import { FaListUl, FaHistory } from 'react-icons/fa'
 import { FiUser } from 'react-icons/fi'
 import { IoIosStats, IoIosAddCircle } from 'react-icons/io'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { loggedIn } from '@/utils/auth'
 
 // internal modules
 import TooltipCn from './tooltip'
 
-export default function AuthLayout ({
-  children
-}: {
+interface LayoutProps {
   children: React.ReactNode
-}): React.ReactNode {
+}
+
+export default function AuthLayout ({ children }: LayoutProps): React.ReactNode {
+  const router = useRouter()
+  const [isAuthenticating, setIsAuthenticating] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
   const Icons = [
     {
       icon: FaListUl,
@@ -44,17 +58,54 @@ export default function AuthLayout ({
       link: '/protected/stats'
     }
   ]
+
+  useEffect(() => {
+    const checkAuthentication = async (): Promise<void> => {
+      const isAuthenticated = await loggedIn()
+      setIsAuthenticated(isAuthenticated.signedIn)
+      setIsAuthenticating(false)
+    }
+
+    checkAuthentication()
+  }, [])
+
+  if (isAuthenticating) {
+    return (
+      <VStack spacing={6} h='100vh' align='center' justify='center'>
+        <Text fontSize='2xl' color='main'>
+          Verifying user ...
+        </Text>
+        <Spinner color='secondary' />
+      </VStack>
+    )
+  }
+
+  if (!isAuthenticated) {
+    router.push('/login')
+    return (
+      <VStack spacing={6} h='100vh' align='center' justify='center'>
+        <Text fontSize='2xl' color='main'>
+          You are not signed in. Redirecting to the login page
+        </Text>
+        <Spinner color='secondary' />
+      </VStack>
+    )
+  }
+
   return (
-    <Flex w='100vw' h='100vh' bg='#FAFAFE'>
+    <Flex w={['auto', '100vw']} h={['auto', '100vh']} bg='#FAFAFE'>
       <Flex
-        width='5%'
+        width={['0%', '5%']}
         bg='white'
         p='2% 0'
         direction='column'
         align='center'
         justify='space-between'
+        visibility={['hidden', 'visible']}
       >
-        <Avatar name='Shoppingify Logo' src='/logo.svg' />
+        <WrapItem>
+          <Avatar name='Shoppingify Logo' src='/logo.svg' />
+        </WrapItem>
         <VStack spacing={8}>
           {Icons.map((icon) => (
             <TooltipCn
@@ -68,7 +119,7 @@ export default function AuthLayout ({
         </VStack>
         <TooltipCn
           label='Add new receipt'
-          link='/protected/addNewReceipt'
+          link='/protected/addReceipt'
           icon={IoIosAddCircle}
           size={8}
         />

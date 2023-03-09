@@ -7,7 +7,8 @@ import {
   CognitoUser,
   CognitoUserAttribute,
   AuthenticationDetails,
-  CognitoUserSession
+  CognitoUserSession,
+  CookieStorage
 } from 'amazon-cognito-identity-js'
 
 // internal modules
@@ -20,7 +21,11 @@ interface DataMapping {
 
 const userPool = new CognitoUserPool({
   UserPoolId: process.env.NEXT_PUBLIC_USER_POOL_ID,
-  ClientId: process.env.NEXT_PUBLIC_USER_POOL_CLIENT_ID
+  ClientId: process.env.NEXT_PUBLIC_USER_POOL_CLIENT_ID,
+  Storage: new CookieStorage({
+    domain: 'localhost',
+    expires: 1 / 24
+  })
 })
 
 export async function createAccount (
@@ -78,7 +83,7 @@ export async function confirmAccount (
 
   const cognitoUser = new CognitoUser(userData)
   cognitoUser.confirmRegistration(code, false, function (err) {
-    if (err != null) {
+    if (err) {
       console.log(err.message)
     } else {
       setConfirmed(true)
@@ -113,7 +118,11 @@ export async function authenticateUser (
 ): Promise<void> {
   const userData = {
     Username: username,
-    Pool: userPool
+    Pool: userPool,
+    Storage: new CookieStorage({
+      domain: 'localhost',
+      expires: 1 / 24
+    })
   }
 
   const authenticationDetails = new AuthenticationDetails({
@@ -189,31 +198,44 @@ export async function resetPassword (
   })
 }
 
-export function getSession (): string {
-  const cognitoUser = userPool.getCurrentUser()
-  if (cognitoUser != null) {
-    cognitoUser?.getSession(function (err: any, session: CognitoUserSession) {
-      if (err != null) {
-        return 'error'
-      } else {
-        // console.log("session validity: " + session.isValid());
-        // Set the profile info
-        cognitoUser?.getUserAttributes(function (err, result) {
-          if (err != null) {
-            console.log('err')
-            return 'err'
-          } else {
-            console.log(result)
-            return 'result'
-          }
-
-          // document.getElementById("email_value").innerHTML = result[2].getValue();
-        })
-        return 'session'
-      }
-    })
-  } else {
-    return 'gg'
-  }
-  return 'gsdfsdg'
+export async function loggedIn (): Promise<{
+  signedIn: boolean
+  error_message?: string
+  email?: string
+  jwt?: string
+}> {
+  return await new Promise((resolve) => {
+    const cognitoUser = userPool.getCurrentUser()
+    if (cognitoUser != null) {
+      cognitoUser.getSession(function (err: any, session: CognitoUserSession) {
+        if (err) {
+          resolve({
+            error_message: 'Error: missing credentials. Please login again!',
+            signedIn: false
+          })
+        }
+        if (session.isValid()) {
+          cognitoUser.getUserAttributes(function (err, result) {
+            if (err != null) {
+              resolve({
+                error_message: 'Error: cannot get user attributes',
+                signedIn: false
+              })
+            } else {
+              resolve({
+                email: result?.filter((pair) => pair.Name === 'email')[0].Value,
+                jwt: session.getIdToken().getJwtToken(),
+                signedIn: true
+              })
+            }
+          })
+        } else {
+          resolve({
+            error_message: 'Error: session expired. Please login again!',
+            signedIn: false
+          })
+        }
+      })
+    } else { resolve({ error_message: 'Error: user not loggen in', signedIn: false }) }
+  })
 }
