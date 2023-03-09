@@ -83,7 +83,7 @@ export async function confirmAccount (
 
   const cognitoUser = new CognitoUser(userData)
   cognitoUser.confirmRegistration(code, false, function (err) {
-    if (err) {
+    if (err != null) {
       console.log(err.message)
     } else {
       setConfirmed(true)
@@ -208,7 +208,7 @@ export async function loggedIn (): Promise<{
     const cognitoUser = userPool.getCurrentUser()
     if (cognitoUser != null) {
       cognitoUser.getSession(function (err: any, session: CognitoUserSession) {
-        if (err) {
+        if (err != null) {
           resolve({
             error_message: 'Error: missing credentials. Please login again!',
             signedIn: false
@@ -236,6 +236,8 @@ export async function loggedIn (): Promise<{
           })
         }
       })
-    } else { resolve({ error_message: 'Error: user not loggen in', signedIn: false }) }
+    } else {
+      resolve({ error_message: 'Error: user not loggen in', signedIn: false })
+    }
   })
 }
