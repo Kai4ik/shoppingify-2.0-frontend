@@ -1,5 +1,6 @@
 'use client'
 
+// external modules
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 
 export default function RootLayout ({

@@ -1,8 +1,7 @@
 'use client'
 
 // external modules
-import { Tooltip, Link, WrapItem } from '@chakra-ui/react'
-import { Icon } from '@chakra-ui/react'
+import { Tooltip, Link, WrapItem, Icon } from '@chakra-ui/react'
 import { IconType } from 'react-icons/lib'
 
 interface Props {
