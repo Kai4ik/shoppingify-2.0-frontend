@@ -6,13 +6,5 @@
   ],
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
-  "root": true,
-  "rules": {
-    "@typescript-eslint/strict-boolean-expressions": [
-      "true",
-      {
-        "allowNullableBoolean": true
-      }
-    ]
-  }
+  "root": true
 }
