@@ -1,22 +1,13 @@
 'use client'
 
-// external modules
-import {
-  VStack,
-  Flex,
-  Avatar,
-  WrapItem,
-  Spinner,
-  Text
-} from '@chakra-ui/react'
+// ----- external modules ----- //
+import { VStack, Flex, Avatar, WrapItem } from '@chakra-ui/react'
 import { FaListUl, FaHistory } from 'react-icons/fa'
 import { FiUser } from 'react-icons/fi'
 import { IoIosStats, IoIosAddCircle } from 'react-icons/io'
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { loggedIn } from '@/utils/auth'
 
-// internal modules
+// ----- internal modules ----- //
+// components
 import TooltipCn from './tooltip'
 
 interface LayoutProps {
@@ -24,10 +15,6 @@ interface LayoutProps {
 }
 
 export default function AuthLayout ({ children }: LayoutProps): React.ReactNode {
-  const router = useRouter()
-  const [isAuthenticating, setIsAuthenticating] = useState(true)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-
   const Icons = [
     {
       icon: FaListUl,
@@ -59,49 +46,18 @@ export default function AuthLayout ({ children }: LayoutProps): React.ReactNode 
     }
   ]
 
-  useEffect(() => {
-    const checkAuthentication = async (): Promise<void> => {
-      const isAuthenticated = await loggedIn()
-      setIsAuthenticated(isAuthenticated.signedIn)
-      setIsAuthenticating(false)
-    }
-
-    checkAuthentication()
-  }, [])
-
-  if (isAuthenticating) {
-    return (
-      <VStack spacing={6} h='100vh' align='center' justify='center'>
-        <Text fontSize='2xl' color='main'>
-          Verifying user ...
-        </Text>
-        <Spinner color='secondary' />
-      </VStack>
-    )
-  }
-
-  if (!isAuthenticated) {
-    router.push('/login')
-    return (
-      <VStack spacing={6} h='100vh' align='center' justify='center'>
-        <Text fontSize='2xl' color='main'>
-          You are not signed in. Redirecting to the login page
-        </Text>
-        <Spinner color='secondary' />
-      </VStack>
-    )
-  }
-
   return (
-    <Flex w={['auto', '100vw']} h={['auto', '100vh']} bg='#FAFAFE'>
+    <Flex w='auto' minH={['100vh', '100vh']} bg='#FAFAFE'>
       <Flex
         width={['0%', '5%']}
+        h='100%'
         bg='white'
         p='2% 0'
         direction='column'
         align='center'
         justify='space-between'
         visibility={['hidden', 'visible']}
+        position='fixed'
       >
         <WrapItem>
           <Avatar name='Shoppingify Logo' src='/logo.svg' />
