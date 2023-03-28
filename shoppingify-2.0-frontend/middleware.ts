@@ -19,7 +19,8 @@ export default async function middleware (
   }
 
   const ifLoggedIn = await verifyUser(idToken)
-  if (ifLoggedIn.succcess) {
+  const succcess: boolean = ifLoggedIn.succcess
+  if (succcess) {
     return NextResponse.next()
   }
 
