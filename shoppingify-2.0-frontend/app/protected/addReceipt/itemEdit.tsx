@@ -1,7 +1,14 @@
 'use client'
 
-// external modules
-import { Input, FormControl, Td, Tr, IconButton } from '@chakra-ui/react'
+// ----- external modules ----- //
+import {
+  Input,
+  FormControl,
+  Td,
+  Tr,
+  IconButton,
+  Select
+} from '@chakra-ui/react'
 import {
   UseFormRegister,
   UseFormUnregister,
@@ -11,11 +18,17 @@ import {
   Control
 } from 'react-hook-form'
 import { DeleteIcon } from '@chakra-ui/icons'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
+import produce from 'immer'
 
-// internal modules
-import NumberInputCp from './numberInput'
-import { LineItem, ReceiptScanResponse } from '@/common/types'
+// ----- internal modules ----- //
+import { deleteItem } from '@/utils/receipts_crud'
+
+// components
+import NumberInputCp from '@/common/components/numberInput'
+
+// types
+import { LineItem, ReceiptScanResponse } from '@/common/types/api_types'
 
 interface Index {
   data: ReceiptScanResponse
@@ -36,6 +49,7 @@ export default function ItemEdit (props: LineItem & Index): JSX.Element {
     qty,
     unit,
     payAttention,
+    data,
     register,
     unregister,
     setData,
@@ -44,30 +58,16 @@ export default function ItemEdit (props: LineItem & Index): JSX.Element {
     control
   } = props
 
-  const deleteItem = (): void => {
-    const subtotal = getValues('subtotal')
-    const total = getValues('total')
-    const productTotal = getValues(id.concat('_', 'total'))
-    const newSubtotal = parseFloat(Number(subtotal - productTotal).toFixed(2))
-    const newTotal = parseFloat(Number(total - productTotal).toFixed(2))
-    setValue('subtotal', newSubtotal)
-    setValue('total', newTotal)
-
-    unregister(id);
-    ['price', 'total', 'unit', 'qty'].forEach((name) => {
-      unregister(id.concat('_', name))
-    })
-
-    setData((prevData) => {
-      if (prevData !== undefined) {
-        prevData.data.line_items = prevData?.data.line_items.filter(
+  const [qtyStep, setQtyStep] = useState(unit === 'kg' ? 0.001 : 1)
+  const [qtyMin, setQtyMin] = useState(unit === 'kg' ? 0.0 : 1)
+  const setFn = (): void => {
+    setData(
+      produce(data, (draftState) => {
+        draftState.data.line_items = draftState.data.line_items.filter(
           (item) => item.id !== id
         )
-        return {
-          ...prevData
-        }
-      }
-    })
+      })
+    )
   }
 
   return (
@@ -76,7 +76,7 @@ export default function ItemEdit (props: LineItem & Index): JSX.Element {
         <IconButton
           aria-label='Delete Item'
           icon={<DeleteIcon />}
-          onClick={deleteItem}
+          onClick={() => deleteItem(getValues, setValue, id, setFn, unregister)}
         />
       </Td>
       <Td px={2}>
@@ -112,8 +112,8 @@ export default function ItemEdit (props: LineItem & Index): JSX.Element {
             payAttention={payAttention}
             name={id.concat('_', 'qty')}
             precision={3}
-            step={unit === 'kg' ? 0.001 : 1}
-            min={unit === 'kg' ? 0.0 : 1}
+            step={qtyStep}
+            min={qtyMin}
             control={control}
             setValue={setValue}
             getValues={getValues}
@@ -122,16 +122,33 @@ export default function ItemEdit (props: LineItem & Index): JSX.Element {
       </Td>
       <Td px={2} w='12%'>
         <FormControl>
-          <Input
-            type='text'
-            variant='outline'
-            placeholder='unit'
+          <Select
+            variant='filled'
             size='md'
-            focusBorderColor='secondary'
-            defaultValue={unit}
-            borderColor={payAttention !== undefined ? 'red.400' : 'inherit'}
+            color='main'
+            _hover={{
+              borderColor: 'gray.200'
+            }}
+            _focus={{
+              borderColor: 'gray.200'
+            }}
             {...register(id.concat('_', 'unit'), { required: true })}
-          />
+            onChange={(e) => {
+              setQtyStep(e.target.value === 'kg' ? 0.001 : 1)
+              setQtyMin(e.target.value === 'kg' ? 0.0 : 1)
+              setValue(
+                id.concat('_', 'qty'),
+                e.target.value === 'kg' ? 0.0 : 1
+              )
+            }}
+          >
+            <option value='ea' selected={unit === 'ea'}>
+              ea
+            </option>
+            <option value='kg' selected={unit === 'kg'}>
+              kg
+            </option>
+          </Select>
         </FormControl>
       </Td>
       <Td px={2}>

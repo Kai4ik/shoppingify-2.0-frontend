@@ -1,34 +1,36 @@
 'use client'
 
-// external modules
+// ----- external modules ----- //
 import axios from 'axios'
 import {
   Stack,
   VStack,
   Text,
   Image,
-  Input,
-  TableContainer,
-  Table,
-  Thead,
-  Tbody,
-  Th,
-  Tr,
+  Button,
   useDisclosure
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
+import * as crypto from 'crypto'
+import produce from 'immer'
 
-// internal modules
+// ----- internal modules ----- //
+import { loggedIn } from '@/utils/auth'
+
+// components
 import UploadReceipt from './uploadReceipt'
 import LoadingCp from '@/app/loadingCp'
-import TopInputs from './topInputs'
-import BottomInputs from './bottomInputs'
 import ItemEdit from './itemEdit'
 import SubmitBtns from './submitBtns'
 import SubmissionAlert from './submissionAlert'
-import { loggedIn } from '@/utils/auth'
-import { ReceiptScanResponse } from '@/common/types'
+import MerchantTitle from '@/common/components/receiptTitle'
+import ReceiptTopInputs from '@/common/components/topInputs'
+import ReceiptBottomInputs from '@/common/components/bottomInputs'
+import ItemsTable from '@/common/components/itemsTable'
+
+// types
+import { ReceiptScanResponse } from '@/common/types/api_types'
 
 export default function AddReceipt (): JSX.Element {
   // TODO: add functionality for adding new item
@@ -62,7 +64,7 @@ export default function AddReceipt (): JSX.Element {
     body.append('file', file as File, file?.name)
     body.append('data', JSON.stringify(getValues()))
     const userLoggedIn = await loggedIn()
-    if (userLoggedIn.signedIn) {
+    if (userLoggedIn.signedIn && userLoggedIn.jwt !== undefined) {
       const response = await axios({
         method: 'post',
         url: 'http://127.0.0.1:8000/saveReceipt',
@@ -85,14 +87,34 @@ export default function AddReceipt (): JSX.Element {
     }
   }
 
+  const addItem = (): void => {
+    const hash = crypto
+      .createHash('md5')
+      .update(JSON.stringify(new Date().getTime() / 1000))
+      .digest('hex')
+
+    setData(
+      produce(data, (draftState) => {
+        draftState?.data.line_items.push({
+          id: hash,
+          unit: 'ea',
+          price: 0,
+          total: 0,
+          qty: 1,
+          productTitle: 'Item Name'
+        })
+      })
+    )
+  }
+
   return (
     <Stack
-      w={['100%', '95%']}
-      p={['5% ', '3% 5%']}
-      justify='space-between'
+      w='100%'
+      p={['5% ', '3% 2% 3% 6%']}
+      justify='space-evenly'
       align='center'
       overflow={['scroll', 'hidden']}
-      h='100%'
+      maxHeight={['auto', '100vh']}
       direction={['column', 'row']}
       spacing={[8, 0]}
     >
@@ -129,78 +151,48 @@ export default function AddReceipt (): JSX.Element {
               ? (
                 <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
                   <VStack spacing={15}>
-                    <Input
-                      maxW='50%'
-                      type='text'
-                      variant='flushed'
-                      placeholder='Merchant'
-                      size='lg'
-                      fontWeight='600'
-                      fontSize='2rem'
-                      textAlign='center'
-                      color='main'
-                      focusBorderColor='secondary'
-                      defaultValue={data.data.merchant}
-                      {...register('merchant')}
+                    <MerchantTitle
+                      register={register}
+                      merchant={data.data.merchant}
+                      currency={data.data.currency}
                     />
-                    <Text alignSelf='flex-start'>
-                      * all prices in {data.data.currency}
-                    </Text>
-                    <Text alignSelf='flex-start'>
-                      * pay attention to items in
-                      <span style={{ color: 'red' }}> red! </span> We found them
-                      suspicious
-                    </Text>
-                    <TopInputs register={register} data={data} />
-                    <TableContainer w='auto'>
-                      <Table
-                        variant='unstyled'
-                        layout={['fixed', 'auto']}
-                        w={['200%', '100%']}
-                        overflowX='scroll'
-                      >
-                        <Thead>
-                          <Tr color='main'>
-                            <Th px={0} w={['8%', 'auto']} />
-                            <Th px={2} w={['40%', '30%']}>
-                              <Text fontSize='xl'>Title</Text>
-                            </Th>
-                            <Th px={2} w={['20%', 'auto']}>
-                              <Text fontSize='xl'>Price</Text>
-                            </Th>
-                            <Th px={2} w={['20%', 'auto']}>
-                              <Text fontSize='xl'>Qty</Text>
-                            </Th>
-                            <Th px={2} w={['20%', 'auto']}>
-                              <Text fontSize='xl'>Unit</Text>
-                            </Th>
-                            <Th px={2} w={['20%', 'auto']}>
-                              <Text fontSize='xl'>Total</Text>
-                            </Th>
-                          </Tr>
-                        </Thead>
-                        <Tbody>
-                          {data.data.line_items.map((product) => (
-                            <ItemEdit
-                              key={product.id}
-                              {...product}
-                              data={data}
-                              register={register}
-                              unregister={unregister}
-                              setData={setData}
-                              setValue={setValue}
-                              control={control}
-                              getValues={getValues}
-                            />
-                          ))}
-                        </Tbody>
-                      </Table>
-                    </TableContainer>
-                    <BottomInputs
-                      data={data}
+                    <ReceiptTopInputs
+                      register={register}
+                      receiptNumber={data.data.receipt_number}
+                      purchaseDate={data.data.purchase_date.split(' ')[0]}
+                      purchaseTime={data.data.purchase_date.split(' ')[1]}
+                    />
+                    <ItemsTable>
+                      {data.data.line_items.map((product) => (
+                        <ItemEdit
+                          key={product.id}
+                          {...product}
+                          data={data}
+                          register={register}
+                          unregister={unregister}
+                          setData={setData}
+                          setValue={setValue}
+                          control={control}
+                          getValues={getValues}
+                        />
+                      ))}
+                    </ItemsTable>
+                    <Button
+                      type='button'
+                      colorScheme='green'
+                      size='lg'
+                      w='100%'
+                      onClick={() => addItem()}
+                    >
+                      Add item
+                    </Button>
+                    <ReceiptBottomInputs
+                      subtotal={data.data.subtotal}
+                      tax={data.data.tax}
+                      total={data.data.total}
+                      setValue={setValue}
                       control={control}
                       getValues={getValues}
-                      setValue={setValue}
                     />
                     <SubmitBtns
                       data={data}

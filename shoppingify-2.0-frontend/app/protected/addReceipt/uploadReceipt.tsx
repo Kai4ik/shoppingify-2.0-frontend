@@ -16,7 +16,7 @@ import { ChangeEvent, Dispatch, SetStateAction, useState, memo } from 'react'
 import { UseFormReset, FieldValues } from 'react-hook-form'
 
 // internal modules
-import { ReceiptScanResponse } from '@/common/types'
+import { ReceiptScanResponse } from '@/common/types/api_types'
 import { loggedIn } from '@/utils/auth'
 
 interface Props {
@@ -42,11 +42,11 @@ function UploadReceipt (props: Props): JSX.Element {
     }
   }
 
-  const handleSubmitScan = () => {
-    setLoading(true);
-    (async () => {
+  const handleSubmitScan = async (): Promise<void> => {
+    setLoading(true)
+    await (async () => {
       const userLoggedIn = await loggedIn()
-      if (userLoggedIn.signedIn) {
+      if (userLoggedIn.signedIn && userLoggedIn.jwt !== undefined) {
         const data = new FormData()
         data.append('file', file, file?.name)
         try {
@@ -78,7 +78,7 @@ function UploadReceipt (props: Props): JSX.Element {
   return (
     <Stack
       w={['100%', '40%']}
-      h='100%'
+      h={['auto', '100%']}
       p='1% 0'
       align='center'
       spacing={6}
@@ -107,7 +107,7 @@ function UploadReceipt (props: Props): JSX.Element {
         alignItems='flex-start'
         justifyContent='center'
         borderRadius={12}
-        h='80%'
+        h='100%'
         css={{
           '&::-webkit-scrollbar': {
             width: '0px'

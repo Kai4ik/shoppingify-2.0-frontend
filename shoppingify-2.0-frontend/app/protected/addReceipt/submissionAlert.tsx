@@ -1,21 +1,15 @@
 'use client'
 
-// external modules
-import { useRef, RefObject, Dispatch, SetStateAction } from 'react'
+// ----- external modules ----- //
+import { Dispatch, SetStateAction } from 'react'
 import Parser from 'html-react-parser'
-import {
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogBody,
-  VStack,
-  Text,
-  Icon
-} from '@chakra-ui/react'
-import { FocusableElement } from '@chakra-ui/utils'
-
+import { VStack, Text, Icon } from '@chakra-ui/react'
 import { CheckCircleIcon } from '@chakra-ui/icons'
 import { AiFillCloseCircle } from 'react-icons/ai'
+
+// ----- internal modules ----- //
+// components
+import Alert from '@/common/components/alert'
 
 interface Props {
   isOpen: boolean
@@ -26,45 +20,32 @@ interface Props {
 
 export default function SubmissionAlert (props: Props): JSX.Element {
   const { isOpen, submissionMessages, setSubmissionMessages, onClose } = props
-  const cancelRef = useRef() as RefObject<FocusableElement>
-  const closeAlerWindow = (): void => {
-    onClose()
-    setSubmissionMessages([])
-  }
 
   return (
-    <AlertDialog
+    <Alert
       isOpen={isOpen}
-      leastDestructiveRef={cancelRef}
-      onClose={closeAlerWindow}
+      onClose={onClose}
+      runOnClose={() => setSubmissionMessages([])}
     >
-      <AlertDialogOverlay>
-        <AlertDialogContent>
-          <AlertDialogBody color='main'>
-            <VStack p='5%'>
-              {submissionMessages.length === 0
-                ? (
-                  <VStack align='center' spacing={6}>
-                    <CheckCircleIcon boxSize={8} color='green.500' />
-                    <Text fontSize='lg' textAlign='center'>
-                      Receipt was successfully uploaded!
-                    </Text>
-                  </VStack>
-                  )
-                : (
-                    submissionMessages.map((message, index) => (
-                      <VStack key={index} align='center' spacing={6}>
-                        <Icon as={AiFillCloseCircle} color='red.500' boxSize={8} />
-                        <Text fontSize='lg' textAlign='center'>
-                          {Parser(message)}
-                        </Text>
-                      </VStack>
-                    ))
-                  )}
-            </VStack>
-          </AlertDialogBody>
-        </AlertDialogContent>
-      </AlertDialogOverlay>
-    </AlertDialog>
+      {submissionMessages.length === 0
+        ? (
+          <VStack align='center' spacing={6}>
+            <CheckCircleIcon boxSize={8} color='green.500' />
+            <Text fontSize='lg' textAlign='center'>
+              Receipt was successfully uploaded!
+            </Text>
+          </VStack>
+          )
+        : (
+            submissionMessages.map((message, index) => (
+              <VStack key={index} align='center' spacing={6}>
+                <Icon as={AiFillCloseCircle} color='red.500' boxSize={8} />
+                <Text fontSize='lg' textAlign='center'>
+                  {Parser(message)}
+                </Text>
+              </VStack>
+            ))
+          )}
+    </Alert>
   )
 }
