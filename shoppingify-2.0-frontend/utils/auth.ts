@@ -1,7 +1,6 @@
-// external modules
+// ----- external modules ----- //
 import { FormikProps } from 'formik'
 import { Dispatch, SetStateAction } from 'react'
-
 import {
   CognitoUserPool,
   CognitoUser,
@@ -10,9 +9,18 @@ import {
   CognitoUserSession,
   CookieStorage
 } from 'amazon-cognito-identity-js'
+import { CognitoJwtVerifier } from 'aws-jwt-verify'
+import Cookies from 'js-cookie'
+import * as jose from 'jose'
 
-// internal modules
-import { User, UserLogin, ResetPasswordVc, ResetPassword } from 'common/types'
+// ----- internal modules ----- //
+// types
+import {
+  User,
+  UserLogin,
+  ResetPasswordVc,
+  ResetPassword
+} from '@/common/types/auth_types'
 
 interface DataMapping {
   property: string
@@ -241,4 +249,44 @@ export async function loggedIn (): Promise<{
       resolve({ error_message: 'Error: user not loggen in', signedIn: false })
     }
   })
+}
+
+export async function verifyUser (token: string): Promise<{
+  succcess: boolean
+  error_message?: string
+  payload?: string
+}> {
+  const response = { succcess: true, error_message: '', payload: '' }
+  const verifier = CognitoJwtVerifier.create({
+    userPoolId: process.env.NEXT_PUBLIC_USER_POOL_ID,
+    tokenUse: 'id',
+    clientId: process.env.NEXT_PUBLIC_USER_POOL_CLIENT_ID
+  })
+
+  try {
+    const payload = await verifier.verify(token)
+    response.payload = JSON.stringify(payload)
+  } catch (e) {
+    response.error_message = e.message
+    response.succcess = false
+  }
+  return response
+}
+
+export function getUsername (payload: string): string {
+  const parsedData = JSON.parse(payload)
+  return parsedData.email
+}
+
+export function getUsernameFromCookies (): string {
+  const allCookies = Cookies.get()
+  let username = ''
+
+  for (const [key, value] of Object.entries(allCookies)) {
+    if (key.includes('idToken')) {
+      username = getUsername(JSON.stringify(jose.decodeJwt(value)))
+    }
+  }
+
+  return username
 }
