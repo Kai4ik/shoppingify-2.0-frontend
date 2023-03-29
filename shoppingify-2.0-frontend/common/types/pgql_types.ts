@@ -20,6 +20,7 @@ export interface ReceiptPgql {
 
 // update receipt
 export interface UpdateReceiptPgql {
+  receiptNumber?: number
   merchant?: string
   tax?: string
   subtotal?: string
@@ -27,6 +28,9 @@ export interface UpdateReceiptPgql {
   purchaseDate?: string
   purchaseTime?: string
   numberOfItems?: number
+  lineItemsByReceiptNumberAndUser?: {
+    nodes: { [key: number]: UpdateLineItemPgql }
+  }
 }
 
 // ---------------- Line Item Types ------------- //
@@ -42,6 +46,7 @@ export interface LineItemPgql {
 
 // update line item
 export interface UpdateLineItemPgql {
+  id?: number
   price?: number
   total?: number
   unit?: string
