@@ -10,6 +10,8 @@ import {
   Button,
   useDisclosure
 } from '@chakra-ui/react'
+import { useRouter } from 'next/navigation'
+
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import * as crypto from 'crypto'
@@ -44,6 +46,7 @@ export default function AddReceipt (): JSX.Element {
     watch,
     control
   } = useForm()
+  const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
   const [file, setFile] = useState<File | undefined>(undefined)
   const [data, setData] = useState<ReceiptScanResponse | undefined>(undefined)
@@ -80,9 +83,8 @@ export default function AddReceipt (): JSX.Element {
       setSubmissionInProgress(false)
       result.success === false && setSubmissionMessages(result.error_messages)
       onOpen()
-      if (result.success === true) {
-        setData(undefined)
-        setFile(undefined)
+      if (result.success === true && data !== undefined) {
+        router.push(`/protected/purchaseHistory/${data.data.receipt_number}`)
       }
     }
   }

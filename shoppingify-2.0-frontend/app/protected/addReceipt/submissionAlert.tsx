@@ -26,6 +26,8 @@ export default function SubmissionAlert (props: Props): JSX.Element {
       isOpen={isOpen}
       onClose={onClose}
       runOnClose={() => setSubmissionMessages([])}
+      closeOnEsc={false}
+      closeOnOverlayClick={false}
     >
       {submissionMessages.length === 0
         ? (

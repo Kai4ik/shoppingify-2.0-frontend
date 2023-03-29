@@ -37,7 +37,9 @@ export default function ValidationAlert (props: Props): JSX.Element {
         : (
             validationMessage.map((message, index) => (
               <Fragment key={index}>
-                <Text fontSize='lg'>{Parser(message)}</Text>
+                <Text fontSize='lg' alignSelf='flex-start'>
+                  {Parser(message)}
+                </Text>
               </Fragment>
             ))
           )}
