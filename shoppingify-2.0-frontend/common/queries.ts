@@ -121,3 +121,43 @@ export const updateReceipt = (): string => {
     'updateReceiptByReceiptNumberAndUser(input: $input) {clientMutationId}}'
   return mutation
 }
+
+export const getItemsForUser = (user: string): string => {
+  return `
+    query MyQuery {
+      allLineItems(filter: {user: {equalTo: "${user}"}}) {
+          nodes {
+            id
+            price
+            qty
+            total
+            unit
+            itemTitle
+          }
+        }
+    }
+    `
+}
+
+export const getSpecificItemInfo = (itemTitle: string): string => {
+  return `
+    query MyQuery {
+      allLineItems(filter: {itemTitle: {equalTo: "${itemTitle}"}}) {
+          nodes {
+            id
+            price
+            qty
+            total
+            unit
+            itemTitle
+            receiptByReceiptNumberAndUser {
+              numberOfItems
+              receiptNumber
+              total
+              purchaseDate
+            }
+          }
+        }
+    }
+    `
+}

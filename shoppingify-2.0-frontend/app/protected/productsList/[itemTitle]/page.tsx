@@ -7,15 +7,18 @@ import { RequestCookie } from 'next/dist/server/web/spec-extension/cookies/types
 import { getUsername } from '@/utils/auth'
 
 // components
-import ItemsContainer from './itemsContainer'
+import ItemContainer from './itemContainer'
 
 // GraphQL queries
-import { getItemsForUser } from '@/common/queries'
+import { getSpecificItemInfo } from '@/common/queries'
 
 // types
-import { LineItemPgql } from '@/common/types/pgql_types'
+import { LineItemStatsPgql } from '@/common/types/pgql_types'
 
-const getLineItemsData = async (cookies: RequestCookie[]) => {
+const getLineItemStats = async (
+  cookies: RequestCookie[],
+  itemTitle: string
+) => {
   let username = ''
 
   cookies.forEach((cookie: { name: string, value: string }) => {
@@ -25,7 +28,9 @@ const getLineItemsData = async (cookies: RequestCookie[]) => {
   })
 
   if (username.length > 0) {
-    const getItemsForUserQuery = getItemsForUser(username)
+    const getItemStatsQuery = getSpecificItemInfo(
+      itemTitle.replaceAll('%20', ' ')
+    )
 
     const receiptsDataForUser = await fetch('http://localhost:5000/graphql', {
       method: 'POST',
@@ -34,22 +39,28 @@ const getLineItemsData = async (cookies: RequestCookie[]) => {
         Accept: 'application/json'
       },
       body: JSON.stringify({
-        query: getItemsForUserQuery
+        query: getItemStatsQuery
       })
     })
     return await receiptsDataForUser.json()
   }
 }
 
-export default async function ProductList (): Promise<JSX.Element> {
+interface Props {
+  params: {
+    itemTitle: string
+  }
+}
+
+export default async function ItemStats ({
+  params
+}: Props): Promise<JSX.Element> {
   const cookieStore = cookies()
 
   const allCookies = cookieStore.getAll()
-  const data = await getLineItemsData(allCookies)
-  const lineItems: LineItemPgql[] = data.data.allLineItems.nodes
-  const uniqueLineItems = Array.from(
-    new Map(lineItems.map((item) => [item.itemTitle, item])).values()
-  )
+  const data = await getLineItemStats(allCookies, params.itemTitle)
+  const lineItemStats: LineItemStatsPgql[] = data.data.allLineItems.nodes
+  console.log(lineItemStats)
 
-  return <ItemsContainer lineItems={uniqueLineItems} />
+  return <ItemContainer lineItemStats={lineItemStats} />
 }
