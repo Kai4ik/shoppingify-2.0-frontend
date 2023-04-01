@@ -64,3 +64,19 @@ export interface CreateLineItemPgql {
   user: string
   receiptNumber: number
 }
+
+// get line item with all receipts info
+export interface LineItemStatsPgql {
+  id: number
+  price: number
+  total: number
+  unit: string
+  itemTitle: string
+  qty: number
+  receiptByReceiptNumberAndUser: {
+    receiptNumber: number
+    total: number
+    numberOfItems: number
+    purchaseDate: string
+  }
+}
