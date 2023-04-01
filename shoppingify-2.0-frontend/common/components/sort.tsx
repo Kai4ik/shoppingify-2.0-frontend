@@ -5,11 +5,13 @@ import { Dispatch, SetStateAction } from 'react'
 interface Props {
   sortOption: string
   setSortOption: Dispatch<SetStateAction<string>>
+  options: Array<{ value: string, label: string }>
 }
 
 export default function Sort ({
   sortOption,
-  setSortOption
+  setSortOption,
+  options
 }: Props): JSX.Element {
   return (
     <Select
@@ -26,10 +28,11 @@ export default function Sort ({
       value={sortOption}
       onChange={(e) => setSortOption(e.target.value)}
     >
-      <option value='oldest'>Oldest to Newest</option>
-      <option value='newest'>Newest to Oldest</option>
-      <option value='cheap'>Price - Low to High</option>
-      <option value='expensive'>Price - High to Low</option>
+      {options.map((option, index) => (
+        <option key={index} value={option.value}>
+          {option.label}
+        </option>
+      ))}
     </Select>
   )
 }

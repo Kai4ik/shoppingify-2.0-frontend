@@ -22,7 +22,7 @@ import { ReceiptPgql } from '@/common/types/pgql_types'
 // components
 import ReceiptFilter from './individualReceiptFilter'
 import ReceiptDetails from './receiptDetails'
-import Sort from './sort'
+import Sort from '@/common/components/sort'
 
 interface Props {
   receipts: { month: string, receipts: ReceiptPgql[] }
@@ -113,7 +113,16 @@ function Receipt ({
         >
           {receipts.month}
         </Text>
-        <Sort sortOption={sortOption} setSortOption={setSortOption} />
+        <Sort
+          sortOption={sortOption}
+          setSortOption={setSortOption}
+          options={[
+            { value: 'oldest', label: 'Oldest to Newest' },
+            { value: 'newest', label: 'Newest to Oldest' },
+            { value: 'cheap', label: 'Price - Low to High' },
+            { value: 'expensive', label: 'Price - High to Low' }
+          ]}
+        />
       </HStack>
       <ReceiptFilter
         receipts={receipts.receipts}
