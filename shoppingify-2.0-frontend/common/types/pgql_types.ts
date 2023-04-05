@@ -80,3 +80,33 @@ export interface LineItemStatsPgql {
     purchaseDate: string
   }
 }
+
+// ---------------- Line Item & Receipts Stats Types ------------- //
+export interface StatsPgql {
+  max: {
+    total: string
+    numberOfItems: number
+  }
+  min: {
+    total: string
+    numberOfItems: number
+  }
+  distinctCount: {
+    merchant: string
+    receiptNumber: string
+  }
+  average: {
+    total: string
+    numberOfItems: string
+  }
+  sum: {
+    total: string
+  }
+}
+
+export interface LineItemGroupStatsPgql {
+  sum: {
+    total: string
+  }
+  keys: string[]
+}
