@@ -27,7 +27,7 @@ const getLineItemsData = async (cookies: RequestCookie[]) => {
   if (username.length > 0) {
     const getItemsForUserQuery = getItemsForUser(username)
 
-    const receiptsDataForUser = await fetch('http://localhost:5000/graphql', {
+    const receiptsDataForUser = await fetch(process.env.PGQL_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

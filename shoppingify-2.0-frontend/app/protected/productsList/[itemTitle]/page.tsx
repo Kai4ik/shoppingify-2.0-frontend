@@ -32,7 +32,7 @@ const getLineItemStats = async (
       itemTitle.replaceAll('%20', ' ')
     )
 
-    const receiptsDataForUser = await fetch('http://localhost:5000/graphql', {
+    const receiptsDataForUser = await fetch(process.env.PGQL_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

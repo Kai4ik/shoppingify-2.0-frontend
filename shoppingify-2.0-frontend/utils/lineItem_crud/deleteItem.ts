@@ -16,7 +16,7 @@ const deleteItemFromDB = async (
     }
   })
 
-  const deletedItems = await fetch('http://localhost:5000/graphql', {
+  const deletedItems = await fetch(process.env.NEXT_PUBLIC_PGQL_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -49,7 +49,7 @@ const getReceiptData = async (
     parseInt(receiptNumber)
   )
 
-  const receipt = await fetch('http://localhost:5000/graphql', {
+  const receipt = await fetch(process.env.PGQL_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

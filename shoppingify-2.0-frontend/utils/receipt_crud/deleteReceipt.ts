@@ -15,6 +15,7 @@ const deleteReceipt = async (receipt: ReceiptPgql): Promise<boolean> => {
     const response = await fetch('http://127.0.0.1:8000/deleteReceipt', {
       method: 'POST',
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${userLoggedIn.jwt}`
       },

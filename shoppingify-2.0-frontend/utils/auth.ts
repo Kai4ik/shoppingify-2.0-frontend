@@ -257,6 +257,7 @@ export async function verifyUser (token: string): Promise<{
   payload?: string
 }> {
   const response = { succcess: true, error_message: '', payload: '' }
+
   const verifier = CognitoJwtVerifier.create({
     userPoolId: process.env.NEXT_PUBLIC_USER_POOL_ID,
     tokenUse: 'id',

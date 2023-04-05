@@ -73,8 +73,9 @@ export default function ReceiptsContainer ({ receipts }: Props): JSX.Element {
     purchaseDate.setDate(purchaseDate.getDate() + 1)
 
     const monthYearString = `${purchaseDate.toLocaleString('default', {
-      month: 'long'
-    })} ${purchaseDate.getFullYear()}`
+      month: 'long',
+      year: 'numeric'
+    })}`
     const index = receiptsByMonth.findIndex(
       (elem) => elem.month === monthYearString
     )

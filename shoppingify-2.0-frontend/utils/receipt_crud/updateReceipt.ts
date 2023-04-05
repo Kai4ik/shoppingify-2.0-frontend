@@ -23,7 +23,7 @@ const updateReceiptInDB = async (
     receiptPatch: valuesToUpdate
   }
 
-  const updatedReceipt = await fetch('http://localhost:5000/graphql', {
+  const updatedReceipt = await fetch(process.env.NEXT_PUBLIC_PGQL_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
