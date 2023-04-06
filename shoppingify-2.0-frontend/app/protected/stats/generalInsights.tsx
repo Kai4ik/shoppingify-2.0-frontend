@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 
 // ----- internal modules ----- //
-import { getReceiptByTotal } from '@/utils/itemStats'
+import { getReceiptByTotal } from '@/utils/helpers'
 // components
 
 // types

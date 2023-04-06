@@ -60,7 +60,6 @@ export default async function ItemStats ({
   const allCookies = cookieStore.getAll()
   const data = await getLineItemStats(allCookies, params.itemTitle)
   const lineItemStats: LineItemStatsPgql[] = data.data.allLineItems.nodes
-  console.log(lineItemStats)
 
   return <ItemContainer lineItemStats={lineItemStats} />
 }

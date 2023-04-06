@@ -15,7 +15,7 @@ import {
 import { Bar } from 'react-chartjs-2'
 
 // ----- internal modules ----- //
-import { getChartData } from '@/utils/itemStats'
+import getMonthlyItemPrice from '@/utils/stats/monthlyItemPrice'
 
 // types
 import { LineItemStatsPgql } from '@/common/types/pgql_types'
@@ -40,7 +40,7 @@ export default function PriceChart ({
 }: Props): JSX.Element {
   const title = lineItemStats[0].itemTitle
 
-  const chartData = getChartData(lineItemStats, parseInt(sortOption))
+  const chartData = getMonthlyItemPrice(lineItemStats, parseInt(sortOption))
   const options: ChartOptions<'bar'> = {
     responsive: true,
     normalized: true,

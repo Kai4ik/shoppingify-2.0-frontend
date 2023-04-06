@@ -12,11 +12,12 @@ import {
   ChartOptions
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
+
 import { useState } from 'react'
 import { VStack, Text, HStack } from '@chakra-ui/react'
 
 // ----- internal modules ----- //
-import { boughtItemsByMonths } from '@/utils/itemStats'
+import calcExpendituresByMonths from '@/utils/stats/monthlyExpenditures'
 
 // types
 import { ReceiptPgql } from '@/common/types/pgql_types'
@@ -37,16 +38,34 @@ interface Props {
   receipts: ReceiptPgql[]
 }
 
-export default function BoughtItemsByMonthChart ({
+export default function MonthlyExpendituresChart ({
   receipts
 }: Props): JSX.Element {
   const [sortOption, setSortOption] = useState('6')
-  const chartData = boughtItemsByMonths(receipts, parseInt(sortOption))
+  const chartData = calcExpendituresByMonths(receipts, parseInt(sortOption))
   const options: ChartOptions<'bar'> = {
     responsive: true,
     normalized: true,
     layout: {
       padding: 30
+    },
+    scales: {
+      y: {
+        ticks: {
+          callback: function (value) {
+            return `$${value}`
+          }
+        }
+      }
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            return `You spend $${context.formattedValue}`
+          }
+        }
+      }
     }
   }
 
@@ -54,8 +73,8 @@ export default function BoughtItemsByMonthChart ({
     labels: chartData.map((elem) => elem.month),
     datasets: [
       {
-        label: `Items Bought in last ${sortOption} months`,
-        data: chartData.map((elem) => elem.items),
+        label: `Expenditures in last ${sortOption} months`,
+        data: chartData.map((elem) => elem.total),
         borderColor: '#F9A109',
         backgroundColor: '#80485B'
       }
@@ -66,7 +85,7 @@ export default function BoughtItemsByMonthChart ({
     <VStack w='100%' align='flex-start'>
       <HStack w='100%' justify='space-between' align='center'>
         <Text fontSize={22} color='main' fontWeight={600}>
-          Items Bought in last {sortOption} months
+          Expenditures in last {sortOption} months
         </Text>
         <Sort
           sortOption={sortOption}

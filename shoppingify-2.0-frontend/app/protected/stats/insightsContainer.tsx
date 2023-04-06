@@ -1,15 +1,18 @@
 'use client'
 
 // ----- external modules ----- //
-import { VStack } from '@chakra-ui/react'
+import { VStack, HStack, Text } from '@chakra-ui/react'
 
 // ----- internal modules ----- //
 // components
 import GeneralInsights from './generalInsights'
 import LineItemsInsights from './lineItemsInsights'
-import SpendByMonthChart from './spendByMonths'
-import BoughtItemsByMonthChart from './boughtItemsByMonths'
-import NumberOfItemsRangeChart from './numberOfItemsRange'
+import MonthlyExpendituresChart from './monthlyExpendituresChart'
+import MonthlyItemsCountChart from './monthlyItemCountChart'
+import ItemCountGroupsChart from './itemCountGroupsChart'
+import TopItemsChart from './topPurchasedItemsChart'
+import PurchaseTimeChart from './purchaseTimeChart'
+import WeekdaysChart from './weekdaysChart'
 
 // types
 import {
@@ -40,10 +43,21 @@ export default function InsightsContainer ({
         lineItems={lineItems}
         lineItemsStatsData={lineItemsStatsData}
       />
-      <SpendByMonthChart receipts={receipts} />
-      <BoughtItemsByMonthChart receipts={receipts} />
-
-      <NumberOfItemsRangeChart receipts={receipts} />
+      <HStack w='100%' m='50px 0 !important'>
+        <ItemCountGroupsChart receipts={receipts} />
+        <TopItemsChart lineItems={lineItems} />
+      </HStack>
+      <MonthlyExpendituresChart receipts={receipts} />
+      <MonthlyItemsCountChart receipts={receipts} />
+      <VStack w='100%' align='flex-start'>
+        <Text fontSize={22} color='main' fontWeight={600}>
+          Timing Insights
+        </Text>
+        <HStack w='100%' justify='space-between'>
+          <PurchaseTimeChart receipts={receipts} />
+          <WeekdaysChart receipts={receipts} />
+        </HStack>
+      </VStack>
     </VStack>
   )
 }

@@ -13,21 +13,19 @@ import { Box } from '@chakra-ui/react'
 import { Pie } from 'react-chartjs-2'
 
 // ----- internal modules ----- //
-import { groupedByNumberOfItems } from '@/utils/itemStats'
+import getMostPurchasedItems from '@/utils/stats/mostPurchasedItems'
 
 // types
-import { ReceiptPgql } from '@/common/types/pgql_types'
+import { LineItemPgql } from '@/common/types/pgql_types'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
 interface Props {
-  receipts: ReceiptPgql[]
+  lineItems: LineItemPgql[]
 }
 
-export default function NumberOfItemsRangeChart ({
-  receipts
-}: Props): JSX.Element {
-  const chartData = groupedByNumberOfItems(receipts)
+export default function TopItemsChart ({ lineItems }: Props): JSX.Element {
+  const chartData = getMostPurchasedItems(lineItems, 5)
   const options: ChartOptions<'pie'> = {
     responsive: true,
     normalized: true,
@@ -38,17 +36,17 @@ export default function NumberOfItemsRangeChart ({
       },
       title: {
         display: true,
-        text: 'Number of items'
+        text: 'Top 5 purchased items'
       }
     }
   }
 
   const data = {
-    labels: chartData.map((elem) => elem.range),
+    labels: chartData.map((elem) => elem.title),
     datasets: [
       {
-        label: 'Number of Items Bought',
-        data: chartData.map((elem) => elem.number),
+        label: 'Number of Times you bought this product',
+        data: chartData.map((elem) => elem.count),
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',

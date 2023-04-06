@@ -13,11 +13,11 @@ import {
 } from '@chakra-ui/react'
 
 // ----- internal modules ----- //
-import {
-  getMostExpensiveAndCheapestItems,
-  getMostSpendOnItem,
-  getMostPurchasedItems
-} from '@/utils/itemStats'
+
+import getCheapestItem from '@/utils/stats/cheapestItem'
+import getMostExpensiveItem from '@/utils/stats/mostExpensiveItem'
+import getMostSpendOnItem from '@/utils/stats/mostSpendOnItem'
+import getMostPurchasedItems from '@/utils/stats/mostPurchasedItems'
 
 // types
 import {
@@ -40,13 +40,11 @@ export default function LineItemsInsights ({
   const leastNumber = statsData.min.numberOfItems
   const mostNumber = statsData.max.numberOfItems
   const average = parseFloat(statsData.average.numberOfItems).toFixed(2)
-  const mostExpensiveAndCheapestItems =
-    getMostExpensiveAndCheapestItems(lineItems)
-  const cheapestItem = mostExpensiveAndCheapestItems.cheapest
-  const mostExpensiveItem = mostExpensiveAndCheapestItems.mostExpensive
 
+  const mostExpensiveItem = getMostExpensiveItem(lineItems)
+  const cheapestItem = getCheapestItem(lineItems)
   const mostSpendOnItem = getMostSpendOnItem(lineItemsStatsData)
-  const mostPurchasedItem = getMostPurchasedItems(lineItems)
+  const mostPurchasedItem = getMostPurchasedItems(lineItems, 1)[0]
 
   return (
     <VStack w='100%' spacing={4} align='flex-start'>

@@ -11,11 +11,10 @@ import {
 } from '@chakra-ui/react'
 
 // ----- internal modules ----- //
-import {
-  calculateLastThreeMonthsFluctuation,
-  getLowestItemPrice,
-  getHighestItemPrice
-} from '@/utils/itemStats'
+import calcItemTotalFluctuation from '@/utils/stats/itemTotalFluctuation'
+import calcLastQtyFluctuation from '@/utils/stats/itemQtyFluctuation'
+import getHighestPriceItem from '@/utils/stats/highestPriceItem'
+import getLowestPriceItem from '@/utils/stats/lowestPriceItem'
 
 // types
 import { LineItemStatsPgql } from '@/common/types/pgql_types'
@@ -34,9 +33,10 @@ export default function StatsContainer ({ lineItemStats }: Props): JSX.Element {
       0
     ) / lineItemStats.length
   ).toFixed(2)
-  const itemFluctuations = calculateLastThreeMonthsFluctuation(lineItemStats)
-  const lowestPriceObj = getLowestItemPrice(lineItemStats)
-  const highestPriceObj = getHighestItemPrice(lineItemStats)
+  const itemTotalFluctuation = calcItemTotalFluctuation(lineItemStats)
+  const qtyFluctuation = calcLastQtyFluctuation(lineItemStats)
+  const lowestPriceObj = getLowestPriceItem(lineItemStats)
+  const highestPriceObj = getHighestPriceItem(lineItemStats)
 
   return (
     <StatGroup
@@ -74,11 +74,9 @@ export default function StatsContainer ({ lineItemStats }: Props): JSX.Element {
         <StatNumber color='secondary'>${totalSpendOnThisProduct}</StatNumber>
         <StatHelpText>
           <StatArrow
-            type={
-              itemFluctuations.totalFluctuation >= 0 ? 'increase' : 'decrease'
-            }
+            type={itemTotalFluctuation >= 0 ? 'increase' : 'decrease'}
           />
-          {itemFluctuations.totalFluctuation}% in last 3 months
+          {itemTotalFluctuation}% in last 3 months
         </StatHelpText>
       </Stat>
 
@@ -86,12 +84,8 @@ export default function StatsContainer ({ lineItemStats }: Props): JSX.Element {
         <StatLabel fontSize={15}>Times Purchased</StatLabel>
         <StatNumber color='secondary'>{lineItemStats.length}</StatNumber>
         <StatHelpText>
-          <StatArrow
-            type={
-              itemFluctuations.qtyFluctuation >= 0 ? 'increase' : 'decrease'
-            }
-          />
-          {itemFluctuations.qtyFluctuation}% in last 3 months
+          <StatArrow type={qtyFluctuation >= 0 ? 'increase' : 'decrease'} />
+          {qtyFluctuation}% in last 3 months
         </StatHelpText>
       </Stat>
     </StatGroup>
