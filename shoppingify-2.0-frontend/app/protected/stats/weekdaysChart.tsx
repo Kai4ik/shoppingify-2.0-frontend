@@ -1,16 +1,7 @@
 'use client'
 
 // ----- external modules ----- //
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ChartOptions
-} from 'chart.js'
+import { ChartOptions } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
 import { Box } from '@chakra-ui/react'
 
@@ -19,15 +10,6 @@ import calcWeekdaysCount from '@/utils/stats/weekdaysCount'
 
 // types
 import { ReceiptPgql } from '@/common/types/pgql_types'
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-)
 
 interface Props {
   receipts: ReceiptPgql[]
@@ -38,6 +20,7 @@ export default function WeekdaysChart ({ receipts }: Props): JSX.Element {
   const options: ChartOptions<'bar'> = {
     responsive: true,
     normalized: true,
+    maintainAspectRatio: false,
     layout: {
       padding: 30
     },
@@ -69,7 +52,7 @@ export default function WeekdaysChart ({ receipts }: Props): JSX.Element {
   }
 
   return (
-    <Box w='70%'>
+    <Box w={['100%', '70%']} h={['350px', '600px']}>
       <Bar data={data} options={options} />
     </Box>
   )

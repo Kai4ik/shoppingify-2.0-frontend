@@ -1,7 +1,18 @@
 'use client'
 
 // ----- external modules ----- //
-import { VStack, HStack, Text } from '@chakra-ui/react'
+import { VStack, Text, Stack } from '@chakra-ui/react'
+
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title
+} from 'chart.js'
 
 // ----- internal modules ----- //
 // components
@@ -29,6 +40,16 @@ interface Props {
   lineItemsStatsData: [LineItemGroupStatsPgql]
 }
 
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Legend
+)
+
 export default function InsightsContainer ({
   lineItems,
   receipts,
@@ -36,27 +57,42 @@ export default function InsightsContainer ({
   lineItemsStatsData
 }: Props): JSX.Element {
   return (
-    <VStack w='95%' p='4% 0 4% 10%' spacing={10} align='flex-start'>
+    <VStack
+      w='95%'
+      p={['4% 0 4% 5%', '4% 0 4% 10%']}
+      spacing={10}
+      align='flex-start'
+    >
       <GeneralInsights statsData={statsData} receiptsData={receipts} />
       <LineItemsInsights
         statsData={statsData}
         lineItems={lineItems}
         lineItemsStatsData={lineItemsStatsData}
       />
-      <HStack w='100%' m='50px 0 !important'>
+      <Stack
+        direction={['column', 'row']}
+        w='100%'
+        m='50px 0 !important'
+        align='center'
+      >
         <ItemCountGroupsChart receipts={receipts} />
         <TopItemsChart lineItems={lineItems} />
-      </HStack>
+      </Stack>
       <MonthlyExpendituresChart receipts={receipts} />
       <MonthlyItemsCountChart receipts={receipts} />
       <VStack w='100%' align='flex-start'>
         <Text fontSize={22} color='main' fontWeight={600}>
           Timing Insights
         </Text>
-        <HStack w='100%' justify='space-between'>
+        <Stack
+          w='100%'
+          justify='space-between'
+          align='center'
+          direction={['column', 'row']}
+        >
           <PurchaseTimeChart receipts={receipts} />
           <WeekdaysChart receipts={receipts} />
-        </HStack>
+        </Stack>
       </VStack>
     </VStack>
   )

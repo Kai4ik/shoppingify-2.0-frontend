@@ -3,6 +3,7 @@
 // ----- external modules ----- //
 import {
   Stat,
+  Stack,
   VStack,
   StatLabel,
   StatNumber,
@@ -58,44 +59,46 @@ export default function LineItemsInsights ({
         color='main'
         w='100%'
       >
-        <Stat>
-          <StatLabel fontSize={15}>Least number of items purchased</StatLabel>
-          <StatNumber color='#56CCF2'>
-            <HStack>
-              <Text>{leastNumber} </Text>
-              <Text pt={1} fontSize={14}>
-                items
-              </Text>
-            </HStack>
-          </StatNumber>
-        </Stat>
+        <Stack direction={['column', 'row']} w='100%' align='flex-start'>
+          <Stat>
+            <StatLabel fontSize={15}>Least number of items purchased</StatLabel>
+            <StatNumber color='#56CCF2'>
+              <HStack>
+                <Text>{leastNumber} </Text>
+                <Text pt={1} fontSize={14}>
+                  items
+                </Text>
+              </HStack>
+            </StatNumber>
+          </Stat>
 
-        <Stat>
-          <StatLabel fontSize={15}>Most number of items purchased</StatLabel>
+          <Stat>
+            <StatLabel fontSize={15}>Most number of items purchased</StatLabel>
 
-          <StatNumber color='#56CCF2'>
-            <HStack>
-              <Text>{mostNumber} </Text>
-              <Text pt={1} fontSize={14}>
-                items
-              </Text>
-            </HStack>
-          </StatNumber>
-        </Stat>
+            <StatNumber color='#56CCF2'>
+              <HStack>
+                <Text>{mostNumber} </Text>
+                <Text pt={1} fontSize={14}>
+                  items
+                </Text>
+              </HStack>
+            </StatNumber>
+          </Stat>
 
-        <Stat>
-          <StatLabel fontSize={15}>In average you buy </StatLabel>
-          <StatNumber color='#56CCF2'>
-            <HStack>
-              <Text>{average} </Text>
-              <Text pt={2} fontSize={14}>
-                items
-              </Text>
-            </HStack>
-          </StatNumber>
-        </Stat>
+          <Stat>
+            <StatLabel fontSize={15}>In average you buy </StatLabel>
+            <StatNumber color='#56CCF2'>
+              <HStack>
+                <Text>{average} </Text>
+                <Text pt={2} fontSize={14}>
+                  items
+                </Text>
+              </HStack>
+            </StatNumber>
+          </Stat>
 
-        <Stat />
+          <Stat />
+        </Stack>
       </StatGroup>
 
       <StatGroup
@@ -105,53 +108,55 @@ export default function LineItemsInsights ({
         color='main'
         w='100%'
       >
-        <Stat>
-          <StatLabel fontSize={15}>The cheapest item</StatLabel>
-          <Link
-            href={`/protected/productsList/${cheapestItem.itemTitle}`}
-            color='secondary'
-          >
-            <StatNumber fontSize={18}>
-              {cheapestItem.itemTitle} - ${cheapestItem.price}
-            </StatNumber>
-          </Link>
-        </Stat>
+        <Stack direction={['column', 'row']} w='100%' align='flex-start'>
+          <Stat>
+            <StatLabel fontSize={15}>The cheapest item</StatLabel>
+            <Link
+              href={`/protected/productsList/${cheapestItem.itemTitle}`}
+              color='secondary'
+            >
+              <StatNumber fontSize={18}>
+                {cheapestItem.itemTitle} - ${cheapestItem.price}
+              </StatNumber>
+            </Link>
+          </Stat>
 
-        <Stat>
-          <StatLabel fontSize={15}>The most expensive item</StatLabel>
-          <Link
-            href={`/protected/productsList/${mostExpensiveItem.itemTitle}`}
-            color='secondary'
-          >
-            <StatNumber fontSize={18}>
-              {mostExpensiveItem.itemTitle} - ${mostExpensiveItem.price}
-            </StatNumber>
-          </Link>
-        </Stat>
+          <Stat>
+            <StatLabel fontSize={15}>The most expensive item</StatLabel>
+            <Link
+              href={`/protected/productsList/${mostExpensiveItem.itemTitle}`}
+              color='secondary'
+            >
+              <StatNumber fontSize={18}>
+                {mostExpensiveItem.itemTitle} - ${mostExpensiveItem.price}
+              </StatNumber>
+            </Link>
+          </Stat>
 
-        <Stat>
-          <StatLabel fontSize={15}>You spend most on </StatLabel>
-          <Link
-            href={`/protected/productsList/${mostSpendOnItem.keys[0]}`}
-            color='secondary'
-          >
-            <StatNumber fontSize={18}>
-              {mostSpendOnItem.keys[0]} - ${mostSpendOnItem.sum.total}
-            </StatNumber>
-          </Link>
-        </Stat>
+          <Stat>
+            <StatLabel fontSize={15}>You spend most on </StatLabel>
+            <Link
+              href={`/protected/productsList/${mostSpendOnItem.keys[0]}`}
+              color='secondary'
+            >
+              <StatNumber fontSize={18}>
+                {mostSpendOnItem.keys[0]} - ${mostSpendOnItem.sum.total}
+              </StatNumber>
+            </Link>
+          </Stat>
 
-        <Stat>
-          <StatLabel fontSize={15}>The most purchased item(s) </StatLabel>
-          <Link
-            href={`/protected/productsList/${mostPurchasedItem.title}`}
-            color='secondary'
-          >
-            <StatNumber fontSize={18}>
-              {mostPurchasedItem.title} - {mostPurchasedItem.count} times
-            </StatNumber>
-          </Link>
-        </Stat>
+          <Stat>
+            <StatLabel fontSize={15}>The most purchased item(s) </StatLabel>
+            <Link
+              href={`/protected/productsList/${mostPurchasedItem.title}`}
+              color='secondary'
+            >
+              <StatNumber fontSize={18}>
+                {mostPurchasedItem.title} - {mostPurchasedItem.count} times
+              </StatNumber>
+            </Link>
+          </Stat>
+        </Stack>
       </StatGroup>
     </VStack>
   )

@@ -1,19 +1,12 @@
 'use client'
 
 // ----- external modules ----- //
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ChartOptions
-} from 'chart.js'
+import { ChartOptions } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
+import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels'
+
 import { useState } from 'react'
-import { VStack, Text, HStack } from '@chakra-ui/react'
+import { VStack, Text, Stack, Box } from '@chakra-ui/react'
 
 // ----- internal modules ----- //
 import calcMonthlyItemCount from '@/utils/stats/monthlyItemsCount'
@@ -23,15 +16,6 @@ import { ReceiptPgql } from '@/common/types/pgql_types'
 
 // components
 import Sort from '@/common/components/sort'
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-)
 
 interface Props {
   receipts: ReceiptPgql[]
@@ -45,6 +29,7 @@ export default function MonthlyItemsCountChart ({
   const options: ChartOptions<'bar'> = {
     responsive: true,
     normalized: true,
+    maintainAspectRatio: false,
     layout: {
       padding: 30
     },
@@ -66,14 +51,29 @@ export default function MonthlyItemsCountChart ({
         label: `Items Bought in last ${sortOption} months`,
         data: chartData.map((elem) => elem.items),
         borderColor: '#F9A109',
-        backgroundColor: '#80485B'
+        backgroundColor: '#80485B',
+        datalabels: {
+          display: function (context: Context) {
+            const value = context?.dataset?.data[context.dataIndex]
+            return value !== null ? value > 0 : false
+          },
+          color: '#F9A109',
+          formatter: function (value: number) {
+            return `${value}  item(s)`
+          }
+        }
       }
     ]
   }
 
   return (
     <VStack w='100%' align='flex-start'>
-      <HStack w='100%' justify='space-between' align='center'>
+      <Stack
+        direction={['column', 'row']}
+        w='100%'
+        justify='space-between'
+        align={['flex-start', 'center']}
+      >
         <Text fontSize={22} color='main' fontWeight={600}>
           Items Bought in last {sortOption} months
         </Text>
@@ -86,8 +86,11 @@ export default function MonthlyItemsCountChart ({
             { value: '12', label: 'Last year' }
           ]}
         />
-      </HStack>
-      <Bar data={data} options={options} />
+      </Stack>
+
+      <Box w='100%' h={['350px', '600px']}>
+        <Bar data={data} options={options} plugins={[ChartDataLabels]} />
+      </Box>
     </VStack>
   )
 }

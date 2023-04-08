@@ -4,6 +4,7 @@
 import {
   Stat,
   VStack,
+  Stack,
   StatLabel,
   StatNumber,
   StatHelpText,
@@ -63,52 +64,53 @@ export default function GeneralInsights ({
         color='main'
         w='100%'
       >
-        <Stat>
-          <StatLabel fontSize={15}>Total Spend (all time)</StatLabel>
-          <StatNumber color='secondary'>${totalSpend}</StatNumber>
+        <Stack direction={['column', 'row']} w='100%' align='flex-start'>
+          <Stat>
+            <StatLabel fontSize={15}>Total Spend (all time)</StatLabel>
+            <StatNumber color='secondary'>${totalSpend}</StatNumber>
 
-          <Link
-            href={`/protected/purchaseHistory/${earliestPurchase.receiptNumber}`}
-          >
-            <StatHelpText>
-              earliest was captured on {earliestPurchase.purchaseDate}
-            </StatHelpText>
-          </Link>
-        </Stat>
+            <Link
+              href={`/protected/purchaseHistory/${earliestPurchase.receiptNumber}`}
+            >
+              <StatHelpText>
+                earliest was captured on {earliestPurchase.purchaseDate}
+              </StatHelpText>
+            </Link>
+          </Stat>
+          <Stat>
+            <StatLabel fontSize={15}>Total Purchases</StatLabel>
+            <StatNumber color='secondary'>{totalPurchases}</StatNumber>
+          </Stat>
 
-        <Stat>
-          <StatLabel fontSize={15}>Total Purchases</StatLabel>
-          <StatNumber color='secondary'>{totalPurchases}</StatNumber>
-        </Stat>
+          <Stat>
+            <StatLabel fontSize={15}>Most expensive purchase</StatLabel>
+            <StatNumber color='secondary'>${mostExpensivePurchase}</StatNumber>
+            <Link
+              href={`/protected/purchaseHistory/${mostExpensivePurchaseDetails.receiptNumber}`}
+            >
+              <StatHelpText>
+                was made on {mostExpensivePurchaseDetails.purchaseDate}
+              </StatHelpText>
+            </Link>
+          </Stat>
 
-        <Stat>
-          <StatLabel fontSize={15}>Most expensive purchase</StatLabel>
-          <StatNumber color='secondary'>${mostExpensivePurchase}</StatNumber>
-          <Link
-            href={`/protected/purchaseHistory/${mostExpensivePurchaseDetails.receiptNumber}`}
-          >
-            <StatHelpText>
-              was made on {mostExpensivePurchaseDetails.purchaseDate}
-            </StatHelpText>
-          </Link>
-        </Stat>
+          <Stat>
+            <StatLabel fontSize={15}>Cheapest purchase</StatLabel>
+            <StatNumber color='secondary'>${cheapestPurchase}</StatNumber>
+            <Link
+              href={`/protected/purchaseHistory/${cheapestPurchaseDetails.receiptNumber}`}
+            >
+              <StatHelpText>
+                was made on {cheapestPurchaseDetails.purchaseDate}
+              </StatHelpText>
+            </Link>
+          </Stat>
 
-        <Stat>
-          <StatLabel fontSize={15}>Cheapest purchase</StatLabel>
-          <StatNumber color='secondary'>${cheapestPurchase}</StatNumber>
-          <Link
-            href={`/protected/purchaseHistory/${cheapestPurchaseDetails.receiptNumber}`}
-          >
-            <StatHelpText>
-              was made on {cheapestPurchaseDetails.purchaseDate}
-            </StatHelpText>
-          </Link>
-        </Stat>
-
-        <Stat>
-          <StatLabel fontSize={15}>In average you spend</StatLabel>
-          <StatNumber color='secondary'>${averageSpenditure}</StatNumber>
-        </Stat>
+          <Stat>
+            <StatLabel fontSize={15}>In average you spend</StatLabel>
+            <StatNumber color='secondary'>${averageSpenditure}</StatNumber>
+          </Stat>
+        </Stack>
       </StatGroup>
     </VStack>
   )

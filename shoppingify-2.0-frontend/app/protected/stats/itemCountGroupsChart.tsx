@@ -1,15 +1,10 @@
 'use client'
 
 // ----- external modules ----- //
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  ChartOptions
-} from 'chart.js'
 import { Box } from '@chakra-ui/react'
+import { ChartOptions } from 'chart.js'
 import { Pie } from 'react-chartjs-2'
+import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels'
 
 // ----- internal modules ----- //
 import calcGroupedItemsCount from '@/utils/stats/groupedByItemsCount'
@@ -17,26 +12,24 @@ import calcGroupedItemsCount from '@/utils/stats/groupedByItemsCount'
 // types
 import { ReceiptPgql } from '@/common/types/pgql_types'
 
-ChartJS.register(ArcElement, Tooltip, Legend)
-
 interface Props {
   receipts: ReceiptPgql[]
 }
 
 export default function ItemCountGroupsChart ({ receipts }: Props): JSX.Element {
   const chartData = calcGroupedItemsCount(receipts)
+
   const options: ChartOptions<'pie'> = {
     responsive: true,
     normalized: true,
     maintainAspectRatio: false,
+
     plugins: {
-      legend: {
-        position: 'top'
-      },
       title: {
         display: true,
         text: 'Number of items'
       },
+
       tooltip: {
         callbacks: {
           label: (context) => {
@@ -66,14 +59,22 @@ export default function ItemCountGroupsChart ({ receipts }: Props): JSX.Element 
           'rgba(255, 206, 86, 0.2)',
           'rgba(75, 192, 192, 0.2)',
           'rgba(255, 159, 64, 0.2)'
-        ]
+        ],
+
+        datalabels: {
+          display: function (context: Context) {
+            const value = context?.dataset?.data[context.dataIndex]
+            return value !== null ? value > 0 : false
+          },
+          color: '#80485B'
+        }
       }
     ]
   }
 
   return (
-    <Box w='50%' h='450px'>
-      <Pie data={data} options={options} />
+    <Box w={['80%', '50%']} h='450px'>
+      <Pie data={data} options={options} plugins={[ChartDataLabels]} />
     </Box>
   )
 }

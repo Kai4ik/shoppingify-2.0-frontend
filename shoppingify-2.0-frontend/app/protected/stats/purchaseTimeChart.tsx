@@ -1,15 +1,9 @@
 'use client'
 
 // ----- external modules ----- //
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  ChartOptions
-} from 'chart.js'
+import { ChartOptions } from 'chart.js'
 import { Box } from '@chakra-ui/react'
-
+import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels'
 import { Pie } from 'react-chartjs-2'
 
 // ----- internal modules ----- //
@@ -17,8 +11,6 @@ import calcGroupedPurchaseTimeCount from '@/utils/stats/groupedByPurchaseTime'
 
 // types
 import { ReceiptPgql } from '@/common/types/pgql_types'
-
-ChartJS.register(ArcElement, Tooltip, Legend)
 
 interface Props {
   receipts: ReceiptPgql[]
@@ -33,7 +25,7 @@ export default function PurchaseTimeChart ({ receipts }: Props): JSX.Element {
     plugins: {
       title: {
         display: true,
-        text: 'Number of items'
+        text: 'Purchase Time'
       },
       tooltip: {
         callbacks: {
@@ -64,14 +56,24 @@ export default function PurchaseTimeChart ({ receipts }: Props): JSX.Element {
           'rgba(255, 206, 86, 0.2)',
           'rgba(75, 192, 192, 0.2)',
           'rgba(255, 159, 64, 0.2)'
-        ]
+        ],
+        datalabels: {
+          display: function (context: Context) {
+            const value = context?.dataset?.data[context.dataIndex]
+            return value !== null ? value > 0 : false
+          },
+          color: '#80485B',
+          formatter: function (value: number) {
+            return `${value} time(s)`
+          }
+        }
       }
     ]
   }
 
   return (
-    <Box w='25%' h='350px'>
-      <Pie data={data} options={options} />
+    <Box w={['80%', '25%']} h='450px'>
+      <Pie data={data} options={options} plugins={[ChartDataLabels]} />
     </Box>
   )
 }
