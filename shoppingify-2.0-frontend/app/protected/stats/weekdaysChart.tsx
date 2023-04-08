@@ -1,7 +1,7 @@
 'use client'
 
 // ----- external modules ----- //
-import { ChartOptions } from 'chart.js'
+import { ChartOptions, ChartData } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
 import { Box } from '@chakra-ui/react'
 
@@ -39,7 +39,7 @@ export default function WeekdaysChart ({ receipts }: Props): JSX.Element {
     }
   }
 
-  const data = {
+  const data: ChartData<'bar'> = {
     labels: chartData.map((elem) => elem.weekday),
     datasets: [
       {

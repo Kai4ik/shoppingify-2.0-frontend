@@ -1,7 +1,7 @@
 'use client'
 
 // ----- external modules ----- //
-import { ChartOptions } from 'chart.js'
+import { ChartOptions, ChartData } from 'chart.js'
 import { Box } from '@chakra-ui/react'
 import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels'
 import { Pie } from 'react-chartjs-2'
@@ -37,7 +37,7 @@ export default function PurchaseTimeChart ({ receipts }: Props): JSX.Element {
     }
   }
 
-  const data = {
+  const data: ChartData<'pie'> = {
     labels: chartData.map((elem) => elem.time),
     datasets: [
       {

@@ -1,7 +1,7 @@
 'use client'
 
 // ----- external modules ----- //
-import { ChartOptions } from 'chart.js'
+import { ChartOptions, ChartData } from 'chart.js'
 import { Pie } from 'react-chartjs-2'
 import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels'
 import { Box } from '@chakra-ui/react'
@@ -30,7 +30,7 @@ export default function TopItemsChart ({ lineItems }: Props): JSX.Element {
     }
   }
 
-  const data = {
+  const data: ChartData<'pie'> = {
     labels: chartData.map((elem) => elem.title),
     datasets: [
       {

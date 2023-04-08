@@ -2,7 +2,7 @@
 
 // ----- external modules ----- //
 import { Box } from '@chakra-ui/react'
-import { ChartOptions } from 'chart.js'
+import { ChartOptions, ChartData } from 'chart.js'
 import { Pie } from 'react-chartjs-2'
 import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels'
 
@@ -40,7 +40,7 @@ export default function ItemCountGroupsChart ({ receipts }: Props): JSX.Element 
     }
   }
 
-  const data = {
+  const data: ChartData<'pie'> = {
     labels: chartData.map((elem) => elem.range),
     datasets: [
       {

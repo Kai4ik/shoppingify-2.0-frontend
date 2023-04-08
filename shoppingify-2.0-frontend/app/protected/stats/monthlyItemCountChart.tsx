@@ -1,7 +1,7 @@
 'use client'
 
 // ----- external modules ----- //
-import { ChartOptions } from 'chart.js'
+import { ChartOptions, ChartData } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
 import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels'
 
@@ -44,7 +44,7 @@ export default function MonthlyItemsCountChart ({
     }
   }
 
-  const data = {
+  const data: ChartData<'bar'> = {
     labels: chartData.map((elem) => elem.month),
     datasets: [
       {
