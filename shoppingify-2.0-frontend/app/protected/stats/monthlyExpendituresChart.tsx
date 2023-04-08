@@ -97,7 +97,7 @@ export default function MonthlyExpendituresChart({
         />
       </Stack>
       <Box w="100%" h={["350px", "600px"]}>
-        <Bar data={data} options={options} plugins={[ChartDataLabels]} />
+        <Bar data={data} options={options} />
       </Box>
     </VStack>
   );
