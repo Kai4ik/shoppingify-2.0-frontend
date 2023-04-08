@@ -19,7 +19,7 @@ import { useState, useEffect, use } from 'react'
 import { useRouter } from 'next/navigation'
 
 // internal modules
-import { User } from '@/common/types'
+import { User } from '@/common/types/auth_types'
 import { UserSchema } from '@/common/yupSchemas'
 import { createAccount } from '@/utils/auth'
 
