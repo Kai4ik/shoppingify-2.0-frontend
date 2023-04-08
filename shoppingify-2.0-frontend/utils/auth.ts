@@ -1,17 +1,17 @@
 // ----- external modules ----- //
-import { FormikProps } from 'formik'
-import { Dispatch, SetStateAction } from 'react'
+import { FormikProps } from "formik";
+import { Dispatch, SetStateAction } from "react";
 import {
   CognitoUserPool,
   CognitoUser,
   CognitoUserAttribute,
   AuthenticationDetails,
   CognitoUserSession,
-  CookieStorage
-} from 'amazon-cognito-identity-js'
-import { CognitoJwtVerifier } from 'aws-jwt-verify'
-import Cookies from 'js-cookie'
-import * as jose from 'jose'
+  CookieStorage,
+} from "amazon-cognito-identity-js";
+import { CognitoJwtVerifier } from "aws-jwt-verify";
+import Cookies from "js-cookie";
+import * as jose from "jose";
 
 // ----- internal modules ----- //
 // types
@@ -19,45 +19,45 @@ import {
   User,
   UserLogin,
   ResetPasswordVc,
-  ResetPassword
-} from '@/common/types/auth_types'
+  ResetPassword,
+} from "@/common/types/auth_types";
 
 interface DataMapping {
-  property: string
-  mapping: string
+  property: string;
+  mapping: string;
 }
 
 const userPool = new CognitoUserPool({
   UserPoolId: process.env.NEXT_PUBLIC_USER_POOL_ID,
   ClientId: process.env.NEXT_PUBLIC_USER_POOL_CLIENT_ID,
   Storage: new CookieStorage({
-    domain: 'localhost',
-    expires: 1 / 24
-  })
-})
+    domain: "localhost",
+    expires: 1 / 24,
+  }),
+});
 
-export async function createAccount (
+export async function createAccount(
   formData: User,
   formik: FormikProps<User>,
   setUsername: Dispatch<SetStateAction<string>>
 ): Promise<void> {
   const dataMapping: DataMapping[] = [
-    { property: 'given_name', mapping: 'fname' },
-    { property: 'family_name', mapping: 'lname' },
-    { property: 'gender', mapping: 'gender' },
-    { property: 'birthdate', mapping: 'birthdate' }
-  ]
+    { property: "given_name", mapping: "fname" },
+    { property: "family_name", mapping: "lname" },
+    { property: "gender", mapping: "gender" },
+    { property: "birthdate", mapping: "birthdate" },
+  ];
 
-  const attributeList: CognitoUserAttribute[] = []
+  const attributeList: CognitoUserAttribute[] = [];
 
   dataMapping.forEach((item: DataMapping) => {
     attributeList.push(
       new CognitoUserAttribute({
         Name: item.property,
-        Value: formData[item.mapping as keyof User]
+        Value: formData[item.mapping as keyof User],
       })
-    )
-  })
+    );
+  });
 
   userPool.signUp(
     formData.email,
@@ -66,59 +66,59 @@ export async function createAccount (
     [],
     function (err, result) {
       if (err != null) {
-        formik.setErrors({ email: err.message })
+        formik.setErrors({ email: err.message });
       } else {
-        const cognitoUser = result?.user
+        const cognitoUser = result?.user;
         setUsername(
           cognitoUser?.getUsername() != null
             ? cognitoUser.getUsername()
-            : 'undefined'
-        )
+            : "undefined"
+        );
       }
     }
-  )
+  );
 }
 
-export async function confirmAccount (
+export async function confirmAccount(
   username: string,
   code: string,
   setConfirmed: Dispatch<SetStateAction<boolean>>
 ): Promise<void> {
   const userData = {
-    Username: decodeURIComponent(username).replace(/\+/g, ' '),
-    Pool: userPool
-  }
+    Username: decodeURIComponent(username).replace(/\+/g, " "),
+    Pool: userPool,
+  };
 
-  const cognitoUser = new CognitoUser(userData)
+  const cognitoUser = new CognitoUser(userData);
   cognitoUser.confirmRegistration(code, false, function (err) {
     if (err != null) {
-      console.log(err.message)
+      console.log(err.message);
     } else {
-      setConfirmed(true)
+      setConfirmed(true);
     }
-  })
+  });
 }
 
-export async function resendConfirmationCode (
+export async function resendConfirmationCode(
   username: string,
   setCodeSent: Dispatch<SetStateAction<boolean>>
 ): Promise<void> {
   const userData = {
-    Username: decodeURIComponent(username).replace(/\+/g, ' '),
-    Pool: userPool
-  }
+    Username: decodeURIComponent(username).replace(/\+/g, " "),
+    Pool: userPool,
+  };
 
-  const cognitoUser = new CognitoUser(userData)
+  const cognitoUser = new CognitoUser(userData);
   cognitoUser.resendConfirmationCode(function (err) {
     if (err != null) {
-      console.log(err.message)
+      console.log(err.message);
     } else {
-      setCodeSent(true)
+      setCodeSent(true);
     }
-  })
+  });
 }
 
-export async function authenticateUser (
+export async function authenticateUser(
   username: string,
   password: string,
   formik: FormikProps<UserLogin>,
@@ -128,57 +128,57 @@ export async function authenticateUser (
     Username: username,
     Pool: userPool,
     Storage: new CookieStorage({
-      domain: 'localhost',
-      expires: 1 / 24
-    })
-  }
+      domain: "localhost",
+      expires: 1 / 24,
+    }),
+  };
 
   const authenticationDetails = new AuthenticationDetails({
     Username: username,
-    Password: password
-  })
+    Password: password,
+  });
 
-  const cognitoUser = new CognitoUser(userData)
+  const cognitoUser = new CognitoUser(userData);
   cognitoUser.authenticateUser(authenticationDetails, {
     onSuccess: function () {
-      setLoggedIn(true)
+      setLoggedIn(true);
     },
 
     onFailure: function (err) {
-      if (err.message === 'User does not exist.') {
-        formik.setErrors({ email: err.message })
+      if (err.message === "User does not exist.") {
+        formik.setErrors({ email: err.message });
       } else {
-        formik.setErrors({ password: 'Incorrect password' })
+        formik.setErrors({ password: "Incorrect password" });
       }
-    }
-  })
+    },
+  });
 }
 
-export async function resetPasswordVc (
+export async function resetPasswordVc(
   username: string,
   formik: FormikProps<ResetPasswordVc>,
   setCodeSent: Dispatch<SetStateAction<boolean>>
 ): Promise<void> {
   const userData = {
     Username: username,
-    Pool: userPool
-  }
+    Pool: userPool,
+  };
 
-  const cognitoUser = new CognitoUser(userData)
+  const cognitoUser = new CognitoUser(userData);
   cognitoUser.forgotPassword({
     onSuccess: function () {
-      setCodeSent(true)
+      setCodeSent(true);
     },
 
     onFailure: function (err) {
-      if (err.message === 'Username/client id combination not found.') {
-        formik.setErrors({ email: 'User does not exist.' })
+      if (err.message === "Username/client id combination not found.") {
+        formik.setErrors({ email: "User does not exist." });
       }
-    }
-  })
+    },
+  });
 }
 
-export async function resetPassword (
+export async function resetPassword(
   code: string,
   newPassword: string,
   username: string,
@@ -187,107 +187,107 @@ export async function resetPassword (
 ): Promise<void> {
   const userData = {
     Username: username,
-    Pool: userPool
-  }
+    Pool: userPool,
+  };
 
-  const cognitoUser = new CognitoUser(userData)
+  const cognitoUser = new CognitoUser(userData);
   cognitoUser.confirmPassword(code, newPassword, {
     onSuccess: function () {
-      setResetPasswordStatus(true)
+      setResetPasswordStatus(true);
     },
 
     onFailure: function (err) {
       if (
-        err.message === 'Invalid verification code provided, please try again.'
+        err.message === "Invalid verification code provided, please try again."
       ) {
-        formik.setErrors({ code: err.message })
+        formik.setErrors({ code: err.message });
       }
-    }
-  })
+    },
+  });
 }
 
-export async function loggedIn (): Promise<{
-  signedIn: boolean
-  error_message?: string
-  email?: string
-  jwt?: string
+export async function loggedIn(): Promise<{
+  signedIn: boolean;
+  error_message?: string;
+  email?: string;
+  jwt?: string;
 }> {
   return await new Promise((resolve) => {
-    const cognitoUser = userPool.getCurrentUser()
+    const cognitoUser = userPool.getCurrentUser();
     if (cognitoUser != null) {
       cognitoUser.getSession(function (err: any, session: CognitoUserSession) {
         if (err != null) {
           resolve({
-            error_message: 'Error: missing credentials. Please login again!',
-            signedIn: false
-          })
+            error_message: "Error: missing credentials. Please login again!",
+            signedIn: false,
+          });
         }
-        const isValid: boolean = session.isValid()
+        const isValid: boolean = session.isValid();
         if (isValid) {
           cognitoUser.getUserAttributes(function (err, result) {
             if (err != null) {
               resolve({
-                error_message: 'Error: cannot get user attributes',
-                signedIn: false
-              })
+                error_message: "Error: cannot get user attributes",
+                signedIn: false,
+              });
             } else {
               resolve({
-                email: result?.filter((pair) => pair.Name === 'email')[0].Value,
+                email: result?.filter((pair) => pair.Name === "email")[0].Value,
                 jwt: session.getIdToken().getJwtToken(),
-                signedIn: true
-              })
+                signedIn: true,
+              });
             }
-          })
+          });
         } else {
           resolve({
-            error_message: 'Error: session expired. Please login again!',
-            signedIn: false
-          })
+            error_message: "Error: session expired. Please login again!",
+            signedIn: false,
+          });
         }
-      })
+      });
     } else {
-      resolve({ error_message: 'Error: user not loggen in', signedIn: false })
+      resolve({ error_message: "Error: user not loggen in", signedIn: false });
     }
-  })
+  });
 }
 
-export async function verifyUser (token: string): Promise<{
-  succcess: boolean
-  error_message?: string
-  payload?: string
+export async function verifyUser(token: string): Promise<{
+  succcess: boolean;
+  error_message?: string;
+  payload?: string;
 }> {
-  const response = { succcess: true, error_message: '', payload: '' }
+  const response = { succcess: true, error_message: "", payload: "" };
 
   const verifier = CognitoJwtVerifier.create({
     userPoolId: process.env.NEXT_PUBLIC_USER_POOL_ID,
-    tokenUse: 'id',
-    clientId: process.env.NEXT_PUBLIC_USER_POOL_CLIENT_ID
-  })
+    tokenUse: "id",
+    clientId: process.env.NEXT_PUBLIC_USER_POOL_CLIENT_ID,
+  });
 
   try {
-    const payload = await verifier.verify(token)
-    response.payload = JSON.stringify(payload)
-  } catch (e) {
-    response.error_message = e.message
-    response.succcess = false
+    const payload = await verifier.verify(token);
+    response.payload = JSON.stringify(payload);
+  } catch {
+    response.error_message = "Token is not valid";
+    response.succcess = false;
   }
-  return response
+  return response;
 }
 
-export function getUsername (payload: string): string {
-  const parsedData = JSON.parse(payload)
-  return parsedData.email
+export function getUsername(payload: string): string {
+  const parsedData = JSON.parse(payload);
+  return parsedData.email;
 }
 
-export function getUsernameFromCookies (): string {
-  const allCookies = Cookies.get()
-  let username = ''
+export function getUsernameFromCookies(): string {
+  const allCookies = Cookies.get();
+  let username = "";
 
   for (const [key, value] of Object.entries(allCookies)) {
-    if (key.includes('idToken')) {
-      username = getUsername(JSON.stringify(jose.decodeJwt(value)))
+    if (key.includes("idToken")) {
+      username = getUsername(JSON.stringify(jose.decodeJwt(value)));
     }
   }
 
-  return username
+  return username;
 }
