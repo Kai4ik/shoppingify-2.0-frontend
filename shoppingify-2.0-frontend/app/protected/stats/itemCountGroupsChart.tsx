@@ -2,7 +2,7 @@
 
 // ----- external modules ----- //
 import { Box } from '@chakra-ui/react'
-import { ChartOptions, ChartData } from 'chart.js'
+import { ChartOptions, ChartData } from 'chart.js/auto'
 import { Pie } from 'react-chartjs-2'
 import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels'
 
