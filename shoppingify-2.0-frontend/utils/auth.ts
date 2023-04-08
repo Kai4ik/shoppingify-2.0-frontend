@@ -31,7 +31,7 @@ const userPool = new CognitoUserPool({
   UserPoolId: process.env.NEXT_PUBLIC_USER_POOL_ID,
   ClientId: process.env.NEXT_PUBLIC_USER_POOL_CLIENT_ID,
   Storage: new CookieStorage({
-    domain: "localhost",
+    domain: "shoppingify-2-0-frontend.vercel.app",
     expires: 1 / 24,
   }),
 });
@@ -128,7 +128,7 @@ export async function authenticateUser(
     Username: username,
     Pool: userPool,
     Storage: new CookieStorage({
-      domain: "localhost",
+      domain: "shoppingify-2-0-frontend.vercel.app",
       expires: 1 / 24,
     }),
   };
