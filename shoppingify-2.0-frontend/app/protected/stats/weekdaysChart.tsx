@@ -2,6 +2,7 @@
 
 // ----- external modules ----- //
 import { ChartOptions, ChartData } from 'chart.js'
+import { Context } from 'chartjs-plugin-datalabels'
 import { Bar } from 'react-chartjs-2'
 import { Box } from '@chakra-ui/react'
 
@@ -46,7 +47,17 @@ export default function WeekdaysChart ({ receipts }: Props): JSX.Element {
         label: 'Weekdays',
         data: chartData.map((elem) => elem.number),
         borderColor: '#F9A109',
-        backgroundColor: '#80485B'
+        backgroundColor: '#80485B',
+        datalabels: {
+          display: function (context: Context) {
+            const value = context?.dataset?.data[context.dataIndex]
+            return value !== null ? value > 0 : false
+          },
+          color: '#F9A109',
+          formatter: function (value: number) {
+            return `${value} time(s)`
+          }
+        }
       }
     ]
   }

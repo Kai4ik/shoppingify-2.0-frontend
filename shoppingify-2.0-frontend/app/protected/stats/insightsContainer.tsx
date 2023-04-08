@@ -13,6 +13,7 @@ import {
   BarElement,
   Title
 } from 'chart.js'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 
 // ----- internal modules ----- //
 // components
@@ -47,7 +48,8 @@ ChartJS.register(
   LinearScale,
   BarElement,
   Title,
-  Legend
+  Legend,
+  ChartDataLabels
 )
 
 export default function InsightsContainer ({
