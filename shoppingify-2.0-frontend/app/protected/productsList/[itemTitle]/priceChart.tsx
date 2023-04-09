@@ -12,6 +12,7 @@ import {
   Legend,
   ChartOptions
 } from 'chart.js'
+import { Box, VStack } from '@chakra-ui/react'
 import { Bar } from 'react-chartjs-2'
 
 // ----- internal modules ----- //
@@ -44,8 +45,9 @@ export default function PriceChart ({
   const options: ChartOptions<'bar'> = {
     responsive: true,
     normalized: true,
+    maintainAspectRatio: false,
     layout: {
-      padding: 20
+      padding: 30
     },
     scales: {
       y: {
@@ -70,5 +72,11 @@ export default function PriceChart ({
     ]
   }
 
-  return <Bar data={data} options={options} />
+  return (
+    <VStack w='100%' overflowX={['scroll', 'hidden']}>
+      <Box w={['160%', '100%']} h={['300px', '600px']}>
+        <Bar data={data} options={options} />
+      </Box>
+    </VStack>
+  )
 }

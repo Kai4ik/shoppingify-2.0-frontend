@@ -32,7 +32,12 @@ export default function ItemContainer ({ lineItemStats }: Props): JSX.Element {
   const title = lineItemStats[0].itemTitle
 
   return (
-    <VStack w='95%' p='4% 0 4% 10%' spacing={16} align='flex-start'>
+    <VStack
+      w='95%'
+      p={['4% 0 4% 5%', '4% 0 4% 10%']}
+      spacing={16}
+      align='flex-start'
+    >
       <VStack w='100%' align='flex-start' spacing={5}>
         <Text fontSize={22} color='main' fontWeight={600}>
           {title}
@@ -120,7 +125,12 @@ export default function ItemContainer ({ lineItemStats }: Props): JSX.Element {
       </VStack>
 
       <VStack w='100%' align='flex-start'>
-        <HStack w='100%' justify='space-between' align='center'>
+        <Stack
+          direction={['column', 'row']}
+          w='100%'
+          justify='space-between'
+          align={['flex-start', 'center']}
+        >
           <Text fontSize={16} color='main' fontWeight={600}>
             {title} price in last {sortOption} months
           </Text>
@@ -133,7 +143,7 @@ export default function ItemContainer ({ lineItemStats }: Props): JSX.Element {
               { value: '12', label: 'Last year' }
             ]}
           />
-        </HStack>
+        </Stack>
         <PriceChart sortOption={sortOption} lineItemStats={lineItemStats} />
       </VStack>
     </VStack>

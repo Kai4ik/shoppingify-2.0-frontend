@@ -6,8 +6,7 @@ import {
   StatLabel,
   StatNumber,
   StatHelpText,
-  StatArrow,
-  StatGroup
+  StatArrow
 } from '@chakra-ui/react'
 
 // ----- internal modules ----- //
@@ -18,6 +17,9 @@ import getLowestPriceItem from '@/utils/stats/lowestPriceItem'
 
 // types
 import { LineItemStatsPgql } from '@/common/types/pgql_types'
+
+// components
+import StatGroupCp from '@/common/components/statGroup'
 
 interface Props {
   lineItemStats: LineItemStatsPgql[]
@@ -39,13 +41,7 @@ export default function StatsContainer ({ lineItemStats }: Props): JSX.Element {
   const highestPriceObj = getHighestPriceItem(lineItemStats)
 
   return (
-    <StatGroup
-      backgroundColor='blackAlpha.50'
-      p='20px 25px'
-      borderRadius={8}
-      color='main'
-      w='100%'
-    >
+    <StatGroupCp>
       <Stat>
         <StatLabel fontSize={15}>Average price</StatLabel>
         <StatNumber color='secondary'>${averagePrice}</StatNumber>
@@ -88,6 +84,6 @@ export default function StatsContainer ({ lineItemStats }: Props): JSX.Element {
           {qtyFluctuation}% in last 3 months
         </StatHelpText>
       </Stat>
-    </StatGroup>
+    </StatGroupCp>
   )
 }

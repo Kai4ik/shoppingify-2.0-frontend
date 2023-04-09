@@ -17,12 +17,12 @@ export default function Item ({ item }: Props): JSX.Element {
     <HStack>
       <Link href={`/protected/productsList/${item.itemTitle}`}>
         <Text
-          fontSize={18}
+          fontSize={[14, 18]}
           fontWeight={500}
           color='main'
           borderRadius={8}
           backgroundColor='blackAlpha.50'
-          mr='5px'
+          mr={['0px', '5px']}
           p='10px 15px'
           cursor='pointer'
           transitionDuration='0.3s'

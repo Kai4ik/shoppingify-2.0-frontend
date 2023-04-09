@@ -58,6 +58,23 @@ export default function MonthlyItemsCountChart ({
             return value !== null ? value > 0 : false
           },
           color: '#F9A109',
+          font: function (context: Context) {
+            const width = context?.chart.width
+            const size =
+              width > 600
+                ? sortOption === '3'
+                  ? 18
+                  : sortOption === '6'
+                    ? 15
+                    : 10
+                : sortOption === '3'
+                  ? 12
+                  : sortOption === '6'
+                    ? 8
+                    : 5
+            return { size }
+          },
+          rotation: -45,
           formatter: function (value: number) {
             return `${value}  item(s)`
           }
@@ -67,7 +84,7 @@ export default function MonthlyItemsCountChart ({
   }
 
   return (
-    <VStack w='100%' align='flex-start'>
+    <VStack w='100%' align='flex-start' overflowX={['scroll', 'hidden']}>
       <Stack
         direction={['column', 'row']}
         w='100%'
@@ -88,7 +105,7 @@ export default function MonthlyItemsCountChart ({
         />
       </Stack>
 
-      <Box w='100%' h={['350px', '600px']}>
+      <Box w={['160%', '100%']} h={['350px', '600px']}>
         <Bar data={data} options={options} />
       </Box>
     </VStack>

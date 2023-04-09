@@ -32,7 +32,12 @@ export default function ItemsContainer ({ lineItems }: Props): JSX.Element {
   })
 
   return (
-    <VStack w='95%' p='4% 0 4% 10%' spacing={8} align='flex-start'>
+    <VStack
+      w='95%'
+      p={['4% 0 4% 5%', '4% 0 4% 10%']}
+      spacing={8}
+      align='flex-start'
+    >
       <VStack align='flex-start'>
         <HStack color='main' fontWeight={600}>
           <Text fontSize={20}>All purchased items</Text>
@@ -54,7 +59,7 @@ export default function ItemsContainer ({ lineItems }: Props): JSX.Element {
         />
       </InputGroup>
 
-      <Flex wrap='wrap' gap='20px'>
+      <Flex wrap='wrap' gap={['15px', '20px']}>
         {filteredItems.map((item) => (
           <Item item={item} key={item.id} />
         ))}

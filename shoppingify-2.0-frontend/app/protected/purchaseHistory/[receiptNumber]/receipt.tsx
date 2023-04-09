@@ -193,15 +193,13 @@ export default function Receipt ({
         alignItems='flex-start'
         justifyContent='center'
         borderRadius={12}
-        h='100%'
-        w='40%'
         css={{
           '&::-webkit-scrollbar': {
             width: '0px'
           }
         }}
       >
-        <Image alt='Receipt Image' src={imgSrc} />
+        <Image alt='Receipt Image' src={imgSrc} borderRadius={12} />
       </WrapItem>
       <VStack
         w={['100%', '55%']}
