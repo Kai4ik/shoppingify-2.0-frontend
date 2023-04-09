@@ -61,7 +61,7 @@ export default function InsightsContainer ({
   return (
     <VStack
       w='95%'
-      p={['4% 0 4% 5%', '4% 0 4% 10%']}
+      p={['4% 0% 15% 5%', '4% 0 4% 10%']}
       spacing={10}
       align='flex-start'
     >

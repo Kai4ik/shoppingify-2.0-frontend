@@ -73,7 +73,7 @@ export default function PriceChart ({
   }
 
   return (
-    <VStack w='100%' overflowX={['scroll', 'hidden']}>
+    <VStack w='100%' align='flex-start' overflowX={['scroll', 'hidden']}>
       <Box w={['160%', '100%']} h={['300px', '600px']}>
         <Bar data={data} options={options} />
       </Box>

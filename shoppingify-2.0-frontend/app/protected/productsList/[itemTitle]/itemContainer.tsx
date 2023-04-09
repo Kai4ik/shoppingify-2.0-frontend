@@ -34,7 +34,7 @@ export default function ItemContainer ({ lineItemStats }: Props): JSX.Element {
   return (
     <VStack
       w='95%'
-      p={['4% 0 4% 5%', '4% 0 4% 10%']}
+      p={['4% 0 15% 5%', '4% 0 4% 10%']}
       spacing={16}
       align='flex-start'
     >

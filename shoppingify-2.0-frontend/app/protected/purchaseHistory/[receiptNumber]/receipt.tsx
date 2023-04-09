@@ -180,19 +180,20 @@ export default function Receipt ({
   return (
     <Stack
       w='100%'
-      p={['5% ', '3% 2% 3% 6%']}
+      p={['5%', '3% 2% 3% 6%']}
       justify='space-evenly'
       align='center'
       overflow={['scroll', 'hidden']}
-      maxHeight={['auto', '100vh']}
       direction={['column', 'row']}
       spacing={[8, 0]}
+      maxHeight={['auto', '100vh']}
     >
       <WrapItem
         overflowY='scroll'
         alignItems='flex-start'
         justifyContent='center'
         borderRadius={12}
+        h={['auto', '100%']}
         css={{
           '&::-webkit-scrollbar': {
             width: '0px'

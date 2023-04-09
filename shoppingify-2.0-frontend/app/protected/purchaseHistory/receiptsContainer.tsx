@@ -13,8 +13,7 @@ import {
   Stack,
   InputGroup,
   InputLeftAddon,
-  Input,
-  Flex
+  Input
 } from '@chakra-ui/react'
 import { useState } from 'react'
 
@@ -87,11 +86,11 @@ export default function ReceiptsContainer ({ receipts }: Props): JSX.Element {
   })
 
   return (
-    <VStack w='100%' align='center' p='4% 0 4% 4%'>
+    <VStack w='95%' p={['4% 0 4% 5%', '4% 0 4% 10%']} align='center'>
       {receipts.length > 0
         ? (
           <>
-            <Accordion w='90%' allowMultiple mb={10}>
+            <Accordion w='100%' allowMultiple mb={10}>
               <AccordionItem borderTop='none' borderColor='gray.300'>
                 <AccordionButton pl={2}>
                   <Stack
@@ -108,9 +107,14 @@ export default function ReceiptsContainer ({ receipts }: Props): JSX.Element {
                 </AccordionButton>
 
                 <AccordionPanel pl={2}>
-                  <Flex align='flex-start'>
+                  <Stack
+                    align='flex-start'
+                    direction={['column', 'row']}
+                    w='100%'
+                    spacing={4}
+                  >
                     <Select
-                      w={['50%', '20%']}
+                      w={['100%', '20%']}
                       variant='filled'
                       size='sm'
                       color='main'
@@ -128,7 +132,12 @@ export default function ReceiptsContainer ({ receipts }: Props): JSX.Element {
                       <option value='cheap'>Price - Low to High</option>
                       <option value='expensive'>Price - High to Low</option>
                     </Select>
-                    <InputGroup colorScheme='purple' size='sm' w='20%' ml='2%'>
+                    <InputGroup
+                      colorScheme='purple'
+                      size='sm'
+                      w={['100%', '20%']}
+                      ml='2%'
+                    >
                       <InputLeftAddon>From</InputLeftAddon>
                       <Input
                         type='date'
@@ -137,7 +146,12 @@ export default function ReceiptsContainer ({ receipts }: Props): JSX.Element {
                         onChange={(e) => setFromDate(e.target.value)}
                       />
                     </InputGroup>
-                    <InputGroup colorScheme='purple' size='sm' w='20%' ml='2%'>
+                    <InputGroup
+                      colorScheme='purple'
+                      size='sm'
+                      w={['100%', '20%']}
+                      ml='2%'
+                    >
                       <InputLeftAddon>To</InputLeftAddon>
                       <Input
                         type='date'
@@ -146,11 +160,11 @@ export default function ReceiptsContainer ({ receipts }: Props): JSX.Element {
                         onChange={(e) => setToDate(e.target.value)}
                       />
                     </InputGroup>
-                  </Flex>
+                  </Stack>
                 </AccordionPanel>
               </AccordionItem>
             </Accordion>
-            <Accordion w='90%' allowMultiple>
+            <Accordion w='100%' allowMultiple>
               {receiptsByMonth.map((receipts) => (
                 <Receipt
                   key={receipts.month}
