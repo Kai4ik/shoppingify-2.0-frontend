@@ -20,6 +20,7 @@ import { useState } from 'react'
 // ----- internal modules ----- //
 // components
 import Receipt from './receipt'
+import NoDataCp from '@/common/components/noData'
 
 // types
 import { ReceiptPgql } from '@/common/types/pgql_types'
@@ -178,14 +179,11 @@ export default function ReceiptsContainer ({ receipts }: Props): JSX.Element {
           </>
           )
         : (
-          <VStack w='90%' align='flex-start'>
-            <Text fontSize={20} fontWeight={600} color='main'>
-              Purchase History
-            </Text>
-            <Text fontSize={18} fontWeight={500} color='secondary'>
-              No purchases yet!
-            </Text>
-          </VStack>
+          <NoDataCp
+            heading='Purchase History'
+            subheading='No Purchases yet'
+            link='Add new receipt?'
+          />
           )}
     </VStack>
   )

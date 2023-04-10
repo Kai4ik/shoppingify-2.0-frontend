@@ -16,6 +16,7 @@ import { useState } from 'react'
 // ----- internal modules ----- //
 // components
 import Item from './item'
+import NoDataCp from '@/common/components/noData'
 
 // types
 import { LineItemPgql } from '@/common/types/pgql_types'
@@ -38,32 +39,44 @@ export default function ItemsContainer ({ lineItems }: Props): JSX.Element {
       spacing={8}
       align='flex-start'
     >
-      <VStack align='flex-start'>
-        <HStack color='main' fontWeight={600}>
-          <Text fontSize={20}>All purchased items</Text>
-          <Text fontSize={16}>({lineItems.length})</Text>
-        </HStack>
-      </VStack>
-      <InputGroup>
-        <InputLeftElement pointerEvents='none'>
-          <Search2Icon color='gray.300' mt='10px' />
-        </InputLeftElement>
-        <Input
-          w='90%'
-          type='text'
-          placeholder='Search by name'
-          size='lg'
-          variant='flushed'
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-      </InputGroup>
+      {filteredItems.length > 0
+        ? (
+          <>
+            <VStack align='flex-start'>
+              <HStack color='main' fontWeight={600}>
+                <Text fontSize={20}>All purchased items</Text>
+                <Text fontSize={16}>({lineItems.length})</Text>
+              </HStack>
+            </VStack>
+            <InputGroup>
+              <InputLeftElement pointerEvents='none'>
+                <Search2Icon color='gray.300' mt='10px' />
+              </InputLeftElement>
+              <Input
+                w='90%'
+                type='text'
+                placeholder='Search by name'
+                size='lg'
+                variant='flushed'
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+              />
+            </InputGroup>
 
-      <Flex wrap='wrap' gap={['15px', '20px']}>
-        {filteredItems.map((item) => (
-          <Item item={item} key={item.id} />
-        ))}
-      </Flex>
+            <Flex wrap='wrap' gap={['15px', '20px']}>
+              {filteredItems.map((item) => (
+                <Item item={item} key={item.id} />
+              ))}
+            </Flex>
+          </>
+          )
+        : (
+          <NoDataCp
+            heading='All purchased items'
+            subheading='No Purchases yet'
+            link='Add new receipt?'
+          />
+          )}
     </VStack>
   )
 }
