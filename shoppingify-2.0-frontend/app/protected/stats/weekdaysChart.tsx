@@ -4,7 +4,7 @@
 import { ChartOptions, ChartData } from 'chart.js'
 import { Context } from 'chartjs-plugin-datalabels'
 import { Bar } from 'react-chartjs-2'
-import { Box } from '@chakra-ui/react'
+import { Box, VStack } from '@chakra-ui/react'
 
 // ----- internal modules ----- //
 import calcWeekdaysCount from '@/utils/stats/weekdaysCount'
@@ -12,12 +12,19 @@ import calcWeekdaysCount from '@/utils/stats/weekdaysCount'
 // types
 import { ReceiptPgql } from '@/common/types/pgql_types'
 
+// components
+
 interface Props {
   receipts: ReceiptPgql[]
+  sortOption: string
 }
 
-export default function WeekdaysChart ({ receipts }: Props): JSX.Element {
-  const chartData = calcWeekdaysCount(receipts)
+export default function WeekdaysChart ({
+  receipts,
+  sortOption
+}: Props): JSX.Element {
+  const chartData = calcWeekdaysCount(receipts, parseInt(sortOption))
+
   const options: ChartOptions<'bar'> = {
     responsive: true,
     normalized: true,
@@ -54,6 +61,23 @@ export default function WeekdaysChart ({ receipts }: Props): JSX.Element {
             return value !== null ? value > 0 : false
           },
           color: '#F9A109',
+          font: function (context: Context) {
+            const width = context?.chart.width
+            const size =
+              width > 600
+                ? sortOption === '3'
+                  ? 18
+                  : sortOption === '6'
+                    ? 15
+                    : 10
+                : sortOption === '3'
+                  ? 12
+                  : sortOption === '6'
+                    ? 8
+                    : 5
+            return { size }
+          },
+          rotation: -45,
           formatter: function (value: number) {
             return `${value} time(s)`
           }
@@ -63,8 +87,10 @@ export default function WeekdaysChart ({ receipts }: Props): JSX.Element {
   }
 
   return (
-    <Box w={['100%', '70%']} h={['350px', '600px']}>
-      <Bar data={data} options={options} />
-    </Box>
+    <VStack w='100%' align='flex-start' overflowX={['scroll', 'hidden']}>
+      <Box w={['160%', '100%']} h={['350px', '600px']}>
+        <Bar data={data} options={options} />
+      </Box>
+    </VStack>
   )
 }

@@ -14,10 +14,17 @@ import { ReceiptPgql } from '@/common/types/pgql_types'
 
 interface Props {
   receipts: ReceiptPgql[]
+  sortOption: string
 }
 
-export default function PurchaseTimeChart ({ receipts }: Props): JSX.Element {
-  const chartData = calcGroupedPurchaseTimeCount(receipts)
+export default function PurchaseTimeChart ({
+  receipts,
+  sortOption
+}: Props): JSX.Element {
+  const chartData = calcGroupedPurchaseTimeCount(
+    receipts,
+    parseInt(sortOption)
+  )
   const options: ChartOptions<'pie'> = {
     responsive: true,
     normalized: true,

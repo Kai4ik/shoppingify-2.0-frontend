@@ -1,7 +1,7 @@
 'use client'
 
 // ----- external modules ----- //
-import { VStack, Text, Stack } from '@chakra-ui/react'
+import { VStack, Stack } from '@chakra-ui/react'
 
 import {
   Chart as ChartJS,
@@ -23,8 +23,8 @@ import MonthlyExpendituresChart from './monthlyExpendituresChart'
 import MonthlyItemsCountChart from './monthlyItemCountChart'
 import ItemCountGroupsChart from './itemCountGroupsChart'
 import TopItemsChart from './topPurchasedItemsChart'
-import PurchaseTimeChart from './purchaseTimeChart'
-import WeekdaysChart from './weekdaysChart'
+import TimingInsightsContainer from './timingInsightsContainer'
+import NoDataCp from '@/common/components/noData'
 
 // types
 import {
@@ -65,37 +65,36 @@ export default function InsightsContainer ({
       spacing={10}
       align='flex-start'
     >
-      <GeneralInsights statsData={statsData} receiptsData={receipts} />
-      <LineItemsInsights
-        statsData={statsData}
-        lineItems={lineItems}
-        lineItemsStatsData={lineItemsStatsData}
-      />
-      <Stack
-        direction={['column', 'row']}
-        w='100%'
-        m='50px 0 !important'
-        align='center'
-      >
-        <ItemCountGroupsChart receipts={receipts} />
-        <TopItemsChart lineItems={lineItems} />
-      </Stack>
-      <MonthlyExpendituresChart receipts={receipts} />
-      <MonthlyItemsCountChart receipts={receipts} />
-      <VStack w='100%' align='flex-start'>
-        <Text fontSize={22} color='main' fontWeight={600}>
-          Timing Insights
-        </Text>
-        <Stack
-          w='100%'
-          justify='space-between'
-          align='center'
-          direction={['column', 'row']}
-        >
-          <PurchaseTimeChart receipts={receipts} />
-          <WeekdaysChart receipts={receipts} />
-        </Stack>
-      </VStack>
+      {receipts.length > 0
+        ? (
+          <>
+            <GeneralInsights statsData={statsData} receiptsData={receipts} />
+            <LineItemsInsights
+              statsData={statsData}
+              lineItems={lineItems}
+              lineItemsStatsData={lineItemsStatsData}
+            />
+            <Stack
+              direction={['column', 'row']}
+              w='100%'
+              m='50px 0 !important'
+              align='center'
+            >
+              <ItemCountGroupsChart receipts={receipts} />
+              <TopItemsChart lineItems={lineItems} />
+            </Stack>
+            <MonthlyExpendituresChart receipts={receipts} />
+            <MonthlyItemsCountChart receipts={receipts} />
+            <TimingInsightsContainer receipts={receipts} />
+          </>
+          )
+        : (
+          <NoDataCp
+            heading='Your Stats'
+            subheading='No Purchases yet'
+            link='Add new receipt?'
+          />
+          )}
     </VStack>
   )
 }
