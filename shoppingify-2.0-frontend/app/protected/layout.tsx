@@ -93,15 +93,28 @@ export default function AuthLayout ({ children }: LayoutProps): React.ReactNode 
               borderTopColor='blackAlpha.200'
             >
               <Stack spacing={8} direction='row' align='center'>
-                {Icons.map((icon) => (
-                  <TooltipCn
-                    label={icon.tooltip}
-                    link={icon.link}
-                    icon={icon.icon}
-                    size={icon.size}
-                    key={icon.id}
-                  />
-                ))}
+                {Icons.map((icon) =>
+                  icon.id === 3
+                    ? (
+                      <WrapItem key={icon.id} pb='35px'>
+                        <TooltipCn
+                          label={icon.tooltip}
+                          link={icon.link}
+                          icon={icon.icon}
+                          size={12}
+                        />
+                      </WrapItem>
+                      )
+                    : (
+                      <TooltipCn
+                        label={icon.tooltip}
+                        link={icon.link}
+                        icon={icon.icon}
+                        size={icon.size}
+                        key={icon.id}
+                      />
+                      )
+                )}
               </Stack>
             </Flex>
             )

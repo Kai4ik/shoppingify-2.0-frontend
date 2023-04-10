@@ -115,9 +115,14 @@ export default function Login (): JSX.Element {
               </Button>
             </VStack>
           </form>
-          <Link href='/resetPasswordVc'>
-            <Text fontSize='md'> Forgot password?</Text>
-          </Link>
+          <VStack w='100%' spacing={2}>
+            <Link href='/resetPasswordVc'>
+              <Text fontSize='md'> Forgot password?</Text>
+            </Link>
+            <Link href='/register'>
+              <Text fontSize='md'>Do not have an account yet ? Create one</Text>
+            </Link>
+          </VStack>
         </VStack>
       </Container>
     </Flex>
