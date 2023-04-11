@@ -212,6 +212,35 @@ export async function resetPassword (
   })
 }
 
+export async function logout (
+  setSignedOut: Dispatch<SetStateAction<boolean>>
+): Promise<void> {
+  const cognitoUser = userPool.getCurrentUser()
+  if (cognitoUser != null) {
+    cognitoUser.getSession(function (err: any, session: CognitoUserSession) {
+      if (err != null) {
+        setSignedOut(false)
+      } else {
+        const isValid: boolean = session.isValid()
+        if (isValid) {
+          cognitoUser.globalSignOut({
+            onSuccess: function () {
+              setSignedOut(true)
+            },
+
+            onFailure: function (err) {
+              console.log(err)
+              setSignedOut(false)
+            }
+          })
+        } else {
+          setSignedOut(false)
+        }
+      }
+    })
+  }
+}
+
 export async function loggedIn (): Promise<{
   signedIn: boolean
   error_message?: string
