@@ -82,6 +82,11 @@ export default function AddReceipt (): JSX.Element {
           accept: 'application/json',
           'Accept-Language': 'en-US,en;q=0.8',
           'Content-Type': 'multipart/form-data',
+          'Access-Control-Allow-Origin': `${
+            process.env.NODE_ENV === 'development'
+              ? 'http://localhost:3000'
+              : 'https://shoppingify-2-0-frontend.vercel.app'
+          }`,
           Authorization: `Bearer ${userLoggedIn.jwt}`
         }
       })
