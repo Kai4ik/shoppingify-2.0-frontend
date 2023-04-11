@@ -11,6 +11,7 @@ declare global {
       AWS_SECRET_ACCESS_KEY: string
       AWS_REGION: string
       PGQL_URL: string
+      NEXT_PUBLIC_API_URL: string
     }
   }
 }

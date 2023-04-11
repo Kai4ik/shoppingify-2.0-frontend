@@ -12,7 +12,12 @@ const deleteReceipt = async (receipt: ReceiptPgql): Promise<boolean> => {
 
   const userLoggedIn = await loggedIn()
   if (userLoggedIn.signedIn && userLoggedIn.jwt !== undefined) {
-    const response = await fetch('http://127.0.0.1:8000/deleteReceipt', {
+    const url = `${
+      process.env.NODE_ENV === 'development'
+        ? 'http://127.0.0.1:8000'
+        : process.env.NEXT_PUBLIC_API_URL
+    }/deleteReceipt`
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

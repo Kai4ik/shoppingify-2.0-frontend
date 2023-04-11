@@ -11,14 +11,16 @@ const getMostPurchasedItems = (
 
   lineItems.forEach((lineItem) => {
     const filteredArray = lineItemsCount.filter(
-      (lineItemCount) => lineItem.itemTitle === lineItemCount.title
+      (lineItemCount) =>
+        lineItem.itemTitle.toLowerCase() === lineItemCount.title.toLowerCase()
     )
 
     if (filteredArray.length === 0) {
       lineItemsCount.push({ title: lineItem.itemTitle, count: 1 })
     } else {
       const index = lineItemsCount.findIndex(
-        (lineItemCount) => lineItem.itemTitle === lineItemCount.title
+        (lineItemCount) =>
+          lineItem.itemTitle.toLowerCase() === lineItemCount.title.toLowerCase()
       )
       lineItemsCount[index].count += 1
     }

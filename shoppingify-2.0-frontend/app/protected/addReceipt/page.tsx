@@ -68,9 +68,15 @@ export default function AddReceipt (): JSX.Element {
     body.append('data', JSON.stringify(getValues()))
     const userLoggedIn = await loggedIn()
     if (userLoggedIn.signedIn && userLoggedIn.jwt !== undefined) {
+      const url = `${
+        process.env.NODE_ENV === 'development'
+          ? 'http://127.0.0.1:8000'
+          : process.env.NEXT_PUBLIC_API_URL
+      }/saveReceipt`
+
       const response = await axios({
         method: 'post',
-        url: 'http://127.0.0.1:8000/saveReceipt',
+        url,
         data: body,
         headers: {
           accept: 'application/json',
