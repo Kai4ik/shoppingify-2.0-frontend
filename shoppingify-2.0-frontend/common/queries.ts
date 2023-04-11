@@ -139,10 +139,13 @@ export const getItemsForUser = (user: string): string => {
     `
 }
 
-export const getSpecificItemInfo = (itemTitle: string): string => {
+export const getSpecificItemInfo = (
+  itemTitle: string,
+  user: string
+): string => {
   return `
     query MyQuery {
-      allLineItems(filter: {itemTitle: {equalTo: "${itemTitle}"}}) {
+      allLineItems(filter: {itemTitle: {equalToInsensitive: "${itemTitle}"}, user: {equalTo: "${user}"} }) {
           nodes {
             id
             price

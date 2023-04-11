@@ -48,7 +48,9 @@ export default async function ProductList (): Promise<JSX.Element> {
   const data = await getLineItemsData(allCookies)
   const lineItems: LineItemPgql[] = data.data.allLineItems.nodes
   const uniqueLineItems = Array.from(
-    new Map(lineItems.map((item) => [item.itemTitle, item])).values()
+    new Map(
+      lineItems.map((item) => [item.itemTitle.toLowerCase(), item])
+    ).values()
   )
 
   return <ItemsContainer lineItems={uniqueLineItems} />

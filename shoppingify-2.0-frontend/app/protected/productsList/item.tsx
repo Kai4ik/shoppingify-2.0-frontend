@@ -3,6 +3,7 @@
 // ----- external modules ----- //
 import { HStack, Text } from '@chakra-ui/react'
 import Link from 'next/link'
+import urlencode from 'urlencode'
 
 // ----- internal modules ----- //
 // types
@@ -15,7 +16,7 @@ interface Props {
 export default function Item ({ item }: Props): JSX.Element {
   return (
     <HStack>
-      <Link href={`/protected/productsList/${item.itemTitle}`}>
+      <Link href={`/protected/productsList/${urlencode(item.itemTitle)}`}>
         <Text
           fontSize={[14, 18]}
           fontWeight={500}

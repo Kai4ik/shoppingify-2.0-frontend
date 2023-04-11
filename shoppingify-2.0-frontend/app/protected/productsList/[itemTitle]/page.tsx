@@ -2,6 +2,7 @@
 import { cookies } from 'next/headers'
 import * as jose from 'jose'
 import { RequestCookie } from 'next/dist/server/web/spec-extension/cookies/types'
+import urlencode from 'urlencode'
 
 // ----- internal modules ----- //
 import { getUsername } from '@/utils/auth'
@@ -27,10 +28,10 @@ const getLineItemStats = async (
     }
   })
 
+  const decodedTitle = urlencode.decode(itemTitle)
+
   if (username.length > 0) {
-    const getItemStatsQuery = getSpecificItemInfo(
-      itemTitle.replaceAll('%20', ' ')
-    )
+    const getItemStatsQuery = getSpecificItemInfo(decodedTitle, username)
 
     const receiptsDataForUser = await fetch(process.env.PGQL_URL, {
       method: 'POST',

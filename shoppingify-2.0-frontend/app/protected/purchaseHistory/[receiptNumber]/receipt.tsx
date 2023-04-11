@@ -193,6 +193,7 @@ export default function Receipt ({
         alignItems='flex-start'
         justifyContent='center'
         borderRadius={12}
+        w={['auto', '40%']}
         h={['auto', '100%']}
         css={{
           '&::-webkit-scrollbar': {
