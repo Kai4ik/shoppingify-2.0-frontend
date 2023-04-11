@@ -20,7 +20,8 @@ export default function ReceiptTopInputs (props: Props): JSX.Element {
       placeholder: 'Receipt Number',
       defaultValue: receiptNumber,
       name: 'receiptNumber',
-      valueAsNumber: true
+      valueAsNumber: true,
+      isInvalid: false
     },
     {
       label: 'Purchase Date',
@@ -28,7 +29,8 @@ export default function ReceiptTopInputs (props: Props): JSX.Element {
       placeholder: 'Purchase Date',
       defaultValue: purchaseDate,
       name: 'purchaseDate',
-      valueAsNumber: false
+      valueAsNumber: false,
+      isInvalid: new Date().toISOString().split('T')[0] === purchaseDate
     },
     {
       label: 'Purchase Time',
@@ -36,19 +38,21 @@ export default function ReceiptTopInputs (props: Props): JSX.Element {
       placeholder: 'Purchase Time',
       defaultValue: purchaseTime,
       name: 'purchaseTime',
-      valueAsNumber: false
+      valueAsNumber: false,
+      isInvalid: new Date().toISOString().split('T')[0] === purchaseDate
     }
   ]
 
   return (
     <>
       {topInputs.map((input, index) => (
-        <InputGroup colorScheme='purple' key={index}>
+        <InputGroup key={index}>
           <InputLeftAddon>{input.label}</InputLeftAddon>
           <Input
             type={input.type}
             placeholder={input.placeholder}
             defaultValue={input.defaultValue}
+            isInvalid={input.isInvalid}
             {...register(input.name, {
               required: true,
               valueAsNumber: input.valueAsNumber

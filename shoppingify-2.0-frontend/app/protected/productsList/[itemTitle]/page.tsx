@@ -31,7 +31,10 @@ const getLineItemStats = async (
   const decodedTitle = urlencode.decode(itemTitle)
 
   if (username.length > 0) {
-    const getItemStatsQuery = getSpecificItemInfo(decodedTitle, username)
+    const getItemStatsQuery = getSpecificItemInfo(
+      decodedTitle.replace('"', '\\"'),
+      username
+    )
 
     const receiptsDataForUser = await fetch(process.env.PGQL_URL, {
       method: 'POST',
@@ -60,6 +63,7 @@ export default async function ItemStats ({
 
   const allCookies = cookieStore.getAll()
   const data = await getLineItemStats(allCookies, params.itemTitle)
+  console.log(data)
   const lineItemStats: LineItemStatsPgql[] = data.data.allLineItems.nodes
 
   return <ItemContainer lineItemStats={lineItemStats} />

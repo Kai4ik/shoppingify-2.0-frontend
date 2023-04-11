@@ -32,7 +32,8 @@ export default function MerchantTitle (props: Props): JSX.Element {
       <Text alignSelf='flex-start'>* all prices in {currency}</Text>
       <Text alignSelf='flex-start'>
         * pay attention to items in
-        <span style={{ color: 'red' }}> red! </span> We found them suspicious
+        <span style={{ color: 'red' }}> red! </span> We found them suspicious or
+        were not able to scan
       </Text>
     </>
   )
