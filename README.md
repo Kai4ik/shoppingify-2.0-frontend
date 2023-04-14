@@ -1,44 +1,49 @@
-## Shoppingify
+# Shoppingify
 
-**What is Shoppingify and why?** 
+**What is Shoppingify and why?**
+
 ---
+
 In the last year, there were a lot of conversations about inflation.
 For instance, prices for food increased by **8.9%.**
-https://www150.statcan.gc.ca/n1/daily-quotidien/230117/dq230117b-eng.htm
+<https://www150.statcan.gc.ca/n1/daily-quotidien/230117/dq230117b-eng.htm>
 
 > That's why Shoppingify was built which simply allows me to know how the price fluctuates for different products I buy, how often I buy a certain product, how much I spend each month, etc.
 
- **How it works?** 
+**How it works?**
+
  ---
+
 The main idea of the Shoppingify app is to allow users quickly upload the receipt image and after it will be scanned, save it and have access to statistics & interesting insights.
 
 More details on how it works can be viewed here
 
- **Tech stack** 
- ---
+## **Tech stack**
+
 The app consists of 3 main parts:
 
- - **Front-end**
-	-  Next.js 13 (app directory feature)
-	- Chakra UI
-	- TypeScript
-	- GraphQL.
+- **Front-end**
+  - Next.js 13 (app directory feature)
+- Chakra UI
+  - TypeScript
+  - GraphQL.
 
- - **Back-end** 
-	- Python (Fast API)
-	- veryfi
-	- boto (AWS SDK)
+- **Back-end**
+  - Python (Fast API)
+  - veryfi
+  - boto (AWS SDK)
 
- - **PostGraphile** 
-	- PostGraphile (formerly PostGraphQL) builds a powerful, extensible and performant GraphQL API from a PostgreSQL 		schema in seconds; saving you weeks if not months of development time. <br/>More on that [here](https://github.com/Kai4ik/shoppingify-2.0-pgql)
+- **PostGraphile**
+  - PostGraphile (formerly PostGraphQL) builds a powerful, extensible and performant GraphQL API from a PostgreSQL   schema in seconds; saving you weeks if not months of development time. <br/>More on that [here](https://github.com/Kai4ik/shoppingify-2.0-pgql)
 
- **More on front-end** 
- ---
+## **More on front-end**
+
 Everything was built around the **[Next.js 13](https://nextjs.org/blog/next-13#server-components)** framework with its app experimental directory, server components as a default type and other great features (layouts,  improved links, etc.)
 
- -  Server components were used for some pages to fetch data from the database and reduce the amount of JavaScript sent to the client.
- - Layout feature was used to share UI between pages and avoid expensive re-renders
- - Next.js middleware was used to check whether a user is logged in or not
+- Server components were used for some pages to fetch data from the database and reduce the amount of JavaScript sent to the client.
+- Layout feature was used to share UI between pages and avoid expensive re-renders
+- Next.js middleware was used to check whether a user is logged in or not
+
  ---
  **[Chakra UI](https://chakra-ui.com/)** was used as a main CSS library that has many prebuild components (Flex, Stack, Input, Button, Accordion, Alert, etc.) and easy-to-use styled system.
 
@@ -65,16 +70,15 @@ To retrieve the data from the database, an extended **[fetch](https://beta.nextj
 
 ---
  For storing receipt images & all the receipts & product information, **[AWS S3](https://aws.amazon.com/s3/)** and **[AWS RDS](https://aws.amazon.com/rds/)** were used accordingly.
- To interact with S3 Client, this library was used - https://www.npmjs.com/package/@aws-sdk/client-s3
- 
- **Deployment** 
- ---
+ To interact with S3 Client, this library was used - <https://www.npmjs.com/package/@aws-sdk/client-s3>
+
+## **Deployment**
+
  1. Next.js app was deployed on **[Vercel](https://vercel.com/docs)**
- 2. Heroku is used to run the Fast API server 
- 3. The PostGraphile image is stored on Docker hub (https://hub.docker.com/)
- 4. The Google Cloud Run is used to run the container that start PostGraphile (https://cloud.google.com/run)
+ 2. Heroku is used to run the Fast API server
+ 3. The PostGraphile image is stored on Docker hub (<https://hub.docker.com/>)
+ 4. The Google Cloud Run is used to run the container that start PostGraphile (<https://cloud.google.com/run>)
 
-
-**The following credentials can be used to test the app** <br />
-Username: test_user@gmail.com <br />
+**The following credentials can be used to test the app** \
+Username: test_user@gmail.com \
 Password: testPassword66==
