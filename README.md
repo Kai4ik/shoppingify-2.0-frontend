@@ -75,4 +75,6 @@ To retrieve the data from the database, an extended **[fetch](https://beta.nextj
  4. The Google Cloud Run is used to run the container that start PostGraphile (https://cloud.google.com/run)
 
 
- 
+**The following credentials can be used to test the app** <br />
+Username: test_user@gmail.com <br />
+Password: testPassword66==
