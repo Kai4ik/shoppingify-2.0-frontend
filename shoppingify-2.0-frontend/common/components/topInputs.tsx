@@ -13,6 +13,10 @@ interface Props {
 
 export default function ReceiptTopInputs (props: Props): JSX.Element {
   const { receiptNumber, purchaseDate, purchaseTime, register } = props
+
+  const offset = new Date().getTimezoneOffset()
+  const todayDate = new Date(new Date().getTime() - offset * 60 * 1000)
+
   const topInputs = [
     {
       label: 'Receipt (slip) Number',
@@ -30,7 +34,7 @@ export default function ReceiptTopInputs (props: Props): JSX.Element {
       defaultValue: purchaseDate,
       name: 'purchaseDate',
       valueAsNumber: false,
-      isInvalid: new Date().toISOString().split('T')[0] === purchaseDate
+      isInvalid: todayDate.toISOString().split('T')[0] === purchaseDate
     },
     {
       label: 'Purchase Time',
@@ -39,7 +43,7 @@ export default function ReceiptTopInputs (props: Props): JSX.Element {
       defaultValue: purchaseTime,
       name: 'purchaseTime',
       valueAsNumber: false,
-      isInvalid: new Date().toISOString().split('T')[0] === purchaseDate
+      isInvalid: todayDate.toISOString().split('T')[0] === purchaseDate
     }
   ]
 
