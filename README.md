@@ -16,7 +16,7 @@ For instance, prices for food increased by **8.9%.**
 
 The main idea of the Shoppingify app is to allow users quickly upload the receipt image and after it will be scanned, save it and have access to statistics & interesting insights.
 
-More details on how it works can be viewed here
+More details on how it works can be viewed [here](https://github.com/Kai4ik/shoppingify-2.0-frontend/wiki)
 
 ## **Tech stack**
 
