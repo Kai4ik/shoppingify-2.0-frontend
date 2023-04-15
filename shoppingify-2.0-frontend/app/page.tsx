@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { verifyUser } from '@/utils/auth'
 
-export default async function Home () {
+export default async function Home (): Promise<JSX.Element> {
   const cookieStore = cookies()
   const allCookies = cookieStore.getAll()
   let idToken = ''
@@ -25,4 +25,6 @@ export default async function Home () {
   } else {
     redirect('/login')
   }
+
+  return <></>
 }
