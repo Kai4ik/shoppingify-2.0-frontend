@@ -22,13 +22,13 @@ More details on how it works can be viewed [here](https://github.com/Kai4ik/shop
 
 The app consists of 3 main parts:
 
-- **Front-end**
+- **Frontend**
   - Next.js 13 (app directory feature)
 - Chakra UI
   - TypeScript
   - GraphQL.
 
-- **Back-end**
+- **Backend**
   - Python (Fast API)
   - veryfi
   - boto (AWS SDK)
@@ -36,7 +36,7 @@ The app consists of 3 main parts:
 - **PostGraphile**
   - PostGraphile (formerly PostGraphQL) builds a powerful, extensible and performant GraphQL API from a PostgreSQL   schema in seconds; saving you weeks if not months of development time. <br/>More on that [here](https://github.com/Kai4ik/shoppingify-2.0-pgql)
 
-## **More on front-end**
+## **More on frontend**
 
 Everything was built around the **[Next.js 13](https://nextjs.org/blog/next-13#server-components)** framework with its app experimental directory, server components as a default type and other great features (layouts,  improved links, etc.)
 
