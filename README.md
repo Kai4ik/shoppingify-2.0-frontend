@@ -24,7 +24,7 @@ The app consists of 3 main parts:
 
 - **Frontend**
   - Next.js 13 (app directory feature)
-- Chakra UI
+  - Chakra UI
   - TypeScript
   - GraphQL.
 
