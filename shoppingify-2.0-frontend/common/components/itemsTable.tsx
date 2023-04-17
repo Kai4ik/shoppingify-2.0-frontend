@@ -10,12 +10,11 @@ import {
   Tr,
   Text
 } from '@chakra-ui/react'
+import { PropsWithChildren } from 'react'
 
 export default function ItemsTable ({
   children
-}: {
-  children: React.ReactNode
-}): JSX.Element {
+}: PropsWithChildren): JSX.Element {
   return (
     <TableContainer w='auto'>
       <Table

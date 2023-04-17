@@ -1,7 +1,7 @@
 'use client'
 
 // ----- external modules ----- //
-import { useRef, RefObject } from 'react'
+import { useRef, RefObject, PropsWithChildren } from 'react'
 import {
   AlertDialog,
   AlertDialogOverlay,
@@ -13,14 +13,16 @@ import { FocusableElement } from '@chakra-ui/utils'
 
 interface Props {
   isOpen: boolean
-  children: React.ReactNode
+
   closeOnOverlayClick?: boolean
   closeOnEsc?: boolean
   onClose: () => void
   runOnClose?: () => void
 }
 
-export default function SubmissionAlert (props: Props): JSX.Element {
+export default function SubmissionAlert (
+  props: PropsWithChildren<Props>
+): JSX.Element {
   const {
     isOpen,
     onClose,

@@ -2,12 +2,11 @@
 
 // ----- external modules ----- //
 import { Stack, StatGroup } from '@chakra-ui/react'
+import { PropsWithChildren } from 'react'
 
-interface Props {
-  children: React.ReactNode
-}
-
-export default function StatGroupCp ({ children }: Props): JSX.Element {
+export default function StatGroupCp ({
+  children
+}: PropsWithChildren): JSX.Element {
   return (
     <StatGroup
       backgroundColor='blackAlpha.50'

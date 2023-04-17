@@ -2,6 +2,7 @@
 
 // ----- external modules ----- //
 import { Stack, Flex, Avatar, WrapItem, Box } from '@chakra-ui/react'
+import { PropsWithChildren } from 'react'
 import { FaListUl, FaHistory } from 'react-icons/fa'
 import { FiUser } from 'react-icons/fi'
 import { IoIosStats, IoIosAddCircle } from 'react-icons/io'
@@ -10,11 +11,9 @@ import { IoIosStats, IoIosAddCircle } from 'react-icons/io'
 // components
 import TooltipCn from './tooltip'
 
-interface LayoutProps {
-  children: React.ReactNode
-}
-
-export default function AuthLayout ({ children }: LayoutProps): React.ReactNode {
+export default function AuthLayout ({
+  children
+}: PropsWithChildren): React.ReactNode {
   const Icons = [
     {
       icon: FaListUl,

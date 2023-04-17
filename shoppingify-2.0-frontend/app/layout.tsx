@@ -2,12 +2,11 @@
 
 // external modules
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
+import { PropsWithChildren } from 'react'
 
 export default function RootLayout ({
   children
-}: {
-  children: React.ReactNode
-}): JSX.Element {
+}: PropsWithChildren): JSX.Element {
   const theme = {
     colors: {
       main: '#80485B',
