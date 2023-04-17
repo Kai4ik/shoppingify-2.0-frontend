@@ -1,8 +1,9 @@
 'use client'
 
 // external modules
-import { Tooltip, Link, WrapItem, Icon } from '@chakra-ui/react'
+import { Tooltip, WrapItem, Icon } from '@chakra-ui/react'
 import { IconType } from 'react-icons/lib'
+import NextLink from 'next/link'
 
 interface Props {
   label: string
@@ -28,7 +29,7 @@ export default function TooltipCn ({
       color='secondary'
     >
       <WrapItem>
-        <Link href={link}>
+        <NextLink href={link}>
           <Icon
             as={icon}
             boxSize={size}
@@ -36,7 +37,7 @@ export default function TooltipCn ({
             cursor='pointer'
             color='main'
           />
-        </Link>
+        </NextLink>
       </WrapItem>
     </Tooltip>
   )

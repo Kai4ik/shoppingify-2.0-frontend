@@ -1,7 +1,8 @@
 'use client'
 
 // ----- external modules ----- //
-import { Text, VStack, Image, Link } from '@chakra-ui/react'
+import { Text, VStack, Image } from '@chakra-ui/react'
+import NextLink from 'next/link'
 
 interface Props {
   heading: string
@@ -26,11 +27,11 @@ export default function NoDataCp ({
           </Text>
         )}
         {link !== undefined && (
-          <Link href='/protected/addReceipt' color='purple.300'>
+          <NextLink href='/protected/addReceipt' color='purple.300'>
             <Text fontSize='xl' color='secondary'>
               {link}
             </Text>
-          </Link>
+          </NextLink>
         )}
       </VStack>
       <Image

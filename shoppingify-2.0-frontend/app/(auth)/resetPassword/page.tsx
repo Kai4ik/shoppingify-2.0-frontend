@@ -6,7 +6,6 @@ import {
   Container,
   VStack,
   Text,
-  Link,
   FormControl,
   FormErrorMessage,
   Input,
@@ -23,6 +22,7 @@ import { FocusableElement } from '@chakra-ui/utils'
 import { useFormik } from 'formik'
 import { use, useState, useRef, RefObject } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import NextLink from 'next/link'
 
 // internal modules
 import { resetPassword } from '@/utils/auth'
@@ -138,9 +138,14 @@ export default function ConfirmEmail (): JSX.Element {
                 </Button>
               </VStack>
             </form>
-            <Link href='/login'>
-              <Text fontSize='md'> Proceed to login</Text>
-            </Link>
+            <NextLink href='/login'>
+              <Text
+                fontSize='md'
+                _hover={{ borderBottomWidth: '1px', borderColor: 'purple' }}
+              >
+                Proceed to login
+              </Text>
+            </NextLink>
           </VStack>
         </VStack>
       </Container>
@@ -161,7 +166,7 @@ export default function ConfirmEmail (): JSX.Element {
                     <CheckCircleIcon boxSize={6} color='green.500' />
                   </HStack>
                   <HStack justify='center' pb='10%'>
-                    <Button onClick={() => router.push('/auth/login/')}>
+                    <Button onClick={() => router.push('/login/')}>
                       Proceed to login
                     </Button>
                   </HStack>

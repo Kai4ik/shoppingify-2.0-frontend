@@ -9,9 +9,9 @@ import {
   StatNumber,
   StatHelpText,
   StatGroup,
-  Text,
-  Link
+  Text
 } from '@chakra-ui/react'
+import NextLink from 'next/link'
 
 // ----- internal modules ----- //
 import { getReceiptByTotal } from '@/utils/helpers'
@@ -69,13 +69,16 @@ export default function GeneralInsights ({
             <StatLabel fontSize={15}>Total Spend (all time)</StatLabel>
             <StatNumber color='secondary'>${totalSpend}</StatNumber>
 
-            <Link
+            <NextLink
               href={`/protected/purchaseHistory/${earliestPurchase.receiptNumber}`}
             >
-              <StatHelpText>
+              <StatHelpText
+                display='inline'
+                _hover={{ borderBottomWidth: '1px', borderColor: 'main' }}
+              >
                 earliest was captured on {earliestPurchase.purchaseDate}
               </StatHelpText>
-            </Link>
+            </NextLink>
           </Stat>
           <Stat>
             <StatLabel fontSize={15}>Total Purchases</StatLabel>
@@ -85,25 +88,31 @@ export default function GeneralInsights ({
           <Stat>
             <StatLabel fontSize={15}>Most expensive purchase</StatLabel>
             <StatNumber color='secondary'>${mostExpensivePurchase}</StatNumber>
-            <Link
+            <NextLink
               href={`/protected/purchaseHistory/${mostExpensivePurchaseDetails.receiptNumber}`}
             >
-              <StatHelpText>
+              <StatHelpText
+                display='inline'
+                _hover={{ borderBottomWidth: '1px', borderColor: 'main' }}
+              >
                 was made on {mostExpensivePurchaseDetails.purchaseDate}
               </StatHelpText>
-            </Link>
+            </NextLink>
           </Stat>
 
           <Stat>
             <StatLabel fontSize={15}>Cheapest purchase</StatLabel>
             <StatNumber color='secondary'>${cheapestPurchase}</StatNumber>
-            <Link
+            <NextLink
               href={`/protected/purchaseHistory/${cheapestPurchaseDetails.receiptNumber}`}
             >
-              <StatHelpText>
+              <StatHelpText
+                display='inline'
+                _hover={{ borderBottomWidth: '1px', borderColor: 'main' }}
+              >
                 was made on {cheapestPurchaseDetails.purchaseDate}
               </StatHelpText>
-            </Link>
+            </NextLink>
           </Stat>
 
           <Stat>

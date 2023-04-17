@@ -9,12 +9,12 @@ import {
   Input,
   FormControl,
   FormErrorMessage,
-  Button,
-  Link
+  Button
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import NextLink from 'next/link'
 
 // internal modules
 import { authenticateUser } from '@/utils/auth'
@@ -116,12 +116,22 @@ export default function Login (): JSX.Element {
             </VStack>
           </form>
           <VStack w='100%' spacing={2}>
-            <Link href='/resetPasswordVc'>
-              <Text fontSize='md'> Forgot password?</Text>
-            </Link>
-            <Link href='/register'>
-              <Text fontSize='md'>Do not have an account yet ? Create one</Text>
-            </Link>
+            <NextLink href='/resetPasswordVc'>
+              <Text
+                fontSize='md'
+                _hover={{ borderBottomWidth: '1px', borderColor: 'purple' }}
+              >
+                Forgot password?
+              </Text>
+            </NextLink>
+            <NextLink href='/register'>
+              <Text
+                fontSize='md'
+                _hover={{ borderBottomWidth: '1px', borderColor: 'purple' }}
+              >
+                Do not have an account yet ? Create one
+              </Text>
+            </NextLink>
           </VStack>
         </VStack>
       </Container>

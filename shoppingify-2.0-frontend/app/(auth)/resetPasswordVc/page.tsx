@@ -22,6 +22,7 @@ import { FocusableElement } from '@chakra-ui/utils'
 import { useFormik } from 'formik'
 import { use, useState, useRef, RefObject } from 'react'
 import { useRouter } from 'next/navigation'
+import NextLink from 'next/link'
 
 // internal modules
 import { resetPasswordVc } from '@/utils/auth'
@@ -79,7 +80,7 @@ export default function ConfirmEmail (): JSX.Element {
               </Text>
             </VStack>
             <form onSubmit={formik.handleSubmit} style={{ width: '90%' }}>
-              <VStack w='100%' spacing={12}>
+              <VStack w='100%' spacing={6}>
                 <FormControl
                   isInvalid={
                     Boolean(formik.errors.email) && formik.touched.email
@@ -108,6 +109,14 @@ export default function ConfirmEmail (): JSX.Element {
                 </Button>
               </VStack>
             </form>
+            <NextLink href='/login'>
+              <Text
+                fontSize='md'
+                _hover={{ borderBottomWidth: '1px', borderColor: 'purple' }}
+              >
+                Go back to login
+              </Text>
+            </NextLink>
           </VStack>
         </VStack>
       </Container>

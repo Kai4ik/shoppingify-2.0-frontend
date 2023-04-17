@@ -7,9 +7,9 @@ import {
   StatLabel,
   StatNumber,
   Text,
-  HStack,
-  Link
+  HStack
 } from '@chakra-ui/react'
+import NextLink from 'next/link'
 
 // ----- internal modules ----- //
 
@@ -97,50 +97,60 @@ export default function LineItemsInsights ({
       <StatGroupCp>
         <Stat>
           <StatLabel fontSize={15}>The cheapest item</StatLabel>
-          <Link
-            href={`/protected/productsList/${cheapestItem.itemTitle}`}
-            color='secondary'
-          >
-            <StatNumber fontSize={18}>
+          <NextLink href={`/protected/productsList/${cheapestItem.itemTitle}`}>
+            <StatNumber
+              fontSize={18}
+              color='secondary'
+              display='inline'
+              _hover={{ borderBottomWidth: '1px', borderColor: 'secondary' }}
+            >
               {cheapestItem.itemTitle} - ${cheapestItem.price}
             </StatNumber>
-          </Link>
+          </NextLink>
         </Stat>
 
         <Stat>
           <StatLabel fontSize={15}>The most expensive item</StatLabel>
-          <Link
+          <NextLink
             href={`/protected/productsList/${mostExpensiveItem.itemTitle}`}
-            color='secondary'
           >
-            <StatNumber fontSize={18}>
+            <StatNumber
+              fontSize={18}
+              color='secondary'
+              display='inline'
+              _hover={{ borderBottomWidth: '1px', borderColor: 'secondary' }}
+            >
               {mostExpensiveItem.itemTitle} - ${mostExpensiveItem.price}
             </StatNumber>
-          </Link>
+          </NextLink>
         </Stat>
 
         <Stat>
           <StatLabel fontSize={15}>You spend most on </StatLabel>
-          <Link
-            href={`/protected/productsList/${mostSpendOnItem.keys[0]}`}
-            color='secondary'
-          >
-            <StatNumber fontSize={18}>
+          <NextLink href={`/protected/productsList/${mostSpendOnItem.keys[0]}`}>
+            <StatNumber
+              fontSize={18}
+              color='secondary'
+              display='inline'
+              _hover={{ borderBottomWidth: '1px', borderColor: 'secondary' }}
+            >
               {mostSpendOnItem.keys[0]} - ${mostSpendOnItem.sum.total}
             </StatNumber>
-          </Link>
+          </NextLink>
         </Stat>
 
         <Stat>
           <StatLabel fontSize={15}>The most purchased item(s) </StatLabel>
-          <Link
-            href={`/protected/productsList/${mostPurchasedItem.title}`}
-            color='secondary'
-          >
-            <StatNumber fontSize={18}>
+          <NextLink href={`/protected/productsList/${mostPurchasedItem.title}`}>
+            <StatNumber
+              fontSize={18}
+              color='secondary'
+              display='inline'
+              _hover={{ borderBottomWidth: '1px', borderColor: 'secondary' }}
+            >
               {mostPurchasedItem.title} - {mostPurchasedItem.count} times
             </StatNumber>
-          </Link>
+          </NextLink>
         </Stat>
       </StatGroupCp>
     </VStack>

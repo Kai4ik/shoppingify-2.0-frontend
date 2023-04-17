@@ -15,8 +15,8 @@ import {
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
 import { useState, useEffect, use } from 'react'
-
 import { useRouter } from 'next/navigation'
+import NextLink from 'next/link'
 
 // internal modules
 import { User } from '@/common/types/auth_types'
@@ -72,7 +72,7 @@ export default function Register (): JSX.Element {
       >
         <VStack
           justify={['flex-start', 'flex-start', 'center']}
-          spacing={[50, 10, 50]}
+          spacing={[50, 10, 8]}
           color='main'
           h='100%'
         >
@@ -200,6 +200,14 @@ export default function Register (): JSX.Element {
               </Button>
             </VStack>
           </form>
+          <NextLink href='/login'>
+            <Text
+              fontSize='md'
+              _hover={{ borderBottomWidth: '1px', borderColor: 'purple' }}
+            >
+              Already have an account?
+            </Text>
+          </NextLink>
         </VStack>
       </Container>
     </Flex>
