@@ -32,6 +32,23 @@ export default function ItemsContainer ({ lineItems }: Props): JSX.Element {
     return item.itemTitle.toLowerCase().includes(searchInput.toLowerCase())
   })
 
+  if (filteredItems.length === 0) {
+    return (
+      <VStack
+        w='95%'
+        p={['4% 0 5% 5%', '4% 0 4% 10%']}
+        spacing={8}
+        align='flex-start'
+      >
+        <NoDataCp
+          heading='All purchased items'
+          subheading='No Purchases yet'
+          link='Add new receipt?'
+        />
+      </VStack>
+    )
+  }
+
   return (
     <VStack
       w='95%'
@@ -39,44 +56,34 @@ export default function ItemsContainer ({ lineItems }: Props): JSX.Element {
       spacing={8}
       align='flex-start'
     >
-      {filteredItems.length > 0
-        ? (
-          <>
-            <VStack align='flex-start'>
-              <HStack color='main' fontWeight={600}>
-                <Text fontSize={20}>All purchased items</Text>
-                <Text fontSize={16}>({lineItems.length})</Text>
-              </HStack>
-            </VStack>
-            <InputGroup>
-              <InputLeftElement pointerEvents='none'>
-                <Search2Icon color='gray.300' mt='10px' />
-              </InputLeftElement>
-              <Input
-                w='90%'
-                type='text'
-                placeholder='Search by name'
-                size='lg'
-                variant='flushed'
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-              />
-            </InputGroup>
-
-            <Flex wrap='wrap' gap={['15px', '20px']}>
-              {filteredItems.map((item) => (
-                <Item item={item} key={item.id} />
-              ))}
-            </Flex>
-          </>
-          )
-        : (
-          <NoDataCp
-            heading='All purchased items'
-            subheading='No Purchases yet'
-            link='Add new receipt?'
+      <>
+        <VStack align='flex-start'>
+          <HStack color='main' fontWeight={600}>
+            <Text fontSize={20}>All purchased items</Text>
+            <Text fontSize={16}>({lineItems.length})</Text>
+          </HStack>
+        </VStack>
+        <InputGroup>
+          <InputLeftElement pointerEvents='none'>
+            <Search2Icon color='gray.300' mt='10px' />
+          </InputLeftElement>
+          <Input
+            w='90%'
+            type='text'
+            placeholder='Search by name'
+            size='lg'
+            variant='flushed'
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
           />
-          )}
+        </InputGroup>
+
+        <Flex wrap='wrap' gap={['15px', '20px']}>
+          {filteredItems.map((item) => (
+            <Item item={item} key={item.id} />
+          ))}
+        </Flex>
+      </>
     </VStack>
   )
 }
