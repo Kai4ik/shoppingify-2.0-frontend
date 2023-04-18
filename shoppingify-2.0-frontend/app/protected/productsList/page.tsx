@@ -1,4 +1,5 @@
 // ----- external modules ----- //
+import { Suspense } from 'react'
 import { cookies } from 'next/headers'
 import * as jose from 'jose'
 import { RequestCookie } from 'next/dist/server/web/spec-extension/cookies/types'
@@ -8,14 +9,21 @@ import { getUsername } from '@/utils/auth'
 
 // components
 import ItemsContainer from './itemsContainer'
+import Fallback from '@/app/protected/fallback'
 
 // GraphQL queries
 import { getItemsForUser } from '@/common/queries'
 
 // types
 import { LineItemPgql } from '@/common/types/pgql_types'
+import { FetchLineItemsResponse } from '@/common/types/fetch_json_types'
 
-const getLineItemsData = async (cookies: RequestCookie[]) => {
+const getLineItemsData = async (
+  cookies: RequestCookie[]
+): Promise<{
+  payload?: LineItemPgql[]
+  errors?: Array<{ message: string }>
+}> => {
   let username = ''
 
   cookies.forEach((cookie: { name: string, value: string }) => {
@@ -37,7 +45,28 @@ const getLineItemsData = async (cookies: RequestCookie[]) => {
         query: getItemsForUserQuery
       })
     })
-    return await receiptsDataForUser.json()
+
+    const { data }: FetchLineItemsResponse = await receiptsDataForUser.json()
+
+    return data !== undefined
+      ? {
+          payload: data.allLineItems.nodes
+        }
+      : {
+          errors: [
+            {
+              message: 'Error occured during fetch'
+            }
+          ]
+        }
+  }
+  return {
+    errors: [
+      {
+        message:
+          'You are not logged in. Please refresh the page and try again!'
+      }
+    ]
   }
 }
 
@@ -46,12 +75,20 @@ export default async function ProductList (): Promise<JSX.Element> {
 
   const allCookies = cookieStore.getAll()
   const data = await getLineItemsData(allCookies)
-  const lineItems: LineItemPgql[] = data.data.allLineItems.nodes
-  const uniqueLineItems = Array.from(
-    new Map(
-      lineItems.map((item) => [item.itemTitle.toLowerCase(), item])
-    ).values()
-  )
 
-  return <ItemsContainer lineItems={uniqueLineItems} />
+  if (data.payload == null) {
+    return <p> Error occured </p>
+  } else {
+    const lineItems: LineItemPgql[] = data.payload
+    const uniqueLineItems = Array.from(
+      new Map(
+        lineItems.map((item) => [item.itemTitle.toLowerCase(), item])
+      ).values()
+    )
+    return (
+      <Suspense fallback={<Fallback />}>
+        <ItemsContainer lineItems={uniqueLineItems} />
+      </Suspense>
+    )
+  }
 }
