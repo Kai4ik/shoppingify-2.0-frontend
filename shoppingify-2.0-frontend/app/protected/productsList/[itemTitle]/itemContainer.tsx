@@ -8,9 +8,10 @@ import {
   Stack,
   Box,
   WrapItem,
-  Link,
   Tooltip as TooltipCn
 } from '@chakra-ui/react'
+import NextLink from 'next/link'
+
 import { useState } from 'react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 
@@ -107,7 +108,7 @@ export default function ItemContainer ({ lineItemStats }: Props): JSX.Element {
                   color='secondary'
                 >
                   <WrapItem>
-                    <Link
+                    <NextLink
                       href={`/protected/purchaseHistory/${lineItem.receiptByReceiptNumberAndUser.receiptNumber}`}
                     >
                       <ChevronRightIcon
@@ -115,7 +116,7 @@ export default function ItemContainer ({ lineItemStats }: Props): JSX.Element {
                         color='main'
                         _hover={{ boxSize: 8 }}
                       />
-                    </Link>
+                    </NextLink>
                   </WrapItem>
                 </TooltipCn>
               </Box>
@@ -144,6 +145,7 @@ export default function ItemContainer ({ lineItemStats }: Props): JSX.Element {
             ]}
           />
         </Stack>
+
         <PriceChart sortOption={sortOption} lineItemStats={lineItemStats} />
       </VStack>
     </VStack>
