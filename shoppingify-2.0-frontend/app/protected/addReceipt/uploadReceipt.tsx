@@ -42,10 +42,9 @@ function UploadReceipt (props: Props): JSX.Element {
     }
   }
 
-  const handleSubmitScan = async (): Promise<void> => {
-    setLoading(true)
-
-    await (async () => {
+  const handleSubmitScan = (): void => {
+    setLoading(true);
+    (async () => {
       const userLoggedIn = await loggedIn()
       if (userLoggedIn.signedIn && userLoggedIn.jwt !== undefined) {
         const url = `${
@@ -79,7 +78,7 @@ function UploadReceipt (props: Props): JSX.Element {
         }
         setLoading(false)
       }
-    })()
+    })().catch((err) => console.error(err))
   }
 
   return (

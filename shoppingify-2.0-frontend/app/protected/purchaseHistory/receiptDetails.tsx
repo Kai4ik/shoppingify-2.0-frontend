@@ -41,15 +41,19 @@ export default function ReceiptDetails ({
   const router = useRouter()
   const [deletionInProgress, setDeletionInProgress] = useState<boolean>(false)
 
-  const handleDelete = async (): Promise<void> => {
-    setDeletionInProgress(true)
-    const result: boolean = await deleteReceipt(receipt)
-    if (result) {
-      const filteredArray = initialReceipts.filter(
-        (elem) => elem.receiptNumber !== receipt.receiptNumber
-      ) as [ReceiptPgql]
-      setInitialReceipts(filteredArray)
-    }
+  const handleDelete = (): void => {
+    setDeletionInProgress(true);
+
+    (async () => {
+      const result: boolean = await deleteReceipt(receipt)
+      if (result) {
+        const filteredArray = initialReceipts.filter(
+          (elem) => elem.receiptNumber !== receipt.receiptNumber
+        ) as [ReceiptPgql]
+        setInitialReceipts(filteredArray)
+      }
+    })().catch((err) => console.error(err))
+
     setDeletionInProgress(false)
   }
 

@@ -23,10 +23,12 @@ export default function DeleteBtn (props: Props): JSX.Element {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const handleDelete = async (): Promise<void> => {
+  const handleDelete = (): void => {
     setDeletionInProgress(true)
-    onOpen()
-    await deleteReceipt(receipt)
+    onOpen();
+    (async () => {
+      await deleteReceipt(receipt)
+    })().catch((err) => console.error(err))
     setDeletionInProgress(false)
     router.push('/protected/purchaseHistory')
   }

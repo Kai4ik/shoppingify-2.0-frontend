@@ -57,47 +57,51 @@ export default function AddReceipt (): JSX.Element {
     useState<boolean>(false)
   const [submissionMessages, setSubmissionMessages] = useState<string[]>([])
 
-  const onSubmit = async (): Promise<void> => {
-    setSubmissionInProgress(true)
-    const body = new FormData()
-    setValue('currency', data?.data.currency)
-    setValue('merchant_address', data?.data.merchant_address)
-    setValue('payment_type', data?.data.payment_type)
-    setValue('initial_line_items', data?.data.line_items)
-    body.append('file', file as File, file?.name)
-    body.append('data', JSON.stringify(getValues()))
-    const userLoggedIn = await loggedIn()
-    if (userLoggedIn.signedIn && userLoggedIn.jwt !== undefined) {
-      const url = `${
-        process.env.NODE_ENV === 'development'
-          ? 'http://127.0.0.1:8000'
-          : process.env.NEXT_PUBLIC_API_URL
-      }/saveReceipt`
+  const onSubmit = (): void => {
+    (async () => {
+      setSubmissionInProgress(true)
+      const body = new FormData()
+      setValue('currency', data?.data.currency)
+      setValue('merchant_address', data?.data.merchant_address)
+      setValue('payment_type', data?.data.payment_type)
+      setValue('initial_line_items', data?.data.line_items)
+      body.append('file', file as File, file?.name)
+      body.append('data', JSON.stringify(getValues()))
 
-      const response = await axios({
-        method: 'post',
-        url,
-        data: body,
-        headers: {
-          accept: 'application/json',
-          'Accept-Language': 'en-US,en;q=0.8',
-          'Content-Type': 'multipart/form-data',
-          'Access-Control-Allow-Origin': `${
-            process.env.NODE_ENV === 'development'
-              ? 'http://localhost:3000'
-              : 'https://shoppingify-2-0-frontend.vercel.app'
-          }`,
-          Authorization: `Bearer ${userLoggedIn.jwt}`
+      const userLoggedIn = await loggedIn()
+      if (userLoggedIn.signedIn && userLoggedIn.jwt !== undefined) {
+        const url = `${
+          process.env.NODE_ENV === 'development'
+            ? 'http://127.0.0.1:8000'
+            : process.env.NEXT_PUBLIC_API_URL
+        }/saveReceipt`
+
+        const response = await axios({
+          method: 'post',
+          url,
+          data: body,
+          headers: {
+            accept: 'application/json',
+            'Accept-Language': 'en-US,en;q=0.8',
+            'Content-Type': 'multipart/form-data',
+            'Access-Control-Allow-Origin': `${
+              process.env.NODE_ENV === 'development'
+                ? 'http://localhost:3000'
+                : 'https://shoppingify-2-0-frontend.vercel.app'
+            }`,
+            Authorization: `Bearer ${userLoggedIn.jwt}`
+          }
+        })
+        const result = response.data
+        setSubmissionInProgress(false)
+        result.success === false &&
+          setSubmissionMessages(result.error_messages)
+        onOpen()
+        if (result.success === true && data !== undefined) {
+          router.push(`/protected/purchaseHistory/${data.data.receipt_number}`)
         }
-      })
-      const result = response.data
-      setSubmissionInProgress(false)
-      result.success === false && setSubmissionMessages(result.error_messages)
-      onOpen()
-      if (result.success === true && data !== undefined) {
-        router.push(`/protected/purchaseHistory/${data.data.receipt_number}`)
       }
-    }
+    })().catch((err) => console.error(err))
   }
 
   const addItem = (): void => {

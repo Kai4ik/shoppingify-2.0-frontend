@@ -63,6 +63,12 @@ export default function ConfirmEmail ({ params }: Props): JSX.Element {
     }
   }, [router, confirmed])
 
+  const handleChange = (e: string): void => {
+    (async () => {
+      await formik.setFieldValue('code', e)
+    })().catch((err) => console.error(err))
+  }
+
   return (
     <Flex
       w='100vw'
@@ -102,12 +108,7 @@ export default function ConfirmEmail ({ params }: Props): JSX.Element {
             <form onSubmit={formik.handleSubmit} style={{ width: '90%' }}>
               <VStack w='100%' spacing={12}>
                 <HStack>
-                  <PinInput
-                    otp
-                    size='lg'
-                    onChange={async (e) =>
-                      await formik.setFieldValue('code', e)}
-                  >
+                  <PinInput otp size='lg' onChange={handleChange}>
                     <PinInputField />
                     <PinInputField />
                     <PinInputField />

@@ -68,90 +68,98 @@ export default function Receipt ({
   const [readyToSubmit, setReadyToSubmit] = useState<boolean>(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const onSubmit = async (): Promise<void> => {
+  const onSubmit = (): void => {
     setUpdateInProgress(true)
-    onOpen()
-    const updatedReceipt: ReceiptPgql = hookFormIntoObject(getValues, data)
-    const difference: ExtendedDetailedDiff = detailedDiff(
-      initialValue,
-      updatedReceipt
-    )
+    onOpen();
 
-    const initialLineItems = initialValue.lineItemsByReceiptNumberAndUser.nodes
-    const updatedLineItems =
-      updatedReceipt.lineItemsByReceiptNumberAndUser.nodes
-    let finalLineItems: LineItemPgql[] = initialLineItems
-
-    const deletedItems = initialLineItems.filter(function (item) {
-      return !updatedLineItems.some(
-        (updatedItem) => item.id === updatedItem.id
-      )
-    })
-
-    const newItems = updatedLineItems.filter(function (item) {
-      return !initialLineItems.some(
-        (updatedItem) => item.id === updatedItem.id
-      )
-    })
-
-    if (deletedItems.length > 0) {
-      await deleteItemFromDB(deletedItems)
-      finalLineItems = finalLineItems.filter((item) => {
-        return !deletedItems.some((deletedItem) => item.id === deletedItem.id)
-      })
-    }
-
-    if (difference.updated.lineItemsByReceiptNumberAndUser != null) {
-      const updatedItemsIndexes: string[] = Object.keys(
-        difference.updated.lineItemsByReceiptNumberAndUser.nodes
-      )
-
-      const updatedItems =
-        difference.updated.lineItemsByReceiptNumberAndUser.nodes
-      updatedItemsIndexes.forEach((index) => {
-        const finalItem = finalLineItems[parseInt(index)]
-        const updatedItem = updatedItems[parseInt(index)]
-        if (updatedItem.itemTitle !== undefined) {
-          finalItem.itemTitle = updatedItem.itemTitle
-        }
-        if (updatedItem.price !== undefined) {
-          finalItem.price = updatedItem.price
-        }
-        if (updatedItem.qty !== undefined) finalItem.qty = updatedItem.qty
-        if (updatedItem.unit !== undefined) finalItem.unit = updatedItem.unit
-        if (updatedItem.total !== undefined) {
-          finalItem.total = updatedItem.total
-        }
-      })
-
-      await updateItemInDB(
-        difference.updated.lineItemsByReceiptNumberAndUser.nodes,
+    (async () => {
+      const updatedReceipt: ReceiptPgql = hookFormIntoObject(getValues, data)
+      const difference: ExtendedDetailedDiff = detailedDiff(
+        initialValue,
         updatedReceipt
       )
-    }
 
-    if (Object.keys(difference.updated).length > 0) {
-      await updateReceiptInDB(
-        parseInt(initialValue.receiptNumber),
-        difference.updated
-      )
-    }
+      const initialLineItems =
+        initialValue.lineItemsByReceiptNumberAndUser.nodes
+      const updatedLineItems =
+        updatedReceipt.lineItemsByReceiptNumberAndUser.nodes
+      let finalLineItems: LineItemPgql[] = initialLineItems
 
-    if (difference.updated.receiptNumber !== undefined) {
-      await updateReceiptNumber(
-        parseInt(initialValue.receiptNumber),
-        parseInt(updatedReceipt.receiptNumber),
-        finalLineItems
-      )
-    }
+      const deletedItems = initialLineItems.filter(function (item) {
+        return !updatedLineItems.some(
+          (updatedItem) => item.id === updatedItem.id
+        )
+      })
 
-    if (newItems.length > 0) {
-      await addItemToDB(newItems, parseInt(updatedReceipt.receiptNumber))
-    }
+      const newItems = updatedLineItems.filter(function (item) {
+        return !initialLineItems.some(
+          (updatedItem) => item.id === updatedItem.id
+        )
+      })
 
-    if (difference.updated.receiptNumber !== undefined) {
-      router.push(`/protected/purchaseHistory/${updatedReceipt.receiptNumber}`)
-    }
+      if (deletedItems.length > 0) {
+        await deleteItemFromDB(deletedItems)
+        finalLineItems = finalLineItems.filter((item) => {
+          return !deletedItems.some(
+            (deletedItem) => item.id === deletedItem.id
+          )
+        })
+      }
+
+      if (difference.updated.lineItemsByReceiptNumberAndUser != null) {
+        const updatedItemsIndexes: string[] = Object.keys(
+          difference.updated.lineItemsByReceiptNumberAndUser.nodes
+        )
+
+        const updatedItems =
+          difference.updated.lineItemsByReceiptNumberAndUser.nodes
+        updatedItemsIndexes.forEach((index) => {
+          const finalItem = finalLineItems[parseInt(index)]
+          const updatedItem = updatedItems[parseInt(index)]
+          if (updatedItem.itemTitle !== undefined) {
+            finalItem.itemTitle = updatedItem.itemTitle
+          }
+          if (updatedItem.price !== undefined) {
+            finalItem.price = updatedItem.price
+          }
+          if (updatedItem.qty !== undefined) finalItem.qty = updatedItem.qty
+          if (updatedItem.unit !== undefined) finalItem.unit = updatedItem.unit
+          if (updatedItem.total !== undefined) {
+            finalItem.total = updatedItem.total
+          }
+        })
+
+        await updateItemInDB(
+          difference.updated.lineItemsByReceiptNumberAndUser.nodes,
+          updatedReceipt
+        )
+      }
+
+      if (Object.keys(difference.updated).length > 0) {
+        await updateReceiptInDB(
+          parseInt(initialValue.receiptNumber),
+          difference.updated
+        )
+      }
+
+      if (difference.updated.receiptNumber !== undefined) {
+        await updateReceiptNumber(
+          parseInt(initialValue.receiptNumber),
+          parseInt(updatedReceipt.receiptNumber),
+          finalLineItems
+        )
+      }
+
+      if (newItems.length > 0) {
+        await addItemToDB(newItems, parseInt(updatedReceipt.receiptNumber))
+      }
+
+      if (difference.updated.receiptNumber !== undefined) {
+        router.push(
+          `/protected/purchaseHistory/${updatedReceipt.receiptNumber}`
+        )
+      }
+    })().catch((err) => console.error(err))
 
     setUpdateInProgress(false)
   }
