@@ -1,4 +1,5 @@
 // ----- external modules ----- //
+import { Suspense } from 'react'
 import { cookies } from 'next/headers'
 import * as jose from 'jose'
 import { RequestCookie } from 'next/dist/server/web/spec-extension/cookies/types'
@@ -8,6 +9,7 @@ import { getUsername } from '@/utils/auth'
 
 // components
 import InsightsContainer from './insightsContainer'
+import Fallback from '@/app/protected/fallback'
 
 // GraphQL queries
 import { getAllDataForSpecificUSer } from '@/common/queries'
@@ -57,11 +59,13 @@ export default async function Stats (): Promise<JSX.Element> {
   const lineItemsStatsData: [LineItemGroupStatsPgql] =
     data.data.allLineItems.groupedAggregates
   return (
-    <InsightsContainer
-      lineItems={lineItems}
-      receipts={receipts}
-      statsData={statsData}
-      lineItemsStatsData={lineItemsStatsData}
-    />
+    <Suspense fallback={<Fallback />}>
+      <InsightsContainer
+        lineItems={lineItems}
+        receipts={receipts}
+        statsData={statsData}
+        lineItemsStatsData={lineItemsStatsData}
+      />
+    </Suspense>
   )
 }

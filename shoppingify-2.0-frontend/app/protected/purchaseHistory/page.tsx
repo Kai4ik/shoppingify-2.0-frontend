@@ -1,4 +1,5 @@
 // ----- external modules ----- //
+import { Suspense } from 'react'
 import { cookies } from 'next/headers'
 import * as jose from 'jose'
 import { RequestCookie } from 'next/dist/server/web/spec-extension/cookies/types'
@@ -8,6 +9,7 @@ import { getUsername } from '@/utils/auth'
 
 // components
 import ReceiptsContainer from './receiptsContainer'
+import Fallback from '@/app/protected/fallback'
 
 // GraphQL queries
 import { getReceiptsForUser } from '@/common/queries'
@@ -48,5 +50,9 @@ export default async function PurchaseHistory (): Promise<JSX.Element> {
   const data = await getReceiptsData(allCookies)
   const receipts: ReceiptPgql[] = data.data.allReceipts.nodes
 
-  return <ReceiptsContainer receipts={receipts} />
+  return (
+    <Suspense fallback={<Fallback />}>
+      <ReceiptsContainer receipts={receipts} />
+    </Suspense>
+  )
 }

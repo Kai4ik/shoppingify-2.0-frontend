@@ -1,4 +1,5 @@
 // external modules
+import { Suspense } from 'react'
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3'
 import { fromUint8Array } from 'js-base64'
 import { cookies } from 'next/headers'
@@ -9,7 +10,9 @@ import { ReceiptPgql } from '@/common/types/pgql_types'
 import { getUsername } from '@/utils/auth'
 import { getReceiptByNumberAndUser } from '@/common/queries'
 
+// components
 import Receipt from './receipt'
+import Fallback from '@/app/protected/fallback'
 
 const getReceiptImgHref = async (
   username: string,
@@ -84,11 +87,13 @@ export default async function page ({ params }: Props): Promise<JSX.Element> {
     const receiptSrc = await getReceiptImgHref(username, params.receiptNumber)
     const receiptData = await getReceiptData(username, params.receiptNumber)
     return (
-      <Receipt
-        imgSrc={`${receiptSrc}`}
-        receipt={receiptData}
-        initialValue={receiptData}
-      />
+      <Suspense fallback={<Fallback />}>
+        <Receipt
+          imgSrc={`${receiptSrc}`}
+          receipt={receiptData}
+          initialValue={receiptData}
+        />
+      </Suspense>
     )
   }
 
