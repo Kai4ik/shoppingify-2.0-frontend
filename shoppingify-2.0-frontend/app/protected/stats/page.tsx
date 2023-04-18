@@ -13,6 +13,7 @@ import Fallback from '@/app/protected/fallback'
 
 // GraphQL queries
 import { getAllDataForSpecificUSer } from '@/common/queries'
+import { FetchAllDataForSpecificUserResponse } from '@/common/types/fetch_json_types'
 
 // types
 import {
@@ -22,7 +23,41 @@ import {
   LineItemGroupStatsPgql
 } from '@/common/types/pgql_types'
 
-const getLineItemsData = async (cookies: RequestCookie[]) => {
+const getLineItemsData = async (
+  cookies: RequestCookie[]
+): Promise<{
+  payload?: {
+    allLineItems: {
+      nodes: LineItemPgql[]
+      groupedAggregates: [LineItemGroupStatsPgql]
+    }
+    allReceipts: {
+      nodes: ReceiptPgql[]
+      aggregates: {
+        max: {
+          total: string
+          numberOfItems: number
+        }
+        min: {
+          total: string
+          numberOfItems: number
+        }
+        distinctCount: {
+          merchant: string
+          receiptNumber: string
+        }
+        average: {
+          total: string
+          numberOfItems: string
+        }
+        sum: {
+          total: string
+        }
+      }
+    }
+  }
+  errors?: Array<{ message: string }>
+}> => {
   let username = ''
 
   cookies.forEach((cookie: { name: string, value: string }) => {
@@ -44,7 +79,28 @@ const getLineItemsData = async (cookies: RequestCookie[]) => {
         query: getItemsForUserQuery
       })
     })
-    return await allDataForUser.json()
+    const { data }: FetchAllDataForSpecificUserResponse =
+      await allDataForUser.json()
+
+    return data !== undefined
+      ? {
+          payload: data
+        }
+      : {
+          errors: [
+            {
+              message: 'Error occured during fetch'
+            }
+          ]
+        }
+  }
+  return {
+    errors: [
+      {
+        message:
+          'You are not logged in. Please refresh the page and try again!'
+      }
+    ]
   }
 }
 
@@ -53,19 +109,25 @@ export default async function Stats (): Promise<JSX.Element> {
 
   const allCookies = cookieStore.getAll()
   const data = await getLineItemsData(allCookies)
-  const lineItems: LineItemPgql[] = data.data.allLineItems.nodes
-  const receipts: ReceiptPgql[] = data.data.allReceipts.nodes
-  const statsData: StatsPgql = data.data.allReceipts.aggregates
-  const lineItemsStatsData: [LineItemGroupStatsPgql] =
-    data.data.allLineItems.groupedAggregates
-  return (
-    <Suspense fallback={<Fallback />}>
-      <InsightsContainer
-        lineItems={lineItems}
-        receipts={receipts}
-        statsData={statsData}
-        lineItemsStatsData={lineItemsStatsData}
-      />
-    </Suspense>
-  )
+
+  if (data.payload == null) {
+    return <p> Error occured </p>
+  } else {
+    const lineItems: LineItemPgql[] = data.payload.allLineItems.nodes
+    const lineItemsStatsData: [LineItemGroupStatsPgql] =
+      data.payload.allLineItems.groupedAggregates
+    const receipts: ReceiptPgql[] = data.payload.allReceipts.nodes
+    const receiptsStatsData: StatsPgql = data.payload.allReceipts.aggregates
+
+    return (
+      <Suspense fallback={<Fallback />}>
+        <InsightsContainer
+          lineItems={lineItems}
+          receipts={receipts}
+          statsData={receiptsStatsData}
+          lineItemsStatsData={lineItemsStatsData}
+        />
+      </Suspense>
+    )
+  }
 }
