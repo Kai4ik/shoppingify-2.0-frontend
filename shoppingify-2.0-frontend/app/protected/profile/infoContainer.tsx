@@ -74,14 +74,12 @@ export default function InfoContainer ({ userinfo }: Props): JSX.Element {
     }
   ]
 
-  const handleLogout = async (): Promise<void> => {
-    setSigningOut(true)
-
-    await logout(setSignedOut)
+  const handleLogout = (): void => {
+    setSigningOut(true);
+    (async () => {
+      await logout(setSignedOut)
+    })().catch((err) => console.error(err))
     setSigningOut(false)
-    if (signedOut) {
-      console.log('hh')
-    }
   }
 
   return (
