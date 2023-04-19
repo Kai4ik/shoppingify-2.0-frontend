@@ -16,6 +16,7 @@ import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import * as crypto from 'crypto'
 import produce from 'immer'
+import dynamic from 'next/dynamic'
 
 // ----- internal modules ----- //
 import { loggedIn } from '@/utils/auth'
@@ -23,19 +24,58 @@ import { loggedIn } from '@/utils/auth'
 // components
 import UploadReceipt from './uploadReceipt'
 import LoadingCp from '@/app/loadingCp'
-import ItemEdit from './itemEdit'
-import SubmitBtns from './submitBtns'
 import SubmissionAlert from './submissionAlert'
-import MerchantTitle from '@/common/components/receiptTitle'
-import ReceiptTopInputs from '@/common/components/topInputs'
-import ReceiptBottomInputs from '@/common/components/bottomInputs'
-import ItemsTable from '@/common/components/itemsTable'
+import ImportLoading from './importLoading'
 
 // types
 import { ReceiptScanResponse } from '@/common/types/api_types'
 
+const ItemEdit = dynamic(async () => await import('./itemEdit'), {
+  loading: () => (
+    <Text
+      fontSize='lg'
+      bg='blackAlpha.50'
+      p={2}
+      mb='2px'
+      textAlign='center'
+      borderRadius='8px'
+      color='main'
+    >
+      Loading item ...
+    </Text>
+  )
+})
+
+const SubmitBtns = dynamic(async () => await import('./submitBtns'), {
+  loading: () => <ImportLoading title='Loading buttons ...' />
+})
+
+const MerchantTitle = dynamic(
+  async () => await import('@/common/components/receiptTitle'),
+  {
+    loading: () => <ImportLoading title='Loading merchant ...' />
+  }
+)
+
+const ReceiptTopInputs = dynamic(
+  async () => await import('@/common/components/topInputs'),
+  {
+    loading: () => <ImportLoading title='Loading receipt number ...' />
+  }
+)
+
+const ReceiptBottomInputs = dynamic(
+  async () => await import('@/common/components/bottomInputs'),
+  {
+    loading: () => <ImportLoading title='Loading receipt total ...' />
+  }
+)
+
+const ItemsTable = dynamic(async () => await import('@/common/components/itemsTable'), {
+  loading: () => <ImportLoading title='Loading receipt items ...' />
+})
+
 export default function AddReceipt (): JSX.Element {
-  // TODO: add functionality for adding new item
   const {
     register,
     unregister,
