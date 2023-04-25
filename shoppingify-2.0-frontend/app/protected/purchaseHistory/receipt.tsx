@@ -82,9 +82,13 @@ function Receipt ({
     }
   }
 
-  const [minFilter, setMinFilter] = useState(getMinValue(receipts.receipts))
-  const [maxFilter, setMaxFilter] = useState(getMaxValue(receipts.receipts))
-  const [merchantsFilter, setMerchantsFilter] = useState(
+  const [minFilter, setMinFilter] = useState(() =>
+    getMinValue(receipts.receipts)
+  )
+  const [maxFilter, setMaxFilter] = useState(() =>
+    getMaxValue(receipts.receipts)
+  )
+  const [merchantsFilter, setMerchantsFilter] = useState(() =>
     getMerchants(receipts.receipts)
   )
 
@@ -138,7 +142,7 @@ function Receipt ({
           borderColor='gray.300'
           borderRadius={8}
           mb='20px'
-          key={receipt.receiptNumber}
+          key={receipt.id}
         >
           <AccordionButton
             alignItems='center'

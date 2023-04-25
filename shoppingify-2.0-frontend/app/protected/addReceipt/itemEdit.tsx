@@ -28,7 +28,7 @@ import { deleteItem } from '@/utils/receipts_crud'
 import NumberInputCp from '@/common/components/numberInput'
 
 // types
-import { LineItem, ReceiptScanResponse } from '@/common/types/api_types'
+import { LineItemScan, ReceiptScanResponse } from '@/common/types/api_types'
 
 interface Index {
   data: ReceiptScanResponse
@@ -40,9 +40,9 @@ interface Index {
   setData: Dispatch<SetStateAction<ReceiptScanResponse | undefined>>
 }
 
-export default function ItemEdit (props: LineItem & Index): JSX.Element {
+export default function ItemEdit (props: LineItemScan & Index): JSX.Element {
   const {
-    productTitle,
+    itemTitle,
     id,
     price,
     total,
@@ -63,7 +63,7 @@ export default function ItemEdit (props: LineItem & Index): JSX.Element {
   const setFn = (): void => {
     setData(
       produce(data, (draftState) => {
-        draftState.data.line_items = draftState.data.line_items.filter(
+        draftState.data.lineItems = draftState.data.lineItems.filter(
           (item) => item.id !== id
         )
       })
@@ -88,7 +88,7 @@ export default function ItemEdit (props: LineItem & Index): JSX.Element {
             size='md'
             borderColor={payAttention !== undefined ? 'red.400' : 'inherit'}
             focusBorderColor='secondary'
-            defaultValue={productTitle}
+            defaultValue={itemTitle}
             {...register(id, { required: true })}
           />
         </FormControl>

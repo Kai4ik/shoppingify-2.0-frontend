@@ -39,7 +39,7 @@ export default function SubmitBtns (props: Props): JSX.Element {
     const notifications = validateBeforeSubmission(
       getValues,
       setValue,
-      data.data.line_items
+      data.data.lineItems
     )
 
     notifications.length > 0 && setValidationMessage(notifications)
