@@ -1,17 +1,15 @@
 // PostGraphile Types
 
+import { BaseReceipt, BaseLineItem } from './base_types'
+
 // ---------------- Receipt Types ------------- //
 // get receipt
-export interface ReceiptPgql {
+export interface ReceiptPgql
+  extends Omit<BaseReceipt, 'tax' | 'subtotal' | 'total'> {
   id: number
-  merchant: string
   tax: string
   subtotal: string
   total: string
-  currency: string
-  purchaseDate: string
-  purchaseTime: string
-  receiptNumber: string
   numberOfItems: number
   lineItemsByReceiptNumberAndUser: {
     nodes: LineItemPgql[]
@@ -19,15 +17,14 @@ export interface ReceiptPgql {
 }
 
 // update receipt
-export interface UpdateReceiptPgql {
+export interface UpdateReceiptPgql
+  extends Partial<
+  Omit<
+  ReceiptPgql,
+  'receiptNumber' | 'lineItemsByReceiptNumberAndUser' | 'id'
+  >
+  > {
   receiptNumber?: number
-  merchant?: string
-  tax?: string
-  subtotal?: string
-  total?: string
-  purchaseDate?: string
-  purchaseTime?: string
-  numberOfItems?: number
   lineItemsByReceiptNumberAndUser?: {
     nodes: { [key: number]: UpdateLineItemPgql }
   }
@@ -35,44 +32,22 @@ export interface UpdateReceiptPgql {
 
 // ---------------- Line Item Types ------------- //
 // get line item
-export interface LineItemPgql {
+export interface LineItemPgql extends Omit<BaseLineItem, 'id'> {
   id: number
-  price: number
-  total: number
-  unit: string
-  itemTitle: string
-  qty: number
 }
 
 // update line item
-export interface UpdateLineItemPgql {
-  id?: number
-  price?: number
-  total?: number
-  unit?: string
-  itemTitle?: string
-  qty?: number
-}
+export type UpdateLineItemPgql = Partial<LineItemPgql>
 
 // create line item
-export interface CreateLineItemPgql {
-  price: number
-  total: number
-  unit: string
-  itemTitle: string
-  qty: number
-  user: string
-  receiptNumber: number
+export interface CreateLineItemPgql extends Omit<BaseLineItem, 'id'> {
+  user?: string
+  receiptNumber?: number
+  sku?: string
 }
 
 // get line item with all receipts info
-export interface LineItemStatsPgql {
-  id: number
-  price: number
-  total: number
-  unit: string
-  itemTitle: string
-  qty: number
+export interface LineItemStatsPgql extends LineItemPgql {
   receiptByReceiptNumberAndUser: {
     receiptNumber: number
     total: number

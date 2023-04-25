@@ -1,27 +1,20 @@
+// ----- internal modules ----- //
+// types
+import { BaseReceipt, BaseLineItem } from './base_types'
+
+export interface ReceiptScan extends BaseReceipt {
+  merchantAddress: string
+  paymentType: string
+  lineItems: LineItemScan[]
+}
+
 export interface ReceiptScanResponse {
   success: boolean
   error_message: string
-  data: {
-    merchant: string
-    merchant_address: string
-    tax: number
-    subtotal: number
-    total: number
-    currency: string
-    purchase_date: string
-    payment_type: string
-    receipt_number: string
-    line_items: LineItem[]
-  }
+  data: ReceiptScan
 }
 
-export interface LineItem {
-  id: string
+export interface LineItemScan extends BaseLineItem {
   sku?: string
-  price: number
-  total: number
-  unit: string
-  productTitle: string
-  qty: number
   payAttention?: boolean
 }
