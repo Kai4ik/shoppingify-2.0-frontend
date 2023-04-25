@@ -7,13 +7,15 @@ import { RequestCookie } from 'next/dist/server/web/spec-extension/cookies/types
 // ----- internal modules ----- //
 import { getUsername } from '@/utils/auth'
 
+// types
+import { GetAllDataForSpecificUserResponse } from '@/common/types/pgql_response_types'
+
 // components
 import InsightsContainer from './insightsContainer'
 import Fallback from '@/app/protected/fallback'
 
 // GraphQL queries
-import { getAllDataForSpecificUSer } from '@/common/queries'
-import { GetAllDataForSpecificUserResponse } from '@/common/types/pgql_response_types'
+import { getReceiptsAndLineItemsForUserQuery } from '@/common/queries/getReceiptsAndItems'
 
 // types
 import {
@@ -67,7 +69,7 @@ const getLineItemsData = async (
   })
 
   if (username.length > 0) {
-    const getItemsForUserQuery = getAllDataForSpecificUSer(username)
+    const getItemsForUserQuery = getReceiptsAndLineItemsForUserQuery(username)
 
     const allDataForUser = await fetch(process.env.PGQL_URL, {
       method: 'POST',

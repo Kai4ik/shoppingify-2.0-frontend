@@ -12,7 +12,7 @@ import ReceiptsContainer from './receiptsContainer'
 import Fallback from '@/app/protected/fallback'
 
 // GraphQL queries
-import { getReceiptsForUser } from '@/common/queries'
+import { getReceiptsForUserQuery } from '@/common/queries/getAllReceipts'
 
 // types
 import { ReceiptPgql } from '@/common/types/pgql_types'
@@ -33,8 +33,6 @@ const getReceiptsData = async (
   })
 
   if (username.length > 0) {
-    const getReceiptsForUserQuery = getReceiptsForUser(username)
-
     const receiptsDataForUser = await fetch(process.env.PGQL_URL, {
       method: 'POST',
       headers: {
@@ -42,7 +40,7 @@ const getReceiptsData = async (
         Accept: 'application/json'
       },
       body: JSON.stringify({
-        query: getReceiptsForUserQuery
+        query: getReceiptsForUserQuery(username)
       })
     })
 

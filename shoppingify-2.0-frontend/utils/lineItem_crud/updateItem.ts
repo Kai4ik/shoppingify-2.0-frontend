@@ -6,7 +6,7 @@ import { updateLineItemsResponse } from '@/common/types/pgql_response_types'
 import { BaseFetchResponse } from '@/common/types/base_types'
 
 // GraphQL queries
-import { updateLineItems } from '@/common/queries'
+import { updateLineItemsMutation } from '@/common/queries/updateLineItems'
 
 const updateItemInDB = async (
   updatedNodes: {
@@ -38,7 +38,7 @@ const updateItemInDB = async (
       Accept: 'application/json'
     },
     body: JSON.stringify({
-      query: updateLineItems(updatedItemsIndexes),
+      query: updateLineItemsMutation(updatedItemsIndexes),
       variables
     })
   })

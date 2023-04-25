@@ -8,7 +8,7 @@ import { createLineItemsResponse } from '@/common/types/pgql_response_types'
 import { BaseFetchResponse } from '@/common/types/base_types'
 
 // GraphQL queries
-import { createLineItems } from '@/common/queries'
+import { createLineItemsMutation } from '@/common/queries/createLineItems'
 
 const addItemToDB = async (
   newNodes: CreateLineItemPgql[],
@@ -38,7 +38,7 @@ const addItemToDB = async (
       Accept: 'application/json'
     },
     body: JSON.stringify({
-      query: createLineItems(newNodes),
+      query: createLineItemsMutation(newNodes),
       variables
     })
   })

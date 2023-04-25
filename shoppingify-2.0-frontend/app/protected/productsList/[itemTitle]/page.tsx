@@ -13,11 +13,11 @@ import ItemContainer from './itemContainer'
 import Fallback from '@/app/protected/fallback'
 
 // GraphQL queries
-import { getSpecificItemInfo } from '@/common/queries'
+import { getLineItemQuery } from '@/common/queries/getLineItem'
 
 // types
 import { LineItemStatsPgql } from '@/common/types/pgql_types'
-import { FetchLineItemsResponse } from '@/common/types/fetch_json_types'
+import { GetLineItemsResponse } from '@/common/types/pgql_response_types'
 
 const getLineItemStats = async (
   cookies: RequestCookie[],
@@ -37,7 +37,7 @@ const getLineItemStats = async (
   const decodedTitle = urlencode.decode(itemTitle)
 
   if (username.length > 0) {
-    const getItemStatsQuery = getSpecificItemInfo(
+    const getItemStatsQuery = getLineItemQuery(
       decodedTitle.replace('"', '\\"'),
       username
     )
@@ -52,19 +52,24 @@ const getLineItemStats = async (
         query: getItemStatsQuery
       })
     })
-    const { data }: FetchLineItemsResponse = await lineItemData.json()
+    const result: GetLineItemsResponse = await lineItemData.json()
 
-    return data !== undefined
-      ? {
-          payload: data.allLineItems.nodes
-        }
-      : {
-          errors: [
-            {
-              message: 'Error occured during fetch'
-            }
-          ]
-        }
+    if (result.data !== undefined) {
+      return {
+        payload: result.data.allLineItems.nodes
+      }
+    } else {
+      if (result.errors !== undefined) {
+        return { errors: result.errors }
+      }
+      return {
+        errors: [
+          {
+            message: 'Unknown error occured during fetch'
+          }
+        ]
+      }
+    }
   }
   return {
     errors: [

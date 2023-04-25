@@ -6,7 +6,7 @@ import { deleteLineItemsResponse } from '@/common/types/pgql_response_types'
 import { BaseFetchResponse } from '@/common/types/base_types'
 
 // GraphQL queries
-import { deleteLineItems } from '@/common/queries'
+import { deleteLineItemsMutation } from '@/common/queries/deleteLineItems'
 
 const deleteItemFromDB = async (
   deletedNodes: LineItemPgql[]
@@ -25,7 +25,7 @@ const deleteItemFromDB = async (
       Accept: 'application/json'
     },
     body: JSON.stringify({
-      query: deleteLineItems(deletedNodes.length),
+      query: deleteLineItemsMutation(deletedNodes.length),
       variables
     })
   })

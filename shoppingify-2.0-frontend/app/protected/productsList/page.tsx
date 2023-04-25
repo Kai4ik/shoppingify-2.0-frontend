@@ -12,7 +12,7 @@ import ItemsContainer from './itemsContainer'
 import Fallback from '@/app/protected/fallback'
 
 // GraphQL queries
-import { getItemsForUser } from '@/common/queries'
+import { getItemsForUserQuery } from '@/common/queries/getAllLineItems'
 
 // types
 import { LineItemPgql } from '@/common/types/pgql_types'
@@ -33,8 +33,6 @@ const getLineItemsData = async (
   })
 
   if (username.length > 0) {
-    const getItemsForUserQuery = getItemsForUser(username)
-
     const receiptsDataForUser = await fetch(process.env.PGQL_URL, {
       method: 'POST',
       headers: {
@@ -42,7 +40,7 @@ const getLineItemsData = async (
         Accept: 'application/json'
       },
       body: JSON.stringify({
-        query: getItemsForUserQuery
+        query: getItemsForUserQuery(username)
       })
     })
 

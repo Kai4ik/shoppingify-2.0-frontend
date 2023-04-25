@@ -9,7 +9,7 @@ import { createReceiptResponse } from '@/common/types/pgql_response_types'
 import { BaseFetchResponse } from '@/common/types/base_types'
 
 // GraphQL queries
-import { createreceipt } from '@/common/queries'
+import { createreceiptMutation } from '@/common/queries/createReceipt'
 
 const addReceiptToDb = async (
   receipt: ReceiptInput
@@ -27,7 +27,7 @@ const addReceiptToDb = async (
       Accept: 'application/json'
     },
     body: JSON.stringify({
-      query: createreceipt(),
+      query: createreceiptMutation(),
       variables
     })
   })

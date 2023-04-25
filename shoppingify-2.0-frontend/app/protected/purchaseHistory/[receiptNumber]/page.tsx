@@ -8,7 +8,7 @@ import * as jose from 'jose'
 // internal modules
 import { ReceiptPgql } from '@/common/types/pgql_types'
 import { getUsername } from '@/utils/auth'
-import { getReceiptByNumberAndUser } from '@/common/queries'
+import { getReceiptByNumberAndUserQuery } from '@/common/queries/getReceiptByNumber'
 
 // components
 import Receipt from './receipt'
@@ -47,7 +47,7 @@ const getReceiptData = async (
   username: string,
   receiptNumber: string
 ): Promise<ReceiptPgql> => {
-  const getReceiptByUserAndNumberQuery = getReceiptByNumberAndUser(
+  const getReceiptByUserAndNumberQuery = getReceiptByNumberAndUserQuery(
     username,
     parseInt(receiptNumber)
   )
