@@ -26,6 +26,7 @@ import deleteReceipt from '@/utils/receipt_crud/deleteReceipt'
 
 // types
 import { ReceiptPgql } from '@/common/types/pgql_types'
+import { BaseFetchResponse } from '@/common/types/base_types'
 
 interface Props {
   receipt: ReceiptPgql
@@ -41,18 +42,16 @@ export default function ReceiptDetails ({
   const router = useRouter()
   const [deletionInProgress, setDeletionInProgress] = useState<boolean>(false)
 
-  const handleDelete = (): void => {
-    setDeletionInProgress(true);
+  const handleDelete = async (): Promise<void> => {
+    setDeletionInProgress(true)
 
-    (async () => {
-      const result: boolean = await deleteReceipt(receipt)
-      if (result) {
-        const filteredArray = initialReceipts.filter(
-          (elem) => elem.receiptNumber !== receipt.receiptNumber
-        ) as [ReceiptPgql]
-        setInitialReceipts(filteredArray)
-      }
-    })().catch((err) => console.error(err))
+    const result: BaseFetchResponse = await deleteReceipt(receipt)
+    if (result.success) {
+      const filteredArray = initialReceipts.filter(
+        (elem) => elem.receiptNumber !== receipt.receiptNumber
+      ) as [ReceiptPgql]
+      setInitialReceipts(filteredArray)
+    }
 
     setDeletionInProgress(false)
   }
