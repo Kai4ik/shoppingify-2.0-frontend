@@ -9,8 +9,13 @@ import {
 // ----- internal modules ----- //
 
 // types
-import { LineItem } from '@/common/types/api_types'
-import { LineItemPgql, ReceiptPgql } from '@/common/types/pgql_types'
+import { LineItemScan, ReceiptScanResponse } from '@/common/types/api_types'
+import {
+  LineItemPgql,
+  ReceiptPgql,
+  CreateLineItemPgql
+} from '@/common/types/pgql_types'
+import { ReceiptInput } from '@/common/types/pgql_input_types'
 
 // delete line item from receipt
 // used on "Edit receipt" and "Upload new receipt" pages
@@ -39,11 +44,11 @@ export const deleteItem = (
 export const validateBeforeSubmission = (
   getValues: UseFormGetValues<FieldValues>,
   setValue: UseFormSetValue<FieldValues>,
-  lineItems: LineItem[] | LineItemPgql[]
+  lineItems: LineItemScan[] | LineItemPgql[]
 ): string[] => {
   const notifications: string[] = []
   let calcSubtotal = 0
-  const ids: string[] = lineItems.map((lineItem: LineItem | LineItemPgql) =>
+  const ids: string[] = lineItems.map((lineItem: LineItemScan | LineItemPgql) =>
     lineItem.id.toString()
   )
 
@@ -116,4 +121,55 @@ export const hookFormIntoObject = (
   }
 
   return formValuesIntoObject
+}
+
+export const parseReceiptFromFormData = (
+  getValues: UseFormGetValues<FieldValues>,
+  receiptScan: ReceiptScanResponse,
+  numberOfItems: number,
+  user: string
+): ReceiptInput => {
+  const hookFormValues = getValues()
+
+  const receipt: ReceiptInput = {
+    merchant: hookFormValues.merchant,
+    tax: hookFormValues.tax,
+    subtotal: hookFormValues.subtotal,
+    total: hookFormValues.total,
+    purchaseDate: hookFormValues.purchaseDate,
+    purchaseTime: hookFormValues.purchaseTime,
+    receiptNumber: hookFormValues.receiptNumber,
+    currency: receiptScan.data.currency,
+    merchantAddress: receiptScan.data.merchantAddress,
+    paymentType: receiptScan.data.paymentType,
+    numberOfItems,
+    user
+  }
+
+  return receipt
+}
+
+export const parseLineItemsFromFormData = (
+  getValues: UseFormGetValues<FieldValues>,
+  lineItems: LineItemScan[]
+): CreateLineItemPgql[] => {
+  const hookFormValues = getValues()
+
+  const items: CreateLineItemPgql[] = []
+  lineItems.forEach((lineItem) => {
+    const itemID = lineItem.id
+    const item: CreateLineItemPgql = {
+      price: hookFormValues[itemID.concat('_', 'price')],
+      total: hookFormValues[itemID.concat('_', 'total')],
+      unit: hookFormValues[itemID.concat('_', 'unit')],
+      itemTitle: hookFormValues[itemID],
+      qty: hookFormValues[itemID.concat('_', 'qty')]
+
+    }
+    if ('sku' in lineItem) {
+      item.sku = lineItem.sku
+    }
+    items.push(item)
+  })
+  return items
 }
