@@ -4,7 +4,7 @@ import { deleteReceiptImageFromS3 } from '../receipt_s3'
 import deleteItemFromDB from '@/utils/lineItem_crud/deleteItem'
 
 // GraphQL queries
-import { deleteReceiptMutation } from '@/common/queries'
+import { deleteReceiptMutation } from '@/common/queries/deleteReceipt'
 
 // types
 import { ReceiptPgql } from '@/common/types/pgql_types'

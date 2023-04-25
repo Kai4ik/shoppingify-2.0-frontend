@@ -8,7 +8,7 @@ import { updateReceiptInput } from '@/common/types/pgql_input_types'
 import { updateReceiptResponse } from '@/common/types/pgql_response_types'
 
 // GraphQL queries
-import { updateReceipt } from '@/common/queries'
+import { updateReceiptMutation } from '@/common/queries/updateReceipt'
 
 const updateReceiptInDB = async (
   receiptNumber: number,
@@ -31,7 +31,7 @@ const updateReceiptInDB = async (
       Accept: 'application/json'
     },
     body: JSON.stringify({
-      query: updateReceipt(),
+      query: updateReceiptMutation(),
       variables
     })
   })
