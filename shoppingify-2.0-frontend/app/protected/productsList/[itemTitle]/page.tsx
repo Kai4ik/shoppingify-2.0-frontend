@@ -51,7 +51,9 @@ const getLineItemStats = async (
       body: JSON.stringify({
         query: getItemStatsQuery
       }),
-      cache: 'no-store'
+      next: {
+        revalidate: 15
+      }
     })
     const result: GetLineItemsResponse = await lineItemData.json()
 

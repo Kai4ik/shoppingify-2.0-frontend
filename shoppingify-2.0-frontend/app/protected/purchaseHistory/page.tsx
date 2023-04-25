@@ -42,7 +42,9 @@ const getReceiptsData = async (
       body: JSON.stringify({
         query: getReceiptsForUserQuery(username)
       }),
-      cache: 'no-store'
+      next: {
+        revalidate: 15
+      }
     })
 
     const result: GetReceiptsResponse = await receiptsDataForUser.json()
