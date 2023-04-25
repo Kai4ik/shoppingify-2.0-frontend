@@ -41,7 +41,8 @@ const getLineItemsData = async (
       },
       body: JSON.stringify({
         query: getItemsForUserQuery(username)
-      })
+      }),
+      cache: 'no-store'
     })
 
     const result: GetLineItemsResponse = await receiptsDataForUser.json()

@@ -79,7 +79,8 @@ const getLineItemsData = async (
       },
       body: JSON.stringify({
         query: getItemsForUserQuery
-      })
+      }),
+      cache: 'no-store'
     })
     const result: GetAllDataForSpecificUserResponse =
       await allDataForUser.json()

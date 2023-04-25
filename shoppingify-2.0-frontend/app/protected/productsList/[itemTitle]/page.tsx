@@ -50,7 +50,8 @@ const getLineItemStats = async (
       },
       body: JSON.stringify({
         query: getItemStatsQuery
-      })
+      }),
+      cache: 'no-store'
     })
     const result: GetLineItemsResponse = await lineItemData.json()
 
