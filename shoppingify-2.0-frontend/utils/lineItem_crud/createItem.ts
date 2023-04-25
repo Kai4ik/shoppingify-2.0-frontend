@@ -2,20 +2,22 @@
 import { getUsernameFromCookies } from '../auth'
 
 // types
-import { LineItemPgql } from '@/common/types/pgql_types'
+import { CreateLineItemPgql } from '@/common/types/pgql_types'
 import { createLineItemInput } from '@/common/types/pgql_input_types'
+import { createLineItemsResponse } from '@/common/types/pgql_response_types'
+import { BaseFetchResponse } from '@/common/types/base_types'
 
 // GraphQL queries
 import { createLineItems } from '@/common/queries'
 
 const addItemToDB = async (
-  newNodes: LineItemPgql[],
+  newNodes: CreateLineItemPgql[],
   receiptNumber: number
-): Promise<void> => {
+): Promise<BaseFetchResponse> => {
   const username = getUsernameFromCookies()
 
   const variables: createLineItemInput = {}
-  newNodes.forEach((newLineItem: LineItemPgql, index: number) => {
+  newNodes.forEach((newLineItem: CreateLineItemPgql, index: number) => {
     variables[`input_${index}`] = {
       lineItem: {
         itemTitle: newLineItem.itemTitle,
@@ -40,8 +42,19 @@ const addItemToDB = async (
       variables
     })
   })
-  // const response = await createdItems.json();
-  console.log(await createdItems.json())
+
+  const response: createLineItemsResponse = await createdItems.json()
+
+  if (response.data !== undefined) {
+    return {
+      success: true
+    }
+  } else {
+    if (response.errors !== undefined) {
+      return { success: false, errors: response.errors }
+    }
+    return { success: false, errors: [] }
+  }
 }
 
 export default addItemToDB

@@ -1,11 +1,12 @@
 'use client'
 
 // ----- external modules ----- //
-import axios from 'axios'
 import {
   Stack,
   VStack,
   Text,
+  Tr,
+  Td,
   Image,
   Button,
   useDisclosure
@@ -20,6 +21,13 @@ import dynamic from 'next/dynamic'
 
 // ----- internal modules ----- //
 import { loggedIn } from '@/utils/auth'
+import addReceiptToDb from '@/utils/receipt_crud/createReceipt'
+import addItemToDB from '@/utils/lineItem_crud/createItem'
+import { addReceiptImageToS3 } from '@/utils/receipt_s3'
+import {
+  parseReceiptFromFormData,
+  parseLineItemsFromFormData
+} from '@/utils/receipts_crud'
 
 // components
 import UploadReceipt from './uploadReceipt'
@@ -29,10 +37,11 @@ import ImportLoading from './importLoading'
 
 // types
 import { ReceiptScanResponse } from '@/common/types/api_types'
+import { BaseFetchResponse } from '@/common/types/base_types'
 
 const ItemEdit = dynamic(async () => await import('./itemEdit'), {
   loading: () => (
-    <Text
+    <Tr
       fontSize='lg'
       bg='blackAlpha.50'
       p={2}
@@ -41,8 +50,8 @@ const ItemEdit = dynamic(async () => await import('./itemEdit'), {
       borderRadius='8px'
       color='main'
     >
-      Loading item ...
-    </Text>
+      <Td w='100%'>Loading item ...</Td>
+    </Tr>
   )
 })
 
@@ -71,9 +80,12 @@ const ReceiptBottomInputs = dynamic(
   }
 )
 
-const ItemsTable = dynamic(async () => await import('@/common/components/itemsTable'), {
-  loading: () => <ImportLoading title='Loading receipt items ...' />
-})
+const ItemsTable = dynamic(
+  async () => await import('@/common/components/itemsTable'),
+  {
+    loading: () => <ImportLoading title='Loading receipt items ...' />
+  }
+)
 
 export default function AddReceipt (): JSX.Element {
   const {
@@ -97,51 +109,55 @@ export default function AddReceipt (): JSX.Element {
     useState<boolean>(false)
   const [submissionMessages, setSubmissionMessages] = useState<string[]>([])
 
-  const onSubmit = (): void => {
-    (async () => {
-      setSubmissionInProgress(true)
-      const body = new FormData()
-      setValue('currency', data?.data.currency)
-      setValue('merchant_address', data?.data.merchant_address)
-      setValue('payment_type', data?.data.payment_type)
-      setValue('initial_line_items', data?.data.line_items)
-      body.append('file', file as File, file?.name)
-      body.append('data', JSON.stringify(getValues()))
+  const onSubmit = async (): Promise<void> => {
+    setSubmissionInProgress(true)
 
+    if (data !== undefined && file !== undefined) {
       const userLoggedIn = await loggedIn()
-      if (userLoggedIn.signedIn && userLoggedIn.jwt !== undefined) {
-        const url = `${
-          process.env.NODE_ENV === 'development'
-            ? 'http://127.0.0.1:8000'
-            : process.env.NEXT_PUBLIC_API_URL
-        }/saveReceipt`
+      if (userLoggedIn.signedIn && userLoggedIn.email !== undefined) {
+        const username = userLoggedIn.email
+        const lineItems = data.data.lineItems
+        const parsedReceipt = parseReceiptFromFormData(
+          getValues,
+          data,
+          lineItems.length,
+          username
+        )
 
-        const response = await axios({
-          method: 'post',
-          url,
-          data: body,
-          headers: {
-            accept: 'application/json',
-            'Accept-Language': 'en-US,en;q=0.8',
-            'Content-Type': 'multipart/form-data',
-            'Access-Control-Allow-Origin': `${
-              process.env.NODE_ENV === 'development'
-                ? 'http://localhost:3000'
-                : 'https://shoppingify-2-0-frontend.vercel.app'
-            }`,
-            Authorization: `Bearer ${userLoggedIn.jwt}`
+        const createdReceiptNumber: BaseFetchResponse = await addReceiptToDb(
+          parsedReceipt
+        )
+
+        if (
+          createdReceiptNumber.success &&
+          createdReceiptNumber.payload !== undefined
+        ) {
+          const newReceiptNumber = createdReceiptNumber.payload
+            .receiptNumber as number
+
+          const createdS3Object = await addReceiptImageToS3(
+            newReceiptNumber.toString(),
+            file
+          )
+          if (createdS3Object) {
+            const parsedLineItems = parseLineItemsFromFormData(
+              getValues,
+              lineItems
+            )
+
+            const createdLineItemsResult: BaseFetchResponse = await addItemToDB(
+              parsedLineItems,
+              newReceiptNumber
+            )
+            if (createdLineItemsResult.success) {
+              router.push(`/protected/purchaseHistory/${newReceiptNumber}`)
+            }
           }
-        })
-        const result = response.data
-        setSubmissionInProgress(false)
-        result.success === false &&
-          setSubmissionMessages(result.error_messages)
-        onOpen()
-        if (result.success === true && data !== undefined) {
-          router.push(`/protected/purchaseHistory/${data.data.receipt_number}`)
         }
+        setSubmissionInProgress(false)
+        onOpen()
       }
-    })().catch((err) => console.error(err))
+    }
   }
 
   const addItem = (): void => {
@@ -152,13 +168,13 @@ export default function AddReceipt (): JSX.Element {
 
     setData(
       produce(data, (draftState) => {
-        draftState?.data.line_items.push({
+        draftState?.data.lineItems.push({
           id: hash,
           unit: 'ea',
           price: 0,
           total: 0,
           qty: 1,
-          productTitle: 'Item Name'
+          itemTitle: 'Item Name'
         })
       })
     )
@@ -215,12 +231,12 @@ export default function AddReceipt (): JSX.Element {
                     />
                     <ReceiptTopInputs
                       register={register}
-                      receiptNumber={data.data.receipt_number}
-                      purchaseDate={data.data.purchase_date.split(' ')[0]}
-                      purchaseTime={data.data.purchase_date.split(' ')[1]}
+                      receiptNumber={data.data.receiptNumber}
+                      purchaseDate={data.data.purchaseDate.split(' ')[0]}
+                      purchaseTime={data.data.purchaseDate.split(' ')[1]}
                     />
                     <ItemsTable>
-                      {data.data.line_items.map((product) => (
+                      {data.data.lineItems.map((product) => (
                         <ItemEdit
                           key={product.id}
                           {...product}

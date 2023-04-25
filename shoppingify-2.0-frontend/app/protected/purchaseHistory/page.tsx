@@ -16,7 +16,7 @@ import { getReceiptsForUser } from '@/common/queries'
 
 // types
 import { ReceiptPgql } from '@/common/types/pgql_types'
-import { FetchReceiptsResponse } from '@/common/types/fetch_json_types'
+import { GetReceiptsResponse } from '@/common/types/pgql_response_types'
 
 const getReceiptsData = async (
   cookies: RequestCookie[]
@@ -46,18 +46,24 @@ const getReceiptsData = async (
       })
     })
 
-    const { data }: FetchReceiptsResponse = await receiptsDataForUser.json()
-    return data !== undefined
-      ? {
-          payload: data.allReceipts.nodes
-        }
-      : {
-          errors: [
-            {
-              message: 'Error occured during fetch'
-            }
-          ]
-        }
+    const result: GetReceiptsResponse = await receiptsDataForUser.json()
+
+    if (result.data !== undefined) {
+      return {
+        payload: result.data.allReceipts.nodes
+      }
+    } else {
+      if (result.errors !== undefined) {
+        return { errors: result.errors }
+      }
+      return {
+        errors: [
+          {
+            message: 'Unknown error occured during fetch'
+          }
+        ]
+      }
+    }
   }
   return {
     errors: [

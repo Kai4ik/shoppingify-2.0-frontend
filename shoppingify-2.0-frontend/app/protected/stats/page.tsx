@@ -13,7 +13,7 @@ import Fallback from '@/app/protected/fallback'
 
 // GraphQL queries
 import { getAllDataForSpecificUSer } from '@/common/queries'
-import { FetchAllDataForSpecificUserResponse } from '@/common/types/fetch_json_types'
+import { GetAllDataForSpecificUserResponse } from '@/common/types/pgql_response_types'
 
 // types
 import {
@@ -79,20 +79,25 @@ const getLineItemsData = async (
         query: getItemsForUserQuery
       })
     })
-    const { data }: FetchAllDataForSpecificUserResponse =
+    const result: GetAllDataForSpecificUserResponse =
       await allDataForUser.json()
 
-    return data !== undefined
-      ? {
-          payload: data
-        }
-      : {
-          errors: [
-            {
-              message: 'Error occured during fetch'
-            }
-          ]
-        }
+    if (result.data !== undefined) {
+      return {
+        payload: result.data
+      }
+    } else {
+      if (result.errors !== undefined) {
+        return { errors: result.errors }
+      }
+      return {
+        errors: [
+          {
+            message: 'Unknown error occured during fetch'
+          }
+        ]
+      }
+    }
   }
   return {
     errors: [

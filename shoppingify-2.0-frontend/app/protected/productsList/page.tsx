@@ -16,7 +16,7 @@ import { getItemsForUser } from '@/common/queries'
 
 // types
 import { LineItemPgql } from '@/common/types/pgql_types'
-import { FetchLineItemsResponse } from '@/common/types/fetch_json_types'
+import { GetLineItemsResponse } from '@/common/types/pgql_response_types'
 
 const getLineItemsData = async (
   cookies: RequestCookie[]
@@ -46,19 +46,24 @@ const getLineItemsData = async (
       })
     })
 
-    const { data }: FetchLineItemsResponse = await receiptsDataForUser.json()
+    const result: GetLineItemsResponse = await receiptsDataForUser.json()
 
-    return data !== undefined
-      ? {
-          payload: data.allLineItems.nodes
-        }
-      : {
-          errors: [
-            {
-              message: 'Error occured during fetch'
-            }
-          ]
-        }
+    if (result.data !== undefined) {
+      return {
+        payload: result.data.allLineItems.nodes
+      }
+    } else {
+      if (result.errors !== undefined) {
+        return { errors: result.errors }
+      }
+      return {
+        errors: [
+          {
+            message: 'Unknown error occured during fetch'
+          }
+        ]
+      }
+    }
   }
   return {
     errors: [

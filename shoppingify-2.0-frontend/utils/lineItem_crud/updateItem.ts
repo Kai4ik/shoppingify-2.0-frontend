@@ -2,6 +2,8 @@
 // types
 import { UpdateLineItemPgql, ReceiptPgql } from '@/common/types/pgql_types'
 import { updateLineItemInput } from '@/common/types/pgql_input_types'
+import { updateLineItemsResponse } from '@/common/types/pgql_response_types'
+import { BaseFetchResponse } from '@/common/types/base_types'
 
 // GraphQL queries
 import { updateLineItems } from '@/common/queries'
@@ -11,7 +13,7 @@ const updateItemInDB = async (
     [key: number]: UpdateLineItemPgql
   },
   receipt: ReceiptPgql
-): Promise<void> => {
+): Promise<BaseFetchResponse> => {
   const updatedItemsIndexes: string[] = Object.keys(updatedNodes)
 
   updatedItemsIndexes.forEach((index) => {
@@ -29,7 +31,7 @@ const updateItemInDB = async (
     }
   })
 
-  await fetch(process.env.NEXT_PUBLIC_PGQL_URL, {
+  const updatedItems = await fetch(process.env.NEXT_PUBLIC_PGQL_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -40,6 +42,19 @@ const updateItemInDB = async (
       variables
     })
   })
+
+  const response: updateLineItemsResponse = await updatedItems.json()
+
+  if (response.data !== undefined) {
+    return {
+      success: true
+    }
+  } else {
+    if (response.errors !== undefined) {
+      return { success: false, errors: response.errors }
+    }
+    return { success: false, errors: [] }
+  }
 }
 
 export default updateItemInDB

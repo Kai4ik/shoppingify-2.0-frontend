@@ -2,17 +2,18 @@
 import { getUsernameFromCookies } from '../auth'
 
 // types
-
+import { BaseFetchResponse } from '@/common/types/base_types'
 import { UpdateReceiptPgql } from '@/common/types/pgql_types'
+import { updateReceiptInput } from '@/common/types/pgql_input_types'
+import { updateReceiptResponse } from '@/common/types/pgql_response_types'
 
 // GraphQL queries
 import { updateReceipt } from '@/common/queries'
-import { updateReceiptInput } from '@/common/types/pgql_input_types'
 
 const updateReceiptInDB = async (
   receiptNumber: number,
   newValues: UpdateReceiptPgql
-): Promise<void> => {
+): Promise<BaseFetchResponse> => {
   const username = getUsernameFromCookies()
   const variables: updateReceiptInput = {}
   const valuesToUpdate: UpdateReceiptPgql = Object.assign({}, newValues)
@@ -34,7 +35,23 @@ const updateReceiptInDB = async (
       variables
     })
   })
-  console.log(await updatedReceipt.json())
+
+  const response: updateReceiptResponse = await updatedReceipt.json()
+  if (response.data !== undefined) {
+    return {
+      success: true,
+      payload: {
+        receiptNumber:
+          response.data.updateReceiptByReceiptNumberAndUser.receipt
+            .receiptNumber
+      }
+    }
+  } else {
+    if (response.errors !== undefined) {
+      return { success: false, errors: response.errors }
+    }
+    return { success: false, errors: [] }
+  }
 }
 
 export default updateReceiptInDB
