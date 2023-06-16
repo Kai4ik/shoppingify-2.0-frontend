@@ -5,13 +5,14 @@ import {
   LineItemGroupStatsPgql
 } from './pgql_types'
 
-export interface BaseResponse {
+interface BaseResponse {
   data?: unknown
   errors?: Array<{ message: string }>
 }
 
 // ---------------- Receipt Types ------------- //
-export interface createReceiptResponse extends Omit<BaseResponse, 'data'> {
+export interface createReceiptResponse
+  extends Readonly<Omit<BaseResponse, 'data'>> {
   data?: {
     createReceipt: {
       receipt: {
@@ -21,7 +22,8 @@ export interface createReceiptResponse extends Omit<BaseResponse, 'data'> {
   }
 }
 
-export interface updateReceiptResponse extends Omit<BaseResponse, 'data'> {
+export interface updateReceiptResponse
+  extends Readonly<Omit<BaseResponse, 'data'>> {
   data?: {
     updateReceiptByReceiptNumberAndUser: {
       receipt: {
@@ -31,7 +33,8 @@ export interface updateReceiptResponse extends Omit<BaseResponse, 'data'> {
   }
 }
 
-export interface deleteReceiptResponse extends Omit<BaseResponse, 'data'> {
+export interface deleteReceiptResponse
+  extends Readonly<Omit<BaseResponse, 'data'>> {
   data?: {
     deleteReceiptByReceiptNumberAndUser: {
       receipt: {
@@ -41,7 +44,8 @@ export interface deleteReceiptResponse extends Omit<BaseResponse, 'data'> {
   }
 }
 
-export interface GetReceiptsResponse extends Omit<BaseResponse, 'data'> {
+export interface GetReceiptsResponse
+  extends Readonly<Omit<BaseResponse, 'data'>> {
   data?: {
     allReceipts: {
       nodes: ReceiptPgql[]
@@ -50,7 +54,8 @@ export interface GetReceiptsResponse extends Omit<BaseResponse, 'data'> {
 }
 
 // ---------------- Line Items Types ------------- //
-export interface createLineItemsResponse extends Omit<BaseResponse, 'data'> {
+export interface createLineItemsResponse
+  extends Readonly<Omit<BaseResponse, 'data'>> {
   data?: {
     [key: string]: {
       lineItem: {
@@ -60,7 +65,8 @@ export interface createLineItemsResponse extends Omit<BaseResponse, 'data'> {
   }
 }
 
-export interface updateLineItemsResponse extends Omit<BaseResponse, 'data'> {
+export interface updateLineItemsResponse
+  extends Readonly<Omit<BaseResponse, 'data'>> {
   data?: {
     [key: string]: {
       lineItem: {
@@ -70,7 +76,8 @@ export interface updateLineItemsResponse extends Omit<BaseResponse, 'data'> {
   }
 }
 
-export interface deleteLineItemsResponse extends Omit<BaseResponse, 'data'> {
+export interface deleteLineItemsResponse
+  extends Readonly<Omit<BaseResponse, 'data'>> {
   data?: {
     [key: string]: {
       deletedLineItemId: number
@@ -78,7 +85,8 @@ export interface deleteLineItemsResponse extends Omit<BaseResponse, 'data'> {
   }
 }
 
-export interface GetLineItemsResponse extends Omit<BaseResponse, 'data'> {
+export interface GetLineItemsResponse
+  extends Readonly<Omit<BaseResponse, 'data'>> {
   data?: {
     allLineItems: {
       nodes: LineItemStatsPgql[]
@@ -87,7 +95,7 @@ export interface GetLineItemsResponse extends Omit<BaseResponse, 'data'> {
 }
 
 export interface GetAllDataForSpecificUserResponse
-  extends Omit<BaseResponse, 'data'> {
+  extends Readonly<Omit<BaseResponse, 'data'>> {
   data?: {
     allLineItems: {
       nodes: LineItemPgql[]

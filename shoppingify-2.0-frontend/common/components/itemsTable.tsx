@@ -16,7 +16,7 @@ export default function ItemsTable ({
   children
 }: PropsWithChildren): JSX.Element {
   return (
-    <TableContainer w='auto'>
+    <TableContainer w='100%'>
       <Table
         variant='unstyled'
         layout={['fixed', 'auto']}

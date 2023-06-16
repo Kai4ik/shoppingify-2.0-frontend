@@ -47,27 +47,19 @@ function UploadReceipt (props: Props): JSX.Element {
     (async () => {
       const userLoggedIn = await loggedIn()
       if (userLoggedIn.signedIn && userLoggedIn.jwt !== undefined) {
-        const url = `${
-          process.env.NODE_ENV === 'development'
-            ? 'http://127.0.0.1:8000'
-            : process.env.NEXT_PUBLIC_API_URL
-        }/scanReceipt`
         const data = new FormData()
         data.append('file', file, file?.name)
         try {
-          const response = await axios.post(url, data, {
-            headers: {
-              accept: 'application/json',
-              'Accept-Language': 'en-US,en;q=0.8',
-              'Content-Type': 'multipart/form-data',
-              'Access-Control-Allow-Origin': `${
-                process.env.NODE_ENV === 'development'
-                  ? 'http://localhost:3000'
-                  : 'https://shoppingify-2-0-frontend.vercel.app'
-              }`,
-              Authorization: `Bearer ${userLoggedIn.jwt}`
+          const response = await axios.post(
+            'https://w13eimazx5.execute-api.us-east-1.amazonaws.com/prod/scanReceipt',
+            data,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${userLoggedIn.jwt}`
+              }
             }
-          })
+          )
           reset(data)
 
           const result: ReceiptScanResponse = response.data
