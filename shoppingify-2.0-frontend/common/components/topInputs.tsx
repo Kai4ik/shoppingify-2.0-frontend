@@ -17,6 +17,11 @@ export default function ReceiptTopInputs (props: Props): JSX.Element {
   const offset = new Date().getTimezoneOffset()
   const todayDate = new Date(new Date().getTime() - offset * 60 * 1000)
 
+  let formattedDate = purchaseDate
+  if (purchaseDate.split('/')[0].length < 3) {
+    formattedDate = '20' + formattedDate
+  }
+
   const topInputs = [
     {
       label: 'Receipt (slip) Number',
@@ -31,7 +36,7 @@ export default function ReceiptTopInputs (props: Props): JSX.Element {
       label: 'Purchase Date',
       type: 'date',
       placeholder: 'Purchase Date',
-      defaultValue: purchaseDate,
+      defaultValue: new Date(formattedDate).toISOString().slice(0, 10),
       name: 'purchaseDate',
       valueAsNumber: false,
       isInvalid: todayDate.toISOString().split('T')[0] === purchaseDate

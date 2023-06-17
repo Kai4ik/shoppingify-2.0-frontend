@@ -32,6 +32,7 @@ const addReceiptToDb = async (
     })
   })
   const response: createReceiptResponse = await createdReceipt.json()
+  console.log(response)
 
   if (response.data !== undefined) {
     return {
