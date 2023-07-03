@@ -1,15 +1,13 @@
 // ----- external modules ----- //
-import { Suspense } from 'react'
 import { cookies } from 'next/headers'
 import * as jose from 'jose'
-import { RequestCookie } from 'next/dist/server/web/spec-extension/cookies/types'
+import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies'
 
 // ----- internal modules ----- //
 import { getUsername } from '@/utils/auth'
 
 // components
 import ItemsContainer from './itemsContainer'
-import Fallback from '@/app/protected/fallback'
 
 // GraphQL queries
 import { getItemsForUserQuery } from '@/common/queries/getAllLineItems'
@@ -91,10 +89,6 @@ export default async function ProductList (): Promise<JSX.Element> {
         lineItems.map((item) => [item.itemTitle.toLowerCase(), item])
       ).values()
     )
-    return (
-      <Suspense fallback={<Fallback />}>
-        <ItemsContainer lineItems={uniqueLineItems} />
-      </Suspense>
-    )
+    return <ItemsContainer lineItems={uniqueLineItems} />
   }
 }
