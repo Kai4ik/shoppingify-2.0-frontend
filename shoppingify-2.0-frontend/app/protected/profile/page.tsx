@@ -2,7 +2,7 @@
 import { Suspense } from 'react'
 import { cookies } from 'next/headers'
 import * as jose from 'jose'
-import { RequestCookie } from 'next/dist/server/web/spec-extension/cookies/types'
+import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies'
 
 // ----- internal modules ----- //
 

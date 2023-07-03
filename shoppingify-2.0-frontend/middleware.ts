@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { verifyUser } from './utils/auth'
-import { RequestCookie } from 'next/dist/server/web/spec-extension/cookies'
+import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies'
 
 export default async function middleware (
   req: NextRequest
