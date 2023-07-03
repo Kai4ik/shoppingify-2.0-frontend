@@ -68,7 +68,7 @@ export default function Login (): JSX.Element {
             Welcome back!
           </Text>
           <form onSubmit={formik.handleSubmit} style={{ width: '90%' }}>
-            <VStack w='100%' spacing={12}>
+            <VStack w='100%' spacing={1}>
               <VStack w='100%' spacing={2}>
                 <FormControl
                   isInvalid={
@@ -105,12 +105,7 @@ export default function Login (): JSX.Element {
                   <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
                 </FormControl>
               </VStack>
-              <Button
-                type='submit'
-                colorScheme='purple'
-                width='full'
-                mt='350px'
-              >
+              <Button type='submit' colorScheme='purple' width='full' mt='35px'>
                 Login
               </Button>
             </VStack>

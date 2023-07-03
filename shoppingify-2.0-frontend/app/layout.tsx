@@ -1,43 +1,12 @@
-'use client'
-
 // external modules
-import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
+
+// internal modules
+import { Providers } from './providers'
 
 export default function RootLayout ({
   children
 }: PropsWithChildren): JSX.Element {
-  const theme = {
-    colors: {
-      main: '#80485B',
-      secondary: '#F9A109'
-    },
-    styles: {
-      global: {
-        'html, body': {
-          boxSizing: 'border-box',
-          margin: '0',
-          padding: '0',
-          bg: '#F7F7F7'
-        }
-      }
-    },
-    components: {
-      Input: {
-        baseStyle: {
-          field: {
-            _autofill: {
-              boxShadow: '0 0 0px 1000px #F7F7F7 inset',
-              textFillColor: '#80485B'
-            }
-          }
-        }
-      }
-    }
-  }
-
-  const customTheme = extendTheme(theme)
-
   return (
     <html lang='en'>
       {/*
@@ -47,7 +16,7 @@ export default function RootLayout ({
       <head />
 
       <body>
-        <ChakraProvider theme={customTheme}>{children}</ChakraProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )
