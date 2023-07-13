@@ -161,7 +161,7 @@ export default function GeneralReceiptsStatsCcp ({
                 display='inline'
                 _hover={{ borderBottomWidth: '1px', borderColor: 'secondary' }}
               >
-                {mostPurchasedItem.itemtitle} -{mostPurchasedItem.totalcount}{' '}
+                {mostPurchasedItem.itemtitle} - {mostPurchasedItem.totalcount}{' '}
                 times
               </StatNumber>
             </NextLink>

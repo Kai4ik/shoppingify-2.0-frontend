@@ -232,7 +232,8 @@ export default function GeneralReceiptsStatsCcp ({
                 display='inline'
                 _hover={{ borderBottomWidth: '1px', borderColor: 'main' }}
               >
-                most recent was captured on {mostNumberOfItems.purchasedate}
+                most recent was captured on <br />
+                {mostNumberOfItems.purchasedate}
               </StatHelpText>
             </NextLink>
           </Stat>
@@ -249,7 +250,8 @@ export default function GeneralReceiptsStatsCcp ({
                 display='inline'
                 _hover={{ borderBottomWidth: '1px', borderColor: 'main' }}
               >
-                most recent was captured on {leastNumberOfItems.purchasedate}
+                most recent was captured on <br />
+                {leastNumberOfItems.purchasedate}
               </StatHelpText>
             </NextLink>
           </Stat>

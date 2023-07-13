@@ -52,7 +52,12 @@ export default function MonthlyExpendituresChart ({ data }: Props): JSX.Element 
       .reverse()
       .slice(0, parseInt(sortOption))
       .reverse()
-      .map((elem) => elem.monthname),
+      .map(
+        (elem) =>
+          `${elem.monthname.split(' ')[0]} ${
+            elem.monthname.split(' ')[elem.monthname.split(' ').length - 1]
+          }`
+      ),
     datasets: [
       {
         label: `Expenditures in last ${sortOption} months`,
