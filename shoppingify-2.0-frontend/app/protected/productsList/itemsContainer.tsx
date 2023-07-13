@@ -32,7 +32,7 @@ export default function ItemsContainer ({ lineItems }: Props): JSX.Element {
     return item.itemTitle.toLowerCase().includes(searchInput.toLowerCase())
   })
 
-  if (filteredItems.length === 0) {
+  if (lineItems.length === 0) {
     return (
       <VStack
         w='95%'
