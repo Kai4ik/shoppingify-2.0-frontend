@@ -4,12 +4,10 @@
 
 // types
 import { GetTimingStatsResponse } from '@/common/types/pgql_response_types'
+import { TimingStatsPgql } from '@/common/types/pgql_types'
 
 // GraphQL queries
 import { getTimingStatsQuery } from '@/common/queries/stats/getTimingStats'
-
-// types
-import { TimingStatsPgql } from '@/common/types/pgql_types'
 
 export async function getData (
   username: string,

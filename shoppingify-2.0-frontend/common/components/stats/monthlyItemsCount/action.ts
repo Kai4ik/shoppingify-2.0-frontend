@@ -4,12 +4,10 @@
 
 // types
 import { GetMonthlyItemsCountResponse } from '@/common/types/pgql_response_types'
+import { MonthlyItemsCountPgql } from '@/common/types/pgql_types'
 
 // GraphQL queries
 import { getMonthlyItemsCountQuery } from '@/common/queries/stats/monthlyItemsCount'
-
-// types
-import { MonthlyItemsCountPgql } from '@/common/types/pgql_types'
 
 export async function getData (username: string): Promise<{
   payload?: MonthlyItemsCountPgql

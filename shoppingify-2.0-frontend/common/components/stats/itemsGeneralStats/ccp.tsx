@@ -1,6 +1,7 @@
 'use client'
 
 // ----- external modules ----- //
+// Chakra UI
 import {
   Stat,
   VStack,
@@ -9,7 +10,11 @@ import {
   StatNumber,
   Text
 } from '@chakra-ui/react'
+
+// React specific
 import { useCallback, useEffect, useState } from 'react'
+
+// Next specific
 import NextLink from 'next/link'
 
 // ----- internal modules ----- //

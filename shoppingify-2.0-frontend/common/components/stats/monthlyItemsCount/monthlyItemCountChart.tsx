@@ -13,6 +13,7 @@ import { Context } from 'chartjs-plugin-datalabels'
 // Chakra UI
 import { VStack, Text, Stack, Box } from '@chakra-ui/react'
 
+// ----- internal modules ----- //
 // components
 import Sort from '@/common/components/sort'
 

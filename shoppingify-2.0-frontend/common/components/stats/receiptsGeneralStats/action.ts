@@ -3,13 +3,11 @@
 // ----- internal modules ----- //
 
 // types
+import { ReceiptsGeneralStatsPgql } from '@/common/types/pgql_types'
 import { GetReceiptsGeneralStatsResponse } from '@/common/types/pgql_response_types'
 
 // GraphQL queries
 import { getReceiptsGeneralStatsQuery } from '@/common/queries/stats/getReceiptsAggregates'
-
-// types
-import { ReceiptsGeneralStatsPgql } from '@/common/types/pgql_types'
 
 export async function getData (
   username: string,

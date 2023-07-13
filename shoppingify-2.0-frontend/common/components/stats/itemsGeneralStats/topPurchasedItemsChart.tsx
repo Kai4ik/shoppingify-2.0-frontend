@@ -1,6 +1,7 @@
 'use client'
 
 // ----- external modules ----- //
+// Chakra UI
 import { Box } from '@chakra-ui/react'
 
 // Chart.js related

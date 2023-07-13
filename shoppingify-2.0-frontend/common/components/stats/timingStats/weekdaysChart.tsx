@@ -1,9 +1,13 @@
 'use client'
 
 // ----- external modules ----- //
+// Chakra UI
+import { Box, VStack } from '@chakra-ui/react'
+
+// Chart.js
 import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels'
 import { Bar } from 'react-chartjs-2'
-import { Box, VStack } from '@chakra-ui/react'
+
 import {
   Chart as ChartJS,
   ArcElement,

@@ -1,10 +1,15 @@
 'use client'
 
 // ----- external modules ----- //
+// Chart.js specific
 import { ChartOptions, ChartData } from 'chart.js/auto'
 import { Bar } from 'react-chartjs-2'
 import { Context } from 'chartjs-plugin-datalabels'
+
+// React specific
 import { useState } from 'react'
+
+// Chakra UI
 import { VStack, Text, Stack, Box } from '@chakra-ui/react'
 
 // components

@@ -4,12 +4,10 @@
 
 // types
 import { GetLineItemsGeneralStatsResponse } from '@/common/types/pgql_response_types'
+import { LineItemsGeneralStatsPgql } from '@/common/types/pgql_types'
 
 // GraphQL queries
 import { getLineItemsGeneralStatsQuery } from '@/common/queries/stats/getItemsAggregates'
-
-// types
-import { LineItemsGeneralStatsPgql } from '@/common/types/pgql_types'
 
 export async function getData (
   username: string,

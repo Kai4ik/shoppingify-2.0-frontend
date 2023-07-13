@@ -3,13 +3,11 @@
 // ----- internal modules ----- //
 
 // types
+import { MonthlyExpendituresPgql } from '@/common/types/pgql_types'
 import { GetMonthlyExpendituresResponse } from '@/common/types/pgql_response_types'
 
 // GraphQL queries
 import { getMonthlyExpendituresQuery } from '@/common/queries/stats/monthlyExpenditures'
-
-// types
-import { MonthlyExpendituresPgql } from '@/common/types/pgql_types'
 
 export async function getData (username: string): Promise<{
   payload?: MonthlyExpendituresPgql

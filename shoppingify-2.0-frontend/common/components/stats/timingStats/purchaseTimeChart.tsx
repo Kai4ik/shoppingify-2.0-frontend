@@ -1,7 +1,10 @@
 'use client'
 
 // ----- external modules ----- //
+// Chakra UI
 import { Box } from '@chakra-ui/react'
+
+// Chart.js
 import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels'
 import { Pie } from 'react-chartjs-2'
 import {
