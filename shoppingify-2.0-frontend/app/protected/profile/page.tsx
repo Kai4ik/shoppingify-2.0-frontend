@@ -1,5 +1,4 @@
 // external modules
-import { Suspense } from 'react'
 import { cookies } from 'next/headers'
 import * as jose from 'jose'
 import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies'
@@ -8,7 +7,6 @@ import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies'
 
 // components
 import InfoContainer from './infoContainer'
-import Fallback from '@/app/protected/fallback'
 
 const getUserInfo = async (
   cookies: RequestCookie[]
@@ -29,9 +27,5 @@ export default async function page (): Promise<JSX.Element> {
 
   const allCookies = cookieStore.getAll()
   const data = await getUserInfo(allCookies)
-  return (
-    <Suspense fallback={<Fallback />}>
-      <InfoContainer userinfo={data} />
-    </Suspense>
-  )
+  return <InfoContainer userinfo={data} />
 }
