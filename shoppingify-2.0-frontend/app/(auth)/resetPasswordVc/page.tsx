@@ -64,7 +64,7 @@ export default function ConfirmEmail (): JSX.Element {
     >
       <Container maxW={['100%', '100%', '50%', '36%']} m='auto 0' h='100%'>
         <VStack
-          justify={['flex-start', 'flex-start', 'center']}
+          justify={['flex-start', 'center']}
           spacing={50}
           color='main'
           h='100%'
@@ -102,7 +102,6 @@ export default function ConfirmEmail (): JSX.Element {
                   type='submit'
                   colorScheme='purple'
                   width='full'
-                  mt='350px'
                   onClick={onOpen}
                 >
                   Submit

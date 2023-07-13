@@ -117,12 +117,7 @@ export default function ConfirmEmail ({ params }: Props): JSX.Element {
                     <PinInputField />
                   </PinInput>
                 </HStack>
-                <Button
-                  type='submit'
-                  colorScheme='purple'
-                  width='full'
-                  mt='350px'
-                >
+                <Button type='submit' colorScheme='purple' width='full'>
                   Verify
                 </Button>
               </VStack>

@@ -190,12 +190,7 @@ export default function Register (): JSX.Element {
                   <FormErrorMessage>{formik.errors.birthdate}</FormErrorMessage>
                 </FormControl>
               </VStack>
-              <Button
-                type='submit'
-                colorScheme='purple'
-                width='full'
-                mt='350px'
-              >
+              <Button type='submit' colorScheme='purple' width='full'>
                 Register
               </Button>
             </VStack>

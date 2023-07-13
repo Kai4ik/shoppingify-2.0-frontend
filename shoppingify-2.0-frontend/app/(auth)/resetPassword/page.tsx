@@ -131,7 +131,6 @@ export default function ConfirmEmail (): JSX.Element {
                   type='submit'
                   colorScheme='purple'
                   width='full'
-                  mt='350px'
                   onClick={onOpen}
                 >
                   Reset
