@@ -8,7 +8,13 @@ import { GetMonthlyItemsCountResponse } from '@/common/types/pgql_response_types
 // GraphQL queries
 import { getMonthlyItemsCountQuery } from '@/common/queries/stats/monthlyItemsCount'
 
-export async function getData (username: string) {
+// types
+import { MonthlyItemsCountPgql } from '@/common/types/pgql_types'
+
+export async function getData (username: string): Promise<{
+  payload?: MonthlyItemsCountPgql
+  errors?: Array<{ message: string }>
+}> {
   const monthlyExpenditures = await fetch(process.env.PGQL_URL, {
     method: 'POST',
     headers: {

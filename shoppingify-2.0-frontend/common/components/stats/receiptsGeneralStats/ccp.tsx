@@ -109,8 +109,8 @@ export default function GeneralReceiptsStatsCcp ({
       setLeastNumberOfItems(updatedData.getminnumberofitems.nodes[0])
       setMostNumberOfItems(updatedData.getmaxnumberofitems.nodes[0])
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sortOption])
+    // eslint-disable-next-line
+  }, [sortOption]);
 
   useEffect(() => {
     fetchUpdatedData()

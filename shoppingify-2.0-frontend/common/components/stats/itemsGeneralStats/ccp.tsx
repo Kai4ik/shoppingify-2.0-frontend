@@ -74,8 +74,8 @@ export default function GeneralReceiptsStatsCcp ({
       setCountByNumberOfItems(updatedData.countbynumberofitems.nodes)
       setTopPurchasedItems(updatedData.getmostpurchaseditem.nodes)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sortOption])
+    // eslint-disable-next-line
+  }, [sortOption]);
 
   useEffect(() => {
     fetchUpdatedData()

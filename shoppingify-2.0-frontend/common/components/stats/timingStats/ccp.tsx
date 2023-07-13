@@ -45,8 +45,8 @@ export default function TimingStatsCcp ({
       setWeekdayGroups(updatedData.countbyweekday.nodes)
       setPurchaseTimeGroups(updatedData.countbypurchasetime.nodes)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sortOption])
+    // eslint-disable-next-line
+  }, [sortOption]);
 
   useEffect(() => {
     fetchUpdatedData()
