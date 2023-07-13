@@ -85,3 +85,120 @@ export interface LineItemGroupStatsPgql {
   }
   keys: string[]
 }
+
+export interface ReceiptsGeneralStatsPgql {
+  allReceipts: {
+    nodes: Array<{
+      receiptNumber: string
+      purchaseDate: string
+    }>
+    aggregates: {
+      distinctCount: {
+        receiptNumber: string
+        merchant: string
+      }
+      average: {
+        total: string
+        numberOfItems: string
+      }
+      sum: {
+        total: string
+        tax: string
+      }
+    }
+  }
+  getmaxtotalreceipt: {
+    nodes: Array<{
+      receiptnumber: string
+      total: string
+      purchasedate: string
+    }>
+  }
+  getmintotalreceipt: {
+    nodes: Array<{
+      receiptnumber: string
+      total: string
+      purchasedate: string
+    }>
+  }
+  getmaxnumberofitems: {
+    nodes: Array<{
+      receiptnumber: string
+      numberofitems: string
+      purchasedate: string
+    }>
+  }
+  getminnumberofitems: {
+    nodes: Array<{
+      receiptnumber: string
+      numberofitems: string
+      purchasedate: string
+    }>
+  }
+}
+
+export interface LineItemsGeneralStatsPgql {
+  getcheapestitem: {
+    nodes: Array<{
+      itemtitle: string
+      price: string
+    }>
+  }
+  getmostexpensiveitem: {
+    nodes: Array<{
+      itemtitle: string
+      price: string
+    }>
+  }
+  getmostspendonitem: {
+    nodes: Array<{
+      itemtitle: string
+      totalsum: string
+    }>
+  }
+  getmostpurchaseditem: {
+    nodes: Array<{
+      itemtitle: string
+      totalcount: string
+    }>
+  }
+  countbynumberofitems: {
+    nodes: Array<{
+      countcategory: string
+      numberofitemscount: string
+    }>
+  }
+}
+
+export interface TimingStatsPgql {
+  countbyweekday: {
+    nodes: Array<{
+      weekday: string
+      numberoftimescount: string
+    }>
+  }
+  countbypurchasetime: {
+    nodes: Array<{
+      timeframe: string
+      numberoftimescount: string
+    }>
+  }
+}
+
+export interface MonthlyExpendituresPgql {
+  monthlyexpenditures: {
+    nodes: Array<{
+      monthname: string
+      monthlytotal: string
+    }>
+  }
+}
+
+export interface MonthlyItemsCountPgql {
+  monthlyitemscount: {
+    nodes: Array<{
+      monthname: string
+      monthlyitemstotal: string
+    }>
+  }
+}

@@ -1,8 +1,11 @@
 import {
   ReceiptPgql,
-  LineItemPgql,
   LineItemStatsPgql,
-  LineItemGroupStatsPgql
+  MonthlyItemsCountPgql,
+  ReceiptsGeneralStatsPgql,
+  LineItemsGeneralStatsPgql,
+  TimingStatsPgql,
+  MonthlyExpendituresPgql
 } from './pgql_types'
 
 interface BaseResponse {
@@ -94,36 +97,28 @@ export interface GetLineItemsResponse
   }
 }
 
-export interface GetAllDataForSpecificUserResponse
+// ---------------- Stats Items Types ------------- //
+export interface GetReceiptsGeneralStatsResponse
   extends Readonly<Omit<BaseResponse, 'data'>> {
-  data?: {
-    allLineItems: {
-      nodes: LineItemPgql[]
-      groupedAggregates: [LineItemGroupStatsPgql]
-    }
-    allReceipts: {
-      nodes: ReceiptPgql[]
-      aggregates: {
-        max: {
-          total: string
-          numberOfItems: number
-        }
-        min: {
-          total: string
-          numberOfItems: number
-        }
-        distinctCount: {
-          merchant: string
-          receiptNumber: string
-        }
-        average: {
-          total: string
-          numberOfItems: string
-        }
-        sum: {
-          total: string
-        }
-      }
-    }
-  }
+  data?: ReceiptsGeneralStatsPgql
+}
+
+export interface GetLineItemsGeneralStatsResponse
+  extends Readonly<Omit<BaseResponse, 'data'>> {
+  data?: LineItemsGeneralStatsPgql
+}
+
+export interface GetTimingStatsResponse
+  extends Readonly<Omit<BaseResponse, 'data'>> {
+  data?: TimingStatsPgql
+}
+
+export interface GetMonthlyExpendituresResponse
+  extends Readonly<Omit<BaseResponse, 'data'>> {
+  data?: MonthlyExpendituresPgql
+}
+
+export interface GetMonthlyItemsCountResponse
+  extends Readonly<Omit<BaseResponse, 'data'>> {
+  data?: MonthlyItemsCountPgql
 }
